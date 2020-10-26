@@ -16,7 +16,7 @@
 </template>
 <script>
 // import pie from './../components/chartComponents/pie'
-import pie from "../../components/chartComponents/pie";
+import pie from "@/views/bridge-cockpit/components/chartComponents/pie";
 import moduleTitle from "@/views/bridge-cockpit/components/moduleTitle";
 export default {
   components: {

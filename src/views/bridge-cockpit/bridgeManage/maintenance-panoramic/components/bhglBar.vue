@@ -15,7 +15,7 @@
 </template>
 <script>
 import echarts from 'echarts'
-import bar from '../../components/chartComponents/bar'
+import bar from '@/views/bridge-cockpit/components/chartComponents/bar'
 import moduleTitle from '@/views/bridge-cockpit/components/moduleTitle'
 export default {
     components: {

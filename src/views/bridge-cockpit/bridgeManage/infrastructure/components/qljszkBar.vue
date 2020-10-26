@@ -1,10 +1,10 @@
 <template>
-    <!-- jszkpd-技术状况评定 -->
-    <div class="module-jszkpd module-pub">
-        <moduleTitle title="技术状况评定" />
+    <!-- qljszk-桥梁技术状况 -->
+    <div class="module-qljszk module-pub">
+        <moduleTitle title="桥梁技术状况" />
         <bar
             ref="echartsBar"
-            refName="jszkpd-bar"
+            refName="qljszk-bar"
             class="module-echarts" 
             :colors="colors"
             :dataList="dataList"
@@ -15,7 +15,7 @@
 </template>
 <script>
 import echarts from 'echarts'
-import bar from '../../components/chartComponents/bar'
+import bar from '@/views/bridge-cockpit/components/chartComponents/bar'
 import moduleTitle from '@/views/bridge-cockpit/components/moduleTitle'
 export default {
     components: {
@@ -72,6 +72,7 @@ export default {
                 return {
                     name: a,
                     data: dataList,
+                    barWidth:10,
                     itemStyle: {
                         color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
                             { offset: 0, color: this.colorItemArr[index][0] },
@@ -88,9 +89,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.module-jszkpd {
-    width: 11.7708rem;
+.module-qljszk {
+    width: 3.8958rem;
     height: 3.2292rem;
+    margin-top: 16px;
   display: flex;
   flex-direction: column;
 }

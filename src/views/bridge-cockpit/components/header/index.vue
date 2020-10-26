@@ -7,9 +7,13 @@
       <el-select style="width:1.2rem" v-model="currentUnit" size="medium">
         <el-option :label="'公司1'" value="公司1"></el-option>
       </el-select>
-    <router-link  to='/bridge-cockpit/bridgeManage' style="color: #33ccc2" >桥梁管理</router-link>
- 
-      <div class="stripe-bg"></div>
+      <router-link to="/bridge-cockpit/bridgeManage" style="color: #33ccc2"
+        >桥梁管理</router-link
+      >
+
+      <div class="stripe-bg">
+        <div v-for="index in 20" class="stripe-item" :key="index"></div>
+      </div>
     </div>
     <div class="header-right">
       <SwitchBox :active="'year'" />
@@ -55,7 +59,7 @@ export default {
         switch (val.path) {
           case "/bigdata-cockpit/home":
             return null;
-              case "/bridge-bigdata/home":
+          case "/bridge-bigdata/home":
             return null;
           default:
             return null;
@@ -81,6 +85,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+//  @import "./img/stripe-bg.svg";
 .bigdata-header {
   height: 0.937rem;
   // padding: 0.260rem;
@@ -133,10 +138,32 @@ export default {
       content: "";
     }
     .stripe-bg {
-      width: 3.177rem;
+      position: relative;
       height: 0.385rem;
-      background: linear-gradient(90deg, #08161d 4%, #485a66 87%);
+      display: flex;
+      background: linear-gradient(90deg, rgba(6, 21, 28, 0.2) 4%, #06151c 87%);
+      // background: url("~./img/stripe-bg.svg") no-repeat;
       opacity: 0.4;
+      .stripe-item {
+        flex-shrink: 0;
+        height: 100%;
+        margin: 0 5px;
+        width: 6px;
+        background: #485a66;
+        transform: skew(22deg);
+      }
+      &::after {
+        content: "";
+        position: absolute;
+        width: 100%;
+        left: -5px;
+        height: 100%;
+        background: linear-gradient(
+          to right,
+          rgba(5, 20, 27, 0.7),
+          rgba(5, 20, 27, 0) 80%
+        );
+      }
     }
   }
   .header-right {

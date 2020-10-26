@@ -2,33 +2,35 @@
     <div class="maintenance-layout">
         <div class="layout-up">
             <div class="up-left">
-                <!-- 上左-基础设施模块 -->
-                <jcssPie :fontSize="htmlFontSize" />
-                <!-- 上左-机电设备模块 -->
-                <jdsbPie :fontSize="htmlFontSize" />
+            
+                <!-- 上左-检查任务 -->
+                <jcrwCount   />
+                    <!-- 上左-病害统计 -->
+                <bhtjCircle :fontSize="htmlFontSize" /> 
+                
             </div>
 
             <div class="up-center">
-                <showNumber :fontSize="htmlFontSize" />
+                <navBar/> 
 
                 <!-- 中间-地图 -->
-                <ChinaMap :fontSize="htmlFontSize" />
+                <!-- <ChinaMap :fontSize="htmlFontSize" /> -->
             </div>
 
             <div class="up-right">
-                <!-- 病害管理 -->
-                <bhglBar :fontSize="htmlFontSize" />
-                <!-- 养护任务 -->
-                <yhrwLine :fontSize="htmlFontSize" />
+                <!-- 实时监测 -->
+                <ssjcEcharts :fontSize="htmlFontSize" />
+                <!-- 机电故障 -->
+                <jdgzBar :fontSize="htmlFontSize" />
             </div>
         </div>
         <div class="layout-down">
-            <!-- 考核指标 -->
-            <khzbRadar :fontSize="htmlFontSize" class="down-left" />
+            <!-- 桥梁信息 -->
+            <qlxxCircle :fontSize="htmlFontSize" class="down-left" /> 
             <!-- 技术状况评定 -->
             <jszkpdBar :fontSize="htmlFontSize" class="down-center" />
-            <!-- 计量支付 -->
-            <jlzfLine :fontSize="htmlFontSize" class="down-right" />
+            <!-- 机电设备 -->
+            <jdsbBar :fontSize="htmlFontSize" class="down-right" />
         </div>
         <!-- <ChartsUtilBlock width="15.06" isMain> -->
 
@@ -37,30 +39,30 @@
 </template>
 <script>
 // import ChartsUtilBlock from '../components/chartComponents/ChartsUtilBlock'
-import ChinaMap from '@/views/bridge-cockpit/components/chartComponents/ChinaMap'
-import jcssPie from '../components/jcssPie'
-import jdsbPie from '../components/jdsbPie'
+// import ChinaMap from '@/views/bridge-cockpit/components/chartComponents/ChinaMap'
+import jcssPie from './components/jcssPie'
+import bhtjCircle from './components/bhtjCircle'
 
 import { mapState } from 'vuex'
 export default {
     components: {
         // ChartsUtilBlock, 
-        ChinaMap, 
-        jdsbPie,
+        jcrwCount:()=>import('./components/jcrwCount'),
+        navBar:()=>import('@/views/bridge-cockpit/components/navBar'), 
+        bhtjCircle,
         jcssPie,
-        jszkpdBar: () => import('../components/jszkpdBar'),
-        showNumber: () => import('../components/showNumber'),
-        bhglBar: () => import('../components/bhglBar'),
-        yhrwLine: () => import('../components/yhrwLine'),
-        khzbRadar: () => import('../components/khzbRadar'),
-        jlzfLine: () => import('../components/jlzfLine')
+        jszkpdBar: () => import('./components/jszkpdBar'),   
+        jdsbBar: () => import('./components/jdsbBar'),
+        qlxxCircle:()=>import('./components/qlxxCircle'),
+        ssjcEcharts:()=>import('./components/ssjcEcharts'),
+        jdgzBar:()=>import('./components/jdgzBar')
     },
     computed: {
         ...mapState(['htmlFontSize'])
     },
     watch: {
         htmlFontSize(val) {
-            console.log(val)
+            // console.log(val)
         }
     }
 }

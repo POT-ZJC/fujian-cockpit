@@ -1,5 +1,5 @@
 <template>
-    <div :ref="refName" :style="`height:${height}px;width:${width}px`"></div>
+    <div :ref="refName"  ></div>
 </template>
 
 <script>
@@ -16,15 +16,7 @@ export default {
                     subtext: ''
                 }
             }
-        },
-        width: {
-            type: Number,
-            default: 100
-        },
-        height: {
-            type: Number,
-            default: 100
-        },
+        }, 
         refName: {
             type: String,
             default: ''
@@ -64,17 +56,17 @@ export default {
         }
     },
     watch: {
-        width(val) {
-            console.log(val)
-            this.$nextTick(() => {
-                this.myChart.resize()
-            })
-        },
-        height() {
-            this.$nextTick(() => {
-                this.myChart.resize()
-            })
-        }
+        // width(val) {
+        //     console.log(val)
+        //     this.$nextTick(() => {
+        //         this.myChart.resize()
+        //     })
+        // },
+        // height() {
+        //     this.$nextTick(() => {
+        //         this.myChart.resize()
+        //     })
+        // }
     },
     data() {
         return {
@@ -87,6 +79,9 @@ export default {
         this.createCharts()
     },
     methods: {
+         echartsResize() {
+      this.myChart.resize();
+    },
         setEcharts() {
             const option = {
                 colors: this.colors,
@@ -204,7 +199,7 @@ export default {
         },
         //高亮图形区域
         highlightArea(params) {
-            console.log(params)
+            // console.log(params)
             //如果高亮的区域名不同，才高亮 -否则不做处理
             if (params.name !== this.highlighttName) {
                 //如果存在上次高亮的区域就取消
@@ -224,7 +219,7 @@ export default {
                 //更新当前高亮的区域名
                 this.highlighttName = params.name
 
-                console.log(this.highlighttName)
+                // console.log(this.highlighttName)
             }
         }
     }

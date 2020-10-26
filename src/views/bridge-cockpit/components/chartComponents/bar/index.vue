@@ -1,19 +1,11 @@
 <template>
-    <div :ref="refName" class="barBox-charts" :style="`height:${height}px;width:${width}px`"></div>
+    <div :ref="refName" class="barBox-charts"></div>
 </template>
 
 <script>
 import echarts from 'echarts'
 export default {
-    props: {
-        width: {
-            type: Number,
-            default: 100
-        },
-        height: {
-            type: Number,
-            default: 100
-        },
+    props: { 
         refName: {
             type: String,
             default: ''

@@ -1,7 +1,9 @@
 .bridge-cockpit-page {
+	background-image: url('/img/cockpit-bg1.jpg');
+	background-size: 100% 100%; 
+	background-repeat: no-repeat;
 	background-color: rgba(0, 13, 26, 1);
 	color: #fff;
-
 	.tc {
 		text-align: center;
 	}

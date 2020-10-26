@@ -6,7 +6,7 @@ export function computedFontSize(html) {
     // 获取根元素 fontSize 标准，屏幕宽度 / 10
     const  clientWidth=document.body.clientWidth
     console.log(clientWidth)
-    let fontSize =  clientWidth / 10 / 2
+    let fontSize =  clientWidth / 10 / 2 ;// 设计图标准1920 ,rem标准值 1rem=96px
     // let fontSize = window.innerWidth / 10 / 2
     // 获取到的 fontSize 不允许超过我们定义的最大值
     fontSize = fontSize > MAX_FONT_SIZE ? MAX_FONT_SIZE : fontSize
@@ -20,7 +20,7 @@ export function computedFontSize(html) {
     } else {
         newFontSize = fontSize
 	}
-	console.log(html)
+	// console.log(html)
     html.style.fontSize = newFontSize + 'px'
 
     return newFontSize

@@ -20,6 +20,7 @@ export default {
 .module-title-box {
     position: relative;
     padding: 0.15rem 0.4167rem 0.1rem 0.2083rem;
+    flex-shrink: 0;
 }
 .module-title {
     position: relative;
@@ -51,7 +52,7 @@ export default {
 .title-link {
     position: absolute;
     top: 0.125rem;
-    right: 0;
+    right: 0.125rem;
     height: 100%;
     font-size: 0.25rem;
     line-height: 100%;

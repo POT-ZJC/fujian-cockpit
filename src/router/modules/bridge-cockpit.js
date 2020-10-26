@@ -27,6 +27,7 @@ export default {
         {
           path: "/bridge-cockpit/bridgeManage/maintenance",
           name: "maintenance",
+          // component: () => import("@/views/bridge-cockpit/bridgeManage/infrastructure"),
           component: () => import("@/views/bridge-cockpit/bridgeManage/maintenance"),
           // hidden: true,
           meta: { title: "桥梁管理-检查养护" },
