@@ -1,11 +1,11 @@
 <template>
   <!-- bhtj-病害统计 -->
   <div class="module-bhtj module-pub">
-    <moduleTitle title="病害统计" /> 
+    <moduleTitle title="病害统计" />
     <circleEcharts
       ref="echartsCircles"
       class="module-echarts"
-      refName="bhtj-circle" 
+      refName="bhtj-circle"
       :colors="colors"
       :dataList="dataList"
       :title="title"
@@ -23,6 +23,10 @@ export default {
     moduleTitle,
   },
   props: {
+    id: {
+      type: String,
+      default: "",
+    },
     fontSize: {
       type: Number,
       default: 14,
@@ -34,11 +38,16 @@ export default {
         this.$refs.echartsCircles.echartsResize();
       });
     },
+    id(val) {
+      this.$nextTick(() => {
+        this.setEcharts();
+      });
+    },
   },
   data() {
     return {
       title: {},
-      moduleName: "病害统计", 
+      moduleName: "病害统计",
       colors: ["#00388C", "#086CD8", "#39A3FE", "#7ECAFE", "#A4DCFF"],
       legendData: [],
       legendTxtList: [
@@ -49,46 +58,52 @@ export default {
         { txt: "混凝土碳化：", unit: "" },
       ],
       dataList: [],
+      isHasData: false,
     };
   },
   mounted() {
-    this.createEcharts();
+    this.setEcharts();
   },
   methods: {
-    createEcharts() {
+    setEcharts() {
       // this.legendData = this.dataList.map(val => val.name)
       let valueTotal = 0;
       this.dataList = this.legendTxtList.map((val, index) => {
         const minNum = 50,
           maxNum = 400;
-        const color = this.colors[index];
+
         const value = Math.floor(
           Math.random() * (maxNum - minNum + 1) + minNum
         );
+        const color = this.colors[index];
         valueTotal += value;
-        const item = {
-          name: val.txt,
-          value: [0, 320 - index * 75],
-          itemStyle: {
-            color: color,
-          },
-          label: {
-            position: "right",
-            distance: 5,
-            show: true,
-
-            formatter: `{b|${val.txt}}{a|${value}}{b|${val.unit || "条"}}`,
-            rich: {
-              a: {
-                color: color,
-                fontSize: 20,
-                fontFamily: "DINEngschriftStd",
-              },
-              b: { color: "#fff", fontSize: 12 },
+        if (!this.isHasData) {
+          const item = {
+            name: val.txt,
+            value: [0, 320 - index * 75],
+            itemStyle: {
+              color: color,
             },
-          },
-        };
-        this.legendData.push(item);
+            label: {
+              position: "right",
+              distance: 5,
+              show: true,
+
+              formatter: `{b|${val.txt}}{a|${value}}{b|${val.unit || "条"}}`,
+              rich: {
+                a: {
+                  color: color,
+                  fontSize: 20,
+                  fontFamily: "DINEngschriftStd",
+                },
+                b: { color: "#fff", fontSize: 12 },
+              },
+            },
+          };
+
+          this.legendData.push(item);
+        }
+
         return { value: value, name: val.txt };
       });
       this.title = {
@@ -98,6 +113,7 @@ export default {
       };
       this.$nextTick(() => {
         this.$refs.echartsCircles.setEcharts();
+        this.isHasData = true;
       });
     },
   },

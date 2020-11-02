@@ -19,6 +19,10 @@ export default {
     moduleTitle,
   },
   props: {
+    id: {
+      type: String,
+      default: "",
+    },
     fontSize: {
       type: Number,
       default: 14,
@@ -40,8 +44,13 @@ export default {
           this.$refs.echartsRadar.echartsResize();
         });
       },
-      immediate: true,
+      // immediate: true,
     },
+     id(val) {
+      this.$nextTick(() => {
+        this.setEcharts();
+      });
+     }
   },
 };
 </script>

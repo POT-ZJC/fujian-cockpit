@@ -38,14 +38,14 @@ export default {
   mounted() {
     this.createCharts();
   },
-  methods: {
+  methods: { 
     setEcharts() {
       const option = {
         // colors: this.colors,
         radar: { indicator: this.indicatorData, center: this.center },
         series: [{ name: "radars", data: this.dataList }],
       };
-      console.log(option);
+      console.log(option); 
       this.myChart.setOption(option);
     },
     echartsResize() {
@@ -55,6 +55,7 @@ export default {
       this.myChart = echarts.init(this.$refs[this.refName]);
       let option = {
         tooltip: {},
+        animationDurationUpdate:1000,
         radar: {
           radius: "70%",
           center: ["50%", "50%"],

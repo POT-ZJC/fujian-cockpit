@@ -25,6 +25,10 @@ export default {
     moduleTitle,
   },
   props: {
+    id: {
+      type: String,
+      default: "",
+    },
     fontSize: {
       type: Number,
       default: 14,
@@ -65,13 +69,18 @@ export default {
       },
       immediate: true,
     },
+     id(val) {
+      this.$nextTick(() => {
+        this.setEcharts();
+      });
+     }
   },
 
   mounted() {
-    this.initEcharts();
+    this.setEcharts();
   },
   methods: {
-    initEcharts() {
+    setEcharts() {
       const maxDataNum = 500;
       const minNum = 50;
       let valueArr = [];

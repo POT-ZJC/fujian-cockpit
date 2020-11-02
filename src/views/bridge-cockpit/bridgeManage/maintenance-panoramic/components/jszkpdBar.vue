@@ -23,6 +23,10 @@ export default {
         moduleTitle
     },
     props: {
+        id: {
+      type: String,
+      default: "",
+    },
         fontSize: {
             type: Number,
             default: 14
@@ -36,7 +40,12 @@ export default {
                 })
             },
             immediate: true
-        }
+        },
+         id(val) {
+      this.$nextTick(() => {
+        this.setEcharts();
+      });
+     }
     },
     data() {
         return { 
@@ -58,10 +67,10 @@ export default {
     },
     mounted() {
 		// this.$forceUpdate()
-		this.creatEcharts()
+		this.setEcharts()
     },
     methods: {
-        creatEcharts() {
+        setEcharts() {
             this.dataList = this.legendData.map((a, index) => {
                 const minNum = 50,
                     maxNum = 400

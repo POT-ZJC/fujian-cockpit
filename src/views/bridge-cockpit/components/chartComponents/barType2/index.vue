@@ -68,7 +68,8 @@ export default {
         tooltip: {
           show: true,
           formatter: "{b}:{c}",
-        },
+        }, 
+        animationDurationUpdate:1000,
         grid: {
           left: "5%",
           top: "5%",

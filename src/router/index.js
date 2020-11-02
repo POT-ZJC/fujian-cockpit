@@ -7,6 +7,7 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
+    redirect: "/bridge-cockpit/bridgeManage/maintenance-panoramic",
     name: 'Home',
     component: Home
   }, 

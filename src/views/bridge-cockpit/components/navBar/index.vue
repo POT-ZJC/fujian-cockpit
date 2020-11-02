@@ -32,7 +32,7 @@ export default {
       activeIndex: 1,
       navList: [
         {
-          name: "基础设施",
+          name: "桥梁管理",
           url: "/bridge-cockpit/bridgeManage/infrastructure",
         },
         {

@@ -24,6 +24,10 @@ export default {
     moduleTitle,
   },
   props: {
+    id: {
+      type: String,
+      default: "",
+    },
     fontSize: {
       type: Number,
       default: 14,
@@ -37,6 +41,11 @@ export default {
         });
       },
       immediate: true,
+    },
+    id(val) {
+      this.$nextTick(() => {
+        this.setEcharts();
+      });
     },
   },
   data() {
@@ -52,13 +61,14 @@ export default {
         { txt: "小桥", unit: "" },
       ],
       dataList: [],
+      isHasData: false,
     };
   },
   mounted() {
-    this.createEcharts();
+    this.setEcharts();
   },
   methods: {
-    createEcharts() {
+    setEcharts() {
       // this.legendData = this.dataList.map(val => val.name)
       let valueTotal = 0;
       this.dataList = this.legendTxtList.map((val, index) => {
@@ -69,30 +79,32 @@ export default {
           Math.random() * (maxNum - minNum + 1) + minNum
         );
         valueTotal += value;
-        const item = {
-          name: val.txt,
-          value: [10, 280 - index * 75],
-          itemStyle: {
-            color: color,
-          },
-          label: {
-            position: "right",
-            distance: 5,
-            show: true,
-
-            formatter: `{b|${val.txt}} {a|${value}} {b|${val.unit || "条"}}`,
-            rich: {
-              a: {
-                color: color,
-                fontSize: 20,
-                fontFamily: "DINEngschriftStd",
-              },
-              b: { color: "#fff", fontSize: 12 },
+        if (!this.isHasData) {
+          const item = {
+            name: val.txt,
+            value: [10, 280 - index * 75],
+            itemStyle: {
+              color: color,
             },
-          },
-        };
+            label: {
+              position: "right",
+              distance: 5,
+              show: true,
 
-        this.legendData.push(item);
+              formatter: `{b|${val.txt}} {a|${value}} {b|${val.unit || "条"}}`,
+              rich: {
+                a: {
+                  color: color,
+                  fontSize: 20,
+                  fontFamily: "DINEngschriftStd",
+                },
+                b: { color: "#fff", fontSize: 12 },
+              },
+            },
+          };
+
+          this.legendData.push(item);
+        }
         return { value: value, name: val.txt };
       });
       this.title = {
@@ -102,6 +114,7 @@ export default {
       };
       this.$nextTick(() => {
         this.$refs.echartsCircles.setEcharts();
+        this.isHasData = true;
       });
     },
   },

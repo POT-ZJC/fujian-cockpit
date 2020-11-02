@@ -2,6 +2,7 @@
   <div class="maintenance-layout">
     <div class="layout-left">
       <navBar />
+      <amap :fontSize="htmlFontSize" class="map" />
     </div>
     <div class="layout-right">
       <!-- 检查任务 -->
@@ -16,8 +17,10 @@
 <script>  
 import bhtjCircle from "./components/bhtjCircle";
 import { mapState } from "vuex"; 
+import amap from "../components/amap";
 export default {
   components: {
+    amap,
     bhtjCircle,
     jcrwCount: () => import("./components/jcrwCount"),
     yhwxCircle: () => import("./components/yhwxCircle"),
@@ -42,6 +45,11 @@ export default {
     flex-shrink: 0;
     width: 1510px;
     height: 100%;
+     margin-right: 15px;
+    .map{
+      height: 100%;
+      width: 100%;
+    }
   }
   .layout-right {
     position: relative;

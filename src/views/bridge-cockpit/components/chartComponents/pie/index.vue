@@ -88,13 +88,14 @@ export default {
                 title: this.title,
                 series: [{ data: this.dataList }, { data: this.legendData }]
             }
-            this.myChart.setOption(option)
+            this.myChart.setOption(option,true)
         },
 
         createCharts() {
             this.myChart = echarts.init(this.$refs[this.refName])
             let option = {
                 // backgroundColor: '#2c343c',
+                animationDurationUpdate:1000,
                 title: {
                     // name: this.moduleName,
                     text: '',

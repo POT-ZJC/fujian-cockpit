@@ -5,7 +5,7 @@
     <pie
       ref="echartsPie"
       refName="jcss-pie"
-      class="module-echarts" 
+      class="module-echarts"
       :colors="colors"
       :dataList="dataList"
       :title="title"
@@ -24,22 +24,31 @@ export default {
     moduleTitle,
   },
   props: {
+    id: {
+      type: String,
+      default: "",
+    },
     fontSize: {
       type: Number,
       default: 14,
     },
   },
   watch: {
-    fontSize(val) { 
+    fontSize(val) {
       this.$nextTick(() => {
         this.$refs.echartsPie.echartsResize();
+      });
+    },
+    id(val) {
+      this.$nextTick(() => {
+        this.setEcharts();
       });
     },
   },
   data() {
     return {
       title: {},
-      moduleName: "基础设施", 
+      moduleName: "基础设施",
       colors: ["#fb497c", "#00ffde", "#ffc760", "#4A79F1", "#0F4392"],
       legendData: [],
       legendTxtList: [
@@ -54,48 +63,55 @@ export default {
   },
   mounted() {
     // this.legendData = this.dataList.map(val => val.name)
-    let valueTotal = 0;
-    this.dataList = this.legendTxtList.map((val, index) => {
-      const minNum = 50,
-        maxNum = 400;
-      const color = this.colors[index];
-      const value = Math.floor(Math.random() * (maxNum - minNum + 1) + minNum);
-      valueTotal += value;
-      const item = {
-        name: val.txt,
-        value: [100, 340 - index * 75],
-        itemStyle: {
-          color: color,
-        },
-        label: {
-          position: "right",
-          distance: 10,
-          show: true,
-
-          formatter: `{b|${val.txt}} {a|${value}} {b|${val.unit || "个"}}`,
-          rich: {
-            a: {
-              color: color,
-              fontSize: 20,
-              fontFamily: "DINEngschriftStd",
-            },
-            b: { color: "#fff", fontSize: 12 },
+    this.setEcharts();
+  },
+  methods: {
+    setEcharts() {
+      let valueTotal = 0;
+      this.dataList = this.legendTxtList.map((val, index) => {
+        const minNum = 50,
+          maxNum = 400;
+        const color = this.colors[index];
+        const value = Math.floor(
+          Math.random() * (maxNum - minNum + 1) + minNum
+        );
+        valueTotal += value;
+        const item = {
+          name: val.txt,
+          value: [100, 340 - index * 75],
+          itemStyle: {
+            color: color,
           },
-        },
-      };
+          label: {
+            position: "right",
+            distance: 10,
+            show: true,
 
-      this.legendData.push(item);
-      return { value: value, name: val.txt };
-    });
-    this.title = {
-      text: valueTotal + "",
-      subtext: "合计(项)",
-      // name: this.moduleName
-    };
-    // this.$forceUpdate()
-    this.$nextTick(() => {
-      this.$refs.echartsPie.setEcharts();
-    });
+            formatter: `{b|${val.txt}} {a|${value}} {b|${val.unit || "个"}}`,
+            rich: {
+              a: {
+                color: color,
+                fontSize: 20,
+                fontFamily: "DINEngschriftStd",
+              },
+              b: { color: "#fff", fontSize: 12 },
+            },
+          },
+        };
+
+        this.legendData.push(item);
+        return { value: value, name: val.txt };
+      });
+      this.title = {
+        text: valueTotal + "",
+        subtext: "合计(项)",
+        // name: this.moduleName
+      };
+      // this.$forceUpdate()
+      this.$nextTick(() => {
+        this.$refs.echartsPie.setEcharts();
+      });
+    },
   },
 };
 </script>

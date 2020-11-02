@@ -82,6 +82,7 @@ export default {
           { data: this.legendData },
         ],
       };
+      // this.myChart.clear()
       this.myChart.setOption(option);
     },
 
@@ -89,6 +90,7 @@ export default {
       this.myChart = echarts.init(this.$refs[this.refName]);
       let option = {
         // backgroundColor: '#2c343c',
+        animationDurationUpdate:1000,
         title: {
           text: "",
           left: "71%",

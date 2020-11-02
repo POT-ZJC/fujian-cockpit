@@ -17,6 +17,10 @@ export default {
         moduleTitle: () => import('@/views/bridge-cockpit/components/moduleTitle')
     },
     props: {
+        id: {
+      type: String,
+      default: "",
+    },
         fontSize: {
             type: Number,
             default: 14
@@ -34,7 +38,12 @@ export default {
                 })
             },
             immediate: true
-        }
+        },
+         id(val) {
+      this.$nextTick(() => {
+        this.setEcharts();
+      });
+     }
     },
     data() {
         return {

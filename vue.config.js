@@ -12,6 +12,7 @@ module.exports = {
    * https://cli.vuejs.org/config/#publicpath
    */
   publicPath: "./",
+
   outputDir: "dist",
   filenameHashing: true,
   assetsDir: "static",
@@ -23,6 +24,8 @@ module.exports = {
     // 设置为true的时候会启动两个窗口，用package.json文件中启动脚本加上--open参数代替
     // open: true,
     inline: false, // 关闭热更新
+    host:'0.0.0.0',
+    disableHostCheck: true,
     overlay: {
       warnings: false,
       errors: true,

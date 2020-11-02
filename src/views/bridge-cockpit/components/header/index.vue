@@ -1,15 +1,18 @@
 <template>
   <div class="bigdata-header">
     <div class="header-left">
-      <div class="left-title">
+      <div class="left-title" v-if="pageType==='2'">
+        {{title}}
+      </div>
+       <div class="left-title" v-else>
         福建省长大桥梁 <span class="title-special">市级</span>平台-养护驾驶舱
       </div>
       <el-select style="width:1.2rem" v-model="currentUnit" size="medium">
-        <el-option :label="'公司1'" value="公司1"></el-option>
+        <el-option :label="'上一级'" value="公司1"></el-option>
       </el-select>
-      <router-link to="/bridge-cockpit/bridgeManage" style="color: #33ccc2"
+      <!-- <router-link to="/bridge-cockpit/bridgeManage" style="color: #33ccc2"
         >桥梁管理</router-link
-      >
+      > -->
 
       <div class="stripe-bg">
         <div v-for="index in 20" class="stripe-item" :key="index"></div>
@@ -51,11 +54,16 @@ export default {
     return {
       userName: "用户名",
       currentUnit: "公司1",
+      title:'',
+      pageType:'',
     };
   },
   watch: {
     $route: {
       handler(val) {
+        // pageTitle
+        this.pageType=val.meta.type||'';
+        this.title=val.meta.pageTitle||'';
         switch (val.path) {
           case "/bigdata-cockpit/home":
             return null;

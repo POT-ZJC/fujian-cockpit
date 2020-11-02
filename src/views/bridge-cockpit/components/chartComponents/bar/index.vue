@@ -92,6 +92,7 @@ export default {
             let fontColor = '#485465'
             let option = {
                 color: this.colors,
+                animationDurationUpdate:1000,
                 legend: {
                     data: this.legendData,
                     itemWidth: 10,
