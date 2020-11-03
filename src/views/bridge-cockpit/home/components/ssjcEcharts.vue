@@ -111,7 +111,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .module-ssjc {
-  width: 3.8958rem;
+   width: 375px;
   height: 3.2292rem;
   position: relative;
   display: flex;

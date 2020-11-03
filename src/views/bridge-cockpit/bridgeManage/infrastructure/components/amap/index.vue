@@ -299,9 +299,7 @@ export default {
     reqBridgeListByParam() {
       const queryData = {
         ...this.queryBridge
-      };
-      queryData.bridgeTypeId = queryData.bridgeTypeId.join(",");
-      queryData.technologyLevel = queryData.technologyLevel.join(",");
+      }; 
       queryData.times = queryData.times ? ["", ""] : queryData.times;
       queryData.buildDateStart = queryData.times[0]; //建设年份开始
       queryData.buildDateEnd = queryData.times[1]; //建设年份结束\
@@ -386,7 +384,10 @@ export default {
       });
       this.markers_Arr = markers;
     },
-    //打开地图点标记桥梁详情
+  
+  
+  
+  //打开地图点标记桥梁详情
     openPoiDetail(data) {
       getBridgeDetailInfoById({ bridgeId: data.bridgeId }).then((res) => {
         console.log(res);

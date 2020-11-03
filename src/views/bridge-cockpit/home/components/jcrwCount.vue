@@ -51,7 +51,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .module-jcrw {
-  width: 377px;
+  width: 375px;
   height: 3.2292rem;
   display: flex;
   flex-direction: column;

@@ -74,18 +74,18 @@ export default {
     height: 6.6rem;
     // justify-content: space-between;
     .up-left {
-      width: 3.8958rem;
+      width: 375px;
       flex-shrink: 0;
     }
     .up-center {
       position: relative;
       width: 11.7708rem;
       height: 100%;
-      margin: 0 0.125rem;
+      margin: 0 auto;
       flex-shrink: 0;
     }
     .up-right {
-      width: 3.8958rem;
+       width: 375px;
       flex-shrink: 0;
     }
   }

@@ -107,7 +107,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .module-jdsb {
-  width: 3.8958rem;
+   width: 375px;
   height: 3.2292rem;
   display: flex;
   flex-direction: column;
