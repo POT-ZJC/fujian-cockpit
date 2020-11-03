@@ -37,8 +37,7 @@
 </template>
 <script>
 // import ChartsUtilBlock from '../components/chartComponents/ChartsUtilBlock'
-// import ChinaMap from '@/views/bridge-cockpit/components/chartComponents/ChinaMap'
-import jcssPie from "./components/jcssPie";
+// import ChinaMap from '@/views/bridge-cockpit/components/chartComponents/ChinaMap' 
 import bhtjCircle from "./components/bhtjCircle";
 import amap from "../components/amap";
 import { mapState } from "vuex";
@@ -48,8 +47,7 @@ export default {
     // ChartsUtilBlock,
     jcrwCount: () => import("./components/jcrwCount"),
     navBar: () => import("@/views/bridge-cockpit/components/navBar"),
-    bhtjCircle,
-    jcssPie,
+    bhtjCircle, 
     jszkpdBar: () => import("./components/jszkpdBar"),
     jdsbBar: () => import("./components/jdsbBar"),
     qlxxCircle: () => import("./components/qlxxCircle"),

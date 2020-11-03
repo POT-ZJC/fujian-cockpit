@@ -54,6 +54,6 @@ html {
   font-size: 160px;
 }
 </style>
-<style lang="scss">
+<style lang="scss" scoped>
 @import "./bigdata-style.scss";
 </style>

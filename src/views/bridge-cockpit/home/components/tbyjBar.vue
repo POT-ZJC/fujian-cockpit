@@ -1,10 +1,10 @@
 <template>
-    <!-- qljszk-桥梁技术状况 -->
-    <div class="module-qljszk module-pub">
-        <moduleTitle title="桥梁技术状况" />
+    <!-- tbyj-通报预警 -->
+    <div class="module-tbyj module-pub">
+        <moduleTitle title="通报预警" />
         <bar
             ref="echartsBar"
-            refName="qljszk-bar"
+            refName="tbyj-bar"
             class="module-echarts" 
             :colors="colors"
             :dataList="dataList"
@@ -23,6 +23,10 @@ export default {
         moduleTitle
     },
     props: {
+        id: {
+      type: String,
+      default: "",
+    },
         fontSize: {
             type: Number,
             default: 14
@@ -36,32 +40,34 @@ export default {
                 })
             },
             immediate: true
-        }
+        },
+         id(val) {
+      this.$nextTick(() => {
+        this.setEcharts();
+      });
+     }
     },
     data() {
         return { 
 			grid:{
 
 			},
-            colors: ['#00A6E3', '#87680C'],
-            legendData: ['1类', '2类', '3类', '4类', '5类'],
-            xAxisData: ['2015', '2016', '2017', '2018', '2019', '2020', '2021'],
+            colors: ['1D60FF', '00AAE7'],
+            legendData: ['通报数', '预警数'],
+            xAxisData: ['2020-01', '2020-02', '2020-03', '2020-01', '2020-04', '2020-05', '2020-06'],
             colorItemArr: [
-                ['#DE3040', '#850D1A'],
-                ['#00FFDE', '#007D6D'],
-                ['#FDCE44', '#66592A'],
-                ['#FF7DFD', '#B72750'],
-                ['#00C9E4', '#420FFF']
+                ['#1D60FF', '#4409FF'],
+                ['#00AAE7', '#00D2E8']
             ],
             dataList: []
         }
     },
     mounted() {
 		// this.$forceUpdate()
-		this.creatEcharts()
+		this.setEcharts()
     },
     methods: {
-        creatEcharts() {
+        setEcharts() {
             this.dataList = this.legendData.map((a, index) => {
                 const minNum = 50,
                     maxNum = 400
@@ -72,15 +78,18 @@ export default {
                 return {
                     name: a,
                     data: dataList,
-                    barWidth:10,
+                    barWidth:6,
+                    stack:index+'',
                     itemStyle: {
-                        color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                        color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
                             { offset: 0, color: this.colorItemArr[index][0] },
                             { offset: 1, color: this.colorItemArr[index][1] }
                         ])
                     }
                 }
             }) 
+
+            console.log(this.dataList,'tbyj')
             this.$nextTick(() => {
                 this.$refs.echartsBar.setEcharts()
             })
@@ -89,10 +98,9 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.module-qljszk {
-    width: 3.8958rem;
+.module-tbyj {
+      width: 3.8958rem;
     height: 3.2292rem;
-    margin-top: 16px;
   display: flex;
   flex-direction: column;
 }

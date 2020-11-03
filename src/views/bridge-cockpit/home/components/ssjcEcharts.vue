@@ -2,14 +2,14 @@
   <!-- ssjc-实时监测 -->
   <div class="module-ssjc module-pub">
     <moduleTitle title="实时监测" />
-    <div class="data-total-box" >
+    <div class="data-total-box">
       异常突发事件:<span class="data-total"> {{ dataTotal }}</span>
     </div>
     <radar
       refName="ssjc-radar"
       ref="echartsRadar"
-      class='module-echarts' 
-      :center="center" 
+      class="module-echarts"
+      :center="center"
       :areaColor="areaColor"
       :dataList="dataList"
       :indicatorData="indicatorData"
@@ -35,8 +35,8 @@ export default {
     },
   },
   data() {
-    return { 
-      center: ['45%','60%'],
+    return {
+      center: ["45%", "60%"],
       dataTotal: 0,
       areaColor: ["rgba(251,73,124,0.8)", "rgba(251,73,124,0)"],
       indicatorData: [
@@ -45,35 +45,38 @@ export default {
           name: "除湿机故障",
         },
         {
-          name: "台风",
+          name: "台风事件",
         },
         {
-          name: "重载",
+          name: "地震事件",
+        },
+          {
+          name: "重载车事件",
+        },
+          {
+          name: "水中漂浮物",
         },
         {
-          name: "船撞",
-        },
-        {
-          name: "地震",
-        },
+          name: "船撞事故",
+        }, 
       ],
       dataList: [],
     };
   },
   watch: {
     fontSize: {
-      handler(val) { 
+      handler(val) {
         this.$nextTick(() => {
           this.$refs.echartsRadar.echartsResize();
         });
       },
       immediate: true,
     },
-     id(val) {
+    id(val) {
       this.$nextTick(() => {
         this.setEcharts();
       });
-     }
+    },
   },
 
   mounted() {
@@ -119,5 +122,4 @@ export default {
   // height: 2.7604rem;
   flex: 1;
 }
-
 </style>

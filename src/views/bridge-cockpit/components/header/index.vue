@@ -1,15 +1,22 @@
 <template>
   <div class="bigdata-header">
     <div class="header-left">
-      <div class="left-title" v-if="pageType==='2'">
-        {{title}}
-      </div>
-       <div class="left-title" v-else>
-        福建省长大桥梁 <span class="title-special">市级</span>平台-养护驾驶舱
-      </div>
-      <el-select style="width:1.2rem" v-model="currentUnit" size="medium">
-        <el-option :label="'上一级'" value="公司1"></el-option>
-      </el-select>
+      <template v-if="pageType === '2'">
+        <div class="left-title">
+          {{ title }}
+        </div>
+        <div class="goBack-button"  @click="$router.push('/bridge-cockpit/home')" ><i class="el-icon-s-home"></i>上一级</div>
+      </template>
+
+      <template v-else>
+        <div class="left-title">
+          福建省长大桥梁 <span class="title-special">省级</span>平台-养护驾驶舱
+        </div>
+        <el-select style="width:1.2rem" v-model="currentUnit" @change="areaChange" size="medium" placeholder="下一级">
+          <el-option :label="'厦彰大桥'" value="厦彰大桥"></el-option>
+        </el-select>
+      </template>
+
       <!-- <router-link to="/bridge-cockpit/bridgeManage" style="color: #33ccc2"
         >桥梁管理</router-link
       > -->
@@ -53,17 +60,17 @@ export default {
   data() {
     return {
       userName: "用户名",
-      currentUnit: "公司1",
-      title:'',
-      pageType:'',
+      currentUnit: "",
+      title: "",
+      pageType: "",
     };
   },
   watch: {
     $route: {
       handler(val) {
         // pageTitle
-        this.pageType=val.meta.type||'';
-        this.title=val.meta.pageTitle||'';
+        this.pageType = val.meta.type || "";
+        this.title = val.meta.pageTitle || "";
         switch (val.path) {
           case "/bigdata-cockpit/home":
             return null;
@@ -85,10 +92,16 @@ export default {
           this.$store.dispatch("user/logout");
           this.$router.push(`/login`);
           break;
-        default:
+        default: 
           return null;
       }
     },
+    areaChange(){
+      this.$router.push('/bridge-cockpit/bridgeManage/maintenance')
+      this.$nextTick(()=>{
+        this.currentUnit=''
+      })
+    }
   },
 };
 </script>
@@ -107,9 +120,10 @@ export default {
     margin-top: 0.26rem;
     align-items: center;
     .left-title {
+      margin-right: 15px;
       height: 0.416rem;
-      margin: 0;
-      font-size: 0.312rem;
+      // margin: 0;
+      font-size: 40px;
       font-weight: 700;
       line-height: 0.416rem;
       letter-spacing: 6px;
@@ -124,14 +138,46 @@ export default {
         -webkit-text-fill-color: #fece43;
       }
     }
+    .goBack-button {
+      border-radius: 2px; /*no*/
+      cursor: pointer;
+      width: 122px;
+      height: 36px;
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      background: #053377;
+      border: 2px solid #33ccc2; /*no*/
+      font-size: 20px;
+      font-family: MicrosoftYaHei, MicrosoftYaHei-Bold;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 40px;
+      letter-spacing: 2px; /*no*/
+      text-align: center;
+      .el-icon-s-home {
+        color: #00ffde;
+        font-size: 16px;
+      }
+    }
+
+    /deep/.el-select {
+      z-index: 1;
+      width: 122px;
+    }
+    // /deep/.el-select--medium {
+    //   height: 40px;
+    // }
     //选择公司下拉框
     /deep/.el-input__inner {
-      height: 0.375rem;
+      height: 40px;
       font-size: 0.208rem;
       line-height: 0.375rem;
-      border: 2px solid #33ccc2;
+      border: 2px solid #33ccc2; /*no */
+      background: #053377;
       input {
-        background-color: #113d75;
+        // background-color: #113d75;
+        background: #053377;
       }
     }
 

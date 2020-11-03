@@ -4,7 +4,7 @@ import Home from '../views/Home.vue'
 
 Vue.use(VueRouter)
 
-const routes = [
+const routes = [ 
   {
     path: '/',
     redirect: "/bridge-cockpit/bridgeManage/maintenance-panoramic",
@@ -18,9 +18,9 @@ const modules = routeFiles
     .keys()
     .map(path => routeFiles(path).default)
     .sort((a, b) => (a.sort > b.sort ? 1 : -1))
- 
+   
 const router = new VueRouter({
-  routes: modules,
+  routes:  modules.concat(routes),
 })
 
 export default router

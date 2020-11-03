@@ -1,17 +1,17 @@
 <template>
-  <!-- qlxx-桥梁信息 -->
-  <div class="module-qlxx module-pub">
-    <moduleTitle title="桥梁信息" />
-    <!--  -->
+  <!-- yhwx-养护维修 -->
+  <div class="module-yhwx module-pub">
+    <moduleTitle title="养护维修" /> 
     <circleEcharts
       ref="echartsCircles"
       class="module-echarts"
-      refName="qlxx-circle"
+      refName="yhwx-circle" 
       :colors="colors"
+      :showLabel="true"
       :dataList="dataList"
       :title="title"
-      :moduleName="moduleName"
-      :legendData="legendData"
+      :center="center"
+      :moduleName="moduleName" 
     />
   </div>
 </template>
@@ -30,26 +30,22 @@ export default {
     },
   },
   watch: {
-    fontSize: {
-      handler(val) {
-        this.$nextTick(() => {
-          this.$refs.echartsCircles.echartsResize();
-        });
-      },
-      immediate: true,
+    fontSize(val) {
+      this.$nextTick(() => {
+        this.$refs.echartsCircles.echartsResize();
+      });
     },
   },
   data() {
     return {
       title: {},
-      moduleName: "桥梁信息",
-      colors: ["#7ECAFE", "#00388C", "#A4DCFF", "#086CD8"],
+      center:["50%",'50%'],
+      moduleName: "养护维修", 
+      colors: ["#00388C", "#086CD8", "#39A3FE", "#7ECAFE", "#A4DCFF"],
       legendData: [],
       legendTxtList: [
-        { txt: "特大桥", unit: "" },
-        { txt: "大桥", unit: "" },
-        { txt: "中桥", unit: "" },
-        { txt: "小桥", unit: "" },
+        { txt: "已修复", unit: "" },
+        { txt: "未修复", unit: "" }, 
       ],
       dataList: [],
     };
@@ -63,42 +59,19 @@ export default {
       let valueTotal = 0;
       this.dataList = this.legendTxtList.map((val, index) => {
         const minNum = 50,
-          maxNum = 400;
-        const color = this.colors[index];
+          maxNum = 400; 
         const value = Math.floor(
           Math.random() * (maxNum - minNum + 1) + minNum
         );
         valueTotal += value;
-        const item = {
-          name: val.txt,
-          value: [10, 280 - index * 75],
-          itemStyle: {
-            color: color,
-          },
-          label: {
-            position: "right",
-            distance: 5,
-            show: true,
-
-            formatter: `{b|${val.txt}} {a|${value}} {b|${val.unit || "座"}}`,
-            rich: {
-              a: {
-                color: color,
-                fontSize: 20,
-                fontFamily: "DINEngschriftStd",
-              },
-              b: { color: "#fff", fontSize: 12 },
-            },
-          },
-        };
-
-        this.legendData.push(item);
+         
         return { value: value, name: val.txt };
       });
       this.title = {
         text: valueTotal + "",
         subtext: "共计",
-        // name: this.moduleName
+          left: "49%",
+          top: "39%", 
       };
       this.$nextTick(() => {
         this.$refs.echartsCircles.setEcharts();
@@ -108,12 +81,16 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.module-qlxx {
+.module-yhwx {
   width: 3.8958rem;
   height: 3.2292rem;
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
 }
 .module-echarts {
   width: 100%;
-  height: 2.7604rem;
+  // height: 2.7604rem;
+  flex: 1;
 }
 </style>

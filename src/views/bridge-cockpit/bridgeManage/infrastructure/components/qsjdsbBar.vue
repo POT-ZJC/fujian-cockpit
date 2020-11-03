@@ -2,6 +2,9 @@
   <!-- qsjdsbBar-桥上机电设备 -->
   <div class="module-qsjdsbBar module-pub">
     <moduleTitle title="桥上机电设备" />
+     <div class="data-total-box">
+      设备总数:<span class="data-total"> {{ dataTotal }}</span>
+    </div>
     <bar
       ref="echartsBar"
       refName="qsjdsbBar-bar"
@@ -41,6 +44,7 @@ export default {
     return { 
       grid: {},
       colors: ["#00A6E3", "#87680C"],
+      dataTotal:0,
       yAxisData: [
         "除湿机",
         "桁车",
@@ -73,7 +77,7 @@ export default {
         const value = Math.floor(
           Math.random() * (maxNum - minNum + 1) + minNum
         );
-
+this.dataTotal = this.dataTotal + value;
         return {
           name: a,
           value: value,
@@ -99,6 +103,7 @@ export default {
   margin-top: 16px;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 .module-echarts { 
   width: 100%;

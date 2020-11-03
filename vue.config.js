@@ -32,9 +32,12 @@ module.exports = {
     },
     proxy: {
       "^/api": {
-        target: "http://10.192.34.67:12000",
+        target: "http://10.192.34.65:8080",
         secure: false,
         changeOrigin: true,
+        pathRewrite:{
+          "^/api":''
+        }
       },
     },
   },

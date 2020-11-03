@@ -18,7 +18,7 @@
 // import ChartsUtilBlock from '../components/chartComponents/ChartsUtilBlock'
 // import ChinaMap from "@/views/bridge-cockpit/components/chartComponents/ChinaMap";
 import qsjdsbBar from "./components/qsjdsbBar";
-import amap from "../components/amap";
+import amap from "./components/amap";
 import { mapState } from "vuex";
 export default {
   components: {

@@ -1,34 +1,139 @@
 .bridge-cockpit-page {
 	background-image: url('/img/cockpit-bg1.jpg');
-	background-size: 100% 100%; 
+	background-size: 100% 100%;
 	background-repeat: no-repeat;
 	background-color: rgba(0, 13, 26, 1);
 	color: #fff;
+
 	.tc {
 		text-align: center;
 	}
 
-	.module-pub {
+	/deep/.module-pub {
 		background: rgba(11, 19, 27, 0.6);
-		border: 1px solid #0a2540;/*no*/
+		border: 1px solid #0a2540;
+		/*no*/
 		box-shadow: 0 13px 22px 0 #12334b inset;
 	}
 
+	/deep/.item-block {
+		margin-bottom: 15px;
+		height: 36px;
+		display: flex;
+		align-items: center;
 
-// 下拉菜单
+		.item-label {
+			flex-shrink: 0;
+			width: 110px;
+			text-align: right;
+			padding-right: 10px;
+		}
 
-.el-dropdown-menu {
-    background-color: #0c3959;
+		.item-content {
+			flex: 1;
+		}
+	}
 
-    &__item {
-        &--divided {
-            &:before {
-                background-color: #0c3959;
-            }
-        }
-    }
-}
+	//地图搜索-公共样式
+	/deep/.map-query-box {
+		.map-search-head {
+			height: 60px;
+			border: 1px solid #006154;
+			border-radius: 6px;
 
+			/deep/.el-input__inner {
+				background-color: rgba(0, 0, 0, 0);
+				border: 0;
+				font-size: 16px;
+				font-weight: 700;
+				color: #c9edff;
+			}
+
+			.search-btn {
+				cursor: pointer;
+				color: #00ffde;
+				margin-left: 15px;
+				font-size: 22px;
+			}
+		}
+
+		/deep/.el-col {
+			display: flex;
+			align-items: center;
+			height: 100%;
+		}
+
+		.map-search-body {
+			border-top: 2px solid #0a2540;
+			padding: 15px;
+
+			/deep/.el-input__inner {
+				//
+				background: #0f283b;
+				box-shadow: 0 10px 30px 0 #12334b inset;
+				border: 1px solid #0a2540;
+			}
+
+			/deep/.el-range-editor--mini .el-range-input {
+				//时间范围选择器背景
+				background: none;
+			}
+
+			/deep/.el-checkbox__inner {
+				border-color: #00fbdb;
+				border-radius: 4px;
+				background-color: rgba(0, 0, 0, 0);
+			}
+
+			/deep/.el-checkbox__input.is-checked .el-checkbox__inner {
+				//勾选框-选中效果
+				border-color: #00fbdb;
+				background-color: rgba(0, 0, 0, 0);
+			}
+
+			/deep/.el-checkbox__inner::after {
+				border: 1px solid #00fbdb; //勾选框-选中效果
+				border-left: 0;
+				border-top: 0;
+			}
+
+			// 勾选框-选中效果
+			/deep/.el-checkbox__input.is-checked+.el-checkbox__label {
+				color: #00fbdb;
+			}
+		}
+	}
+
+	// 下拉菜单
+
+	/deep/.el-dropdown-menu {
+		background-color: #0c3959;
+
+		&__item {
+			&--divided {
+				&:before {
+					background-color: #0c3959;
+				}
+			}
+		}
+	}
+
+	/deep/.data-total-box {
+		position: absolute;
+		display: flex;
+		align-items: center;
+		right: 24px;
+		top: 15%;
+		font-size: 12px;
+		font-family: MicrosoftYaHei;
+		color: #ffffff;
+
+		.data-total {
+			font-size: 20px;
+			font-family: DINEngschriftStd;
+			color: #00ffde;
+		}
+	}
 
 
 

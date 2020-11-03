@@ -5,9 +5,7 @@
         <bar
             ref="echartsBar"
             refName="jszkpd-bar"
-            class="module-echarts"
-            :width="width"
-            :height="height"
+            class="module-echarts" 
             :colors="colors"
             :dataList="dataList"
             :xAxisData="xAxisData"
@@ -17,7 +15,7 @@
 </template>
 <script>
 import echarts from 'echarts'
-import bar from '../../components/chartComponents/bar'
+import bar from '@/views/bridge-cockpit/components/chartComponents/bar'
 import moduleTitle from '@/views/bridge-cockpit/components/moduleTitle'
 export default {
     components: {
@@ -25,6 +23,10 @@ export default {
         moduleTitle
     },
     props: {
+        id: {
+      type: String,
+      default: "",
+    },
         fontSize: {
             type: Number,
             default: 14
@@ -32,29 +34,26 @@ export default {
     },
     watch: {
         fontSize: {
-            handler(val) {
-                const remW = 11.7708 //单位rem
-                const remH = 2.7604//3.2708 - 1.1354 //   265px/0.96
-                this.width = val * remW
-                this.height = val * remH
-                console.log(this.height)
+            handler(val) { 
                 this.$nextTick(() => {
                     this.$refs.echartsBar.echartsResize()
                 })
             },
             immediate: true
-        }
+        },
+         id(val) {
+      this.$nextTick(() => {
+        this.setEcharts();
+      });
+     }
     },
     data() {
-        return {
-            // title: {},
-            width: null,
-			height: null,
+        return { 
 			grid:{
 
 			},
             colors: ['#00A6E3', '#87680C'],
-            legendData: ['优', '良', '中', '次', '差'],
+            legendData: ['1类', '2类', '3类', '4类', '5类'],
             xAxisData: ['2015', '2016', '2017', '2018', '2019', '2020', '2021'],
             colorItemArr: [
                 ['#DE3040', '#850D1A'],
@@ -68,10 +67,10 @@ export default {
     },
     mounted() {
 		// this.$forceUpdate()
-		this.creatEcharts()
+		this.setEcharts()
     },
     methods: {
-        creatEcharts() {
+        setEcharts() {
             this.dataList = this.legendData.map((a, index) => {
                 const minNum = 50,
                     maxNum = 400
@@ -89,8 +88,7 @@ export default {
                         ])
                     }
                 }
-            })
-            console.log(this.dataList)
+            }) 
             this.$nextTick(() => {
                 this.$refs.echartsBar.setEcharts()
             })
@@ -101,6 +99,13 @@ export default {
 <style lang="scss" scoped>
 .module-jszkpd {
     width: 11.7708rem;
-    height: 3.2708rem;
+    height: 3.2292rem;
+  display: flex;
+  flex-direction: column;
+}
+.module-echarts {
+  width: 100%;
+  // height: 2.7604rem;
+  flex: 1;
 }
 </style>

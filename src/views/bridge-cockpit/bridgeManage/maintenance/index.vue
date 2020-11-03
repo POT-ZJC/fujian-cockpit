@@ -17,7 +17,7 @@
 <script>  
 import bhtjCircle from "./components/bhtjCircle";
 import { mapState } from "vuex"; 
-import amap from "../components/amap";
+import amap from "./components/amap";
 export default {
   components: {
     amap,
