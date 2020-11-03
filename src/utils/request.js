@@ -4,7 +4,7 @@ import store from "@/store";
 // import { getToken } from '@/utils/auth'
 
 const api_root =
-  process.env.NODE_ENV == "development" ? "/api" : "http://10.192.34.65:8080";
+  process.env.NODE_ENV == "development" ? "/api" : "";
 // const api_root = process.env.NODE_ENV == "development" ? "http://10.192.34.65:8080" : "/api";
 
 let requestCount = 0;
