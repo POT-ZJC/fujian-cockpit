@@ -8,6 +8,7 @@
             v-model="queryBridge.bridgeName"
             size="medium "
             placeholder="搜索名称"
+             @keyup.enter.native="reqBridgeListByParam"
           />
         </el-col>
         <el-col :span="3">
@@ -21,11 +22,12 @@
             <div class="item-label">桥梁名称：</div>
             <div class="item-content">
               <el-select
+                clearable
                 style="width:1.2rem"
                 v-model="queryBridge.bridgeId"
                 placeholder="选择桥梁"
               >
-              <el-option value="">全部</el-option>
+                <el-option value="">全部</el-option>
                 <el-option
                   v-for="item in allBridgeList"
                   :key="item.bridgeName"
@@ -39,6 +41,7 @@
             <div class="item-label">左/右幅：</div>
             <div class="item-content">
               <el-select
+                clearable
                 style="width:1.2rem"
                 v-model="queryBridge.leftRight"
                 placeholder="下一级"
@@ -112,7 +115,15 @@
       </div>
       <div class="detail-body">
         <div class="body-left">
-          <img :src="detailData.imgUrl" alt="桥梁图片" />
+          <el-image
+            v-show="bridgeCompPhotoList.length > 0"
+            class="img"
+            :src="bridgeCompPhotoList[0]"
+            :preview-src-list="bridgeCompPhotoList"
+          >
+          </el-image>
+          <div v-show="bridgeCompPhotoList.length < 1">暂无桥梁图片</div>
+          <!-- <img :src="detailData.imgUrl" alt="桥梁图片" /> -->
         </div>
         <div class="body-right">
           <div class="right-title">{{ detailData.bridgeName }}</div>
@@ -139,6 +150,7 @@ import poi_type_4 from "./img/poi-type-4.svg";
 import poi_type_5 from "./img/poi-type-5.svg";
 import tip_bg from "./img/tip-bg.svg";
 import map_poi_desc from "./img/map-poi-desc.png";
+import moment from "moment";
 import {
   getBridgeListByParam,
   getBridgeDetailInfoById,
@@ -173,38 +185,67 @@ export default {
       {
         bridgeId: "480670b7-9d11-11e7-93c0-00163e042bbd",
         bridgeName: "北汊北引桥（左幅）",
-        addr: [117.959762, 24.470813],
+        addr: [117.956972, 24.458801],
       },
       {
         bridgeId: "1527244b-9d14-11e7-93c0-00163e042bbd",
         bridgeName: "北汊北引桥（右幅）",
-        addr: [117.957273, 24.470579],
+        addr: [117.953882, 24.459505],
+      },
+      {
+        bridgeId: "ccf1871f-9d15-11e7-93c0-00163e042bbd",
+        bridgeName: "北汊南引桥（左幅）",
+        addr: [117.953625, 24.444816],
+      },
+
+      {
+        bridgeId: "7d7ea66e-9d17-11e7-93c0-00163e042bbd",
+        bridgeName: "北汊南引桥（右幅）",
+        addr: [117.950706, 24.44505],
       },
       {
         bridgeId: "2103b393-9d15-11e7-93c0-00163e042bbd",
         bridgeName: "北汊主桥",
-        addr: [117.953582, 24.452024],
+        addr: [117.954311, 24.453567],
       },
+
       {
         bridgeId: "9e5c45a9-9d1c-11e7-93c0-00163e042bbd",
         bridgeName: "南汊南引桥（左幅）",
-        addr: [117.993922, 24.374336],
+        addr: [117.965641, 24.417543],
       },
       {
         bridgeId: "14df6da3-9d1c-11e7-93c0-00163e042bbd",
         bridgeName: "南汊主桥",
         addr: [117.959726, 24.424457],
       },
+
       {
-        bridgeId: "1588a917-2018-11e8-94b6-5cb901893af4",
-        bridgeName: "海门岛互通（A匝道）",
-        addr: [117.966673, 24.41088],
+        bridgeId: "4c4d9f55-9d1b-11e7-93c0-00163e042bbd",
+        bridgeName: "南汊北引桥（右幅）",
+        addr: [117.951736, 24.436142],
+      },
+
+      {
+        bridgeId: "7f976dee-9d1a-11e7-93c0-00163e042bbd",
+        bridgeName: "南汊北引桥（左幅）",
+        addr: [117.955256, 24.438799],
       },
       {
-        bridgeId: "77707707-ce8f-11e7-93c0-00163e042bbd",
-        bridgeName: "海门岛互通（C匝道）",
-        addr: [117.968425, 24.410022],
+        bridgeId: "1f27bff0-9d1d-11e7-93c0-00163e042bbd",
+        bridgeName: "南汊南引桥（右幅）",
+        addr: [117.961779, 24.416996],
       },
+      // {
+      //   bridgeId: "1588a917-2018-11e8-94b6-5cb901893af4",
+      //   bridgeName: "海门岛互通（A匝道）",
+      //   addr: [117.966673, 24.41088],
+      // },
+      // {
+      //   bridgeId: "77707707-ce8f-11e7-93c0-00163e042bbd",
+      //   bridgeName: "海门岛互通（C匝道）",
+      //   addr: [117.968425, 24.410022],
+      // },
     ];
     return {
       map_poi_desc,
@@ -224,7 +265,8 @@ export default {
         { name: "养护单位", key: "maintenanceDepart" },
       ],
       //桥梁详情
-      detailData: { name: "泉州湾大桥" },
+      detailData: { name: "大桥" },
+      bridgeCompPhotoList: [],
       //搜索桥梁
       queryBridge: {
         bridgeId: "", // 桥梁id
@@ -292,23 +334,24 @@ export default {
       const { attachObj } = res;
       this.allBridgeList = this.bridgeData_filter(attachObj);
       // this.allBridgeList=allBridgeList
+
+      this.mapBridgeList = this.bridgeData_filter(attachObj);
+      this.updateMapPoi(this.mapBridgeList);
     });
   },
   methods: {
     //查询桥梁
     reqBridgeListByParam() {
       const queryData = {
-        ...this.queryBridge
-      }; 
+        ...this.queryBridge,
+      };
 
-
-
-      queryData.bridgeTypeId=queryData.bridgeTypeId.join(',');
-      queryData.technologyLevel=queryData.technologyLevel.join(',');
+      queryData.bridgeTypeId = queryData.bridgeTypeId.join(",");
+      queryData.technologyLevel = queryData.technologyLevel.join(",");
       queryData.times = queryData.times ? ["", ""] : queryData.times;
       queryData.buildDateStart = queryData.times[0]; //建设年份开始
       queryData.buildDateEnd = queryData.times[1]; //建设年份结束\
-      delete queryData.times 
+      delete queryData.times;
       getBridgeListByParam(queryData).then((res) => {
         console.log(res);
         const { attachObj } = res;
@@ -389,19 +432,23 @@ export default {
       });
       this.markers_Arr = markers;
     },
-  
-  
-  
-  //打开地图点标记桥梁详情
+
+    //打开地图点标记桥梁详情
     openPoiDetail(data) {
       getBridgeDetailInfoById({ bridgeId: data.bridgeId }).then((res) => {
         console.log(res);
         let { attachObj } = res;
 
         const { bridgeCompPhotoList } = attachObj;
-        attachObj.imgUrl = bridgeCompPhotoList.length
-          ? bridgeCompPhotoList[0].filePath
-          : "";
+        // attachObj.imgUrl = bridgeCompPhotoList.length
+        //   ? bridgeCompPhotoList[0].filePath
+        //   : "";
+        this.bridgeCompPhotoList = bridgeCompPhotoList || [];
+        attachObj.buildDate = moment(attachObj.buildDate).format("yyyy-MM-DD");
+
+        //   this.detail_imgs_1 = this.diseaseDetail.attList
+        // ? this.diseaseDetail.attList.map((a) => a.attPath)
+        // : [];
         this.detailData = attachObj;
         this.isOpenBridgeDetail = true;
       });
@@ -508,18 +555,6 @@ export default {
   width: 690px;
   height: 510px;
 
-  .item-block {
-    margin: 0;
-  }
-  .item-label {
-    width: auto;
-    text-align: left;
-  }
-  .item-content {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
   .detail-header {
     display: flex;
     justify-content: space-between;
@@ -558,7 +593,7 @@ export default {
       width: 290px;
       height: 396px;
       flex-shrink: 0;
-      img {
+      .img {
         width: 100%;
         height: 100%;
       }
@@ -573,6 +608,18 @@ export default {
         color: #ffffff;
         line-height: 24px;
         letter-spacing: 1px; /*no */
+      }
+      .item-block {
+        margin: 0;
+      }
+      .item-label {
+        width: auto;
+        text-align: left;
+      }
+      .item-content {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     }
   }

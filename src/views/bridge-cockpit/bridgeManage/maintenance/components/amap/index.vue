@@ -8,6 +8,7 @@
             v-model="queryBridge.bridgeName"
             size="medium "
             placeholder="搜索名称"
+            @keyup.enter.native="reqDiseaseListByParam"
           />
         </el-col>
         <el-col :span="3">
@@ -23,7 +24,11 @@
           <el-col :span="11" class="item-block">
             <div class="item-label">桥梁名称：</div>
             <div class="item-content">
-              <el-select v-model="queryBridge.bridgeId" placeholder="桥梁选择">
+              <el-select
+                clearable
+                v-model="queryBridge.bridgeId"
+                placeholder="桥梁选择"
+              >
                 <el-option value="">全部</el-option>
                 <el-option
                   v-for="item in allBridgeList"
@@ -40,6 +45,7 @@
             <div class="item-label">巡查类型：</div>
             <div class="item-content">
               <el-select
+                clearable
                 v-model="queryBridge.paramId"
                 placeholder="巡查类型选择"
               >
@@ -58,7 +64,11 @@
           <el-col :span="23" class="item-block">
             <div class="item-label">巡查项：</div>
             <div class="item-content">
-              <el-select v-model="queryBridge.inspId" placeholder="巡查项选择">
+              <el-select
+                clearable
+                v-model="queryBridge.inspId"
+                placeholder="巡查项选择"
+              >
                 <el-option value="">全部</el-option>
                 <el-option
                   v-for="item in patrolItemList"
@@ -75,6 +85,7 @@
             <div class="item-label">病害类型：</div>
             <div class="item-content">
               <el-select
+                clearable
                 v-model="queryBridge.diseaseId"
                 placeholder="病害类型选择"
               >
@@ -94,6 +105,7 @@
             <div class="item-label">审核状态：</div>
             <div class="item-content">
               <el-select
+                clearable
                 v-model="queryBridge.signStatus"
                 placeholder="审核状态选择"
               >
@@ -114,6 +126,7 @@
             <div class="item-content">
               <el-date-picker
                 v-model="queryBridge.times"
+                value-format="yyyy-MM-dd"
                 type="daterange"
                 popper-class="daterange-wrapper"
                 range-separator="-"
@@ -141,13 +154,27 @@
 
           <div class="contentBlock-item">
             <div class="show-imgs">
-              <img
+              <!-- <img
                 v-for="item in detail_imgs_1"
                 :src="item.attPath"
                 alt=""
                 :key="item.attPath"
-              />
-              <span v-if="detail_imgs_1.length < 1">暂无图片</span>
+              /> -->
+              <el-image
+                class="img"
+                v-show="detail_imgs_1.length > 0"
+                :src="detail_imgs_1[0]"
+                :preview-src-list="detail_imgs_1"
+              >
+              </el-image>
+              <el-image
+                v-show="detail_imgs_1.length > 1"
+                class="img"
+                :src="detail_imgs_1[1]"
+                :preview-src-list="detail_imgs_1"
+              >
+              </el-image>
+              <span v-show="detail_imgs_1.length < 1">暂无图片</span>
             </div>
             <div
               class="item-block"
@@ -155,7 +182,7 @@
               :key="item.key"
             >
               <div class="item-label">{{ item.name + ":" }}</div>
-              <div class="item-content">
+              <div class="item-content" :title="diseaseDetail[item.key] || '-'">
                 {{ diseaseDetail[item.key] || "-" }}
               </div>
             </div>
@@ -171,6 +198,7 @@
                 alt=""
                 :key="item.attPath"
               />
+
               <span v-if="detail_imgs_2.length < 1">暂无图片</span>
             </div>
             <div
@@ -179,7 +207,7 @@
               :key="item.key"
             >
               <div class="item-label">{{ item.name + ":" }}</div>
-              <div class="item-content">
+              <div class="item-content" :title="maintenance[item.key] || '-'">
                 {{ maintenance[item.key] || "-" }}
               </div>
             </div>
@@ -204,7 +232,7 @@
               :key="item.key"
             >
               <div class="item-label">{{ item.name + ":" }}</div>
-              <div class="item-content">
+              <div class="item-content" :title="acceptance[item.key] || '-'">
                 {{ acceptance[item.key] || "-" }}
               </div>
             </div>
@@ -221,6 +249,7 @@ import poi_red from "./img/point-red.png";
 import poi_green from "./img/point-green.png";
 import poi_yellow from "./img/point-yellow.png";
 import tip_bg from "./img/tip-bg.svg";
+
 import {
   getDiseaseListByParam,
   getDiseaseDetailInfoById,
@@ -255,27 +284,27 @@ export default {
       map: null,
       isOpenBridgeDetail: false,
       detailFormat_1: [
-        { name: "结构物名称", key: "bridgeNumber" },
+        { name: "结构物名称", key: "bridgeName" },
         { name: "检查类型", key: "paramId" },
         { name: "巡查项", key: "inspName" },
         { name: "病害类型", key: "diseaseName" },
         { name: "病害位置", key: "diseasePosition" },
         { name: "病害参数", key: "diseaseParam" },
-        { name: "病害描述", key: "designDepart" },
         { name: "巡查员", key: "checkPersonName" },
         { name: "巡查时间", key: "gmtCreate" },
+        { name: "审核状态", key: "signStatus" },
       ],
       detailFormat_2: [
-        { name: "预估工程量", key: "bridgeNumber" },
-        { name: "实际工程量", key: "length" },
+        { name: "预估工程量", key: "expectWorkloadVaule" }, //expectWorkloadCompany
+        { name: "实际工程量", key: "realWorkload" },
         { name: "维护信息", key: "bridgeType" },
-        { name: "维修人", key: "buildDate" },
-        { name: "维修时间", key: "technologyLevel" },
+        { name: "维修人", key: "createByName" },
+        { name: "维修时间", key: "gmtCreate" },
       ],
       detailFormat_3: [
-        { name: "验收结果", key: "bridgeNumber" },
-        { name: "验收人", key: "length" },
-        { name: "验收时间", key: "bridgeType" },
+        { name: "验收结果", key: "diseaseRemark" },
+        { name: "验收人", key: "createByName" },
+        { name: "验收时间", key: "gmtCreate" },
       ],
       queryBridge: {
         bridgeId: "", // 桥梁id
@@ -310,40 +339,55 @@ export default {
   mounted() {
     this.initMap();
     getDiseaseListByParam().then((res) => {
-      // console.log(res)
       const { attachObj } = res;
-      this.allBridgeList = this.bridgeData_filter(attachObj || []);
+      this.allBridgeList = this.unique(attachObj || []);
+       this.mapBridgeList = this.bridgeData_filter(attachObj||[]); 
+        this.updateMapPoi(this.mapBridgeList);
     });
   },
   methods: {
+    unique(arr) {
+      var newArr = [];
+      for (var i = 0; i < arr.length; i++) {
+        // bridgeId;
+        if (newArr.findIndex((a) => a.bridgeId === arr[i].bridgeId) === -1) {
+          newArr.push(arr[i]);
+        }
+      }
+      console.log(newArr);
+      return newArr;
+    },
+
     reqDiseaseListByParam() {
       const queryData = {
         ...this.queryBridge,
       };
-      queryData.times = queryData.times ? ["", ""] : queryData.times;
+
+      queryData.times = queryData.times ? queryData.times : ["", ""];
       queryData.beginDate = queryData.times[0]; //建设年份开始
       queryData.endDate = queryData.times[1]; //建设年份结束\
       delete queryData.times;
       getDiseaseListByParam(queryData).then((res) => {
         console.log(res);
         const { attachObj } = res;
-        this.mapBridgeList = this.bridgeData_filter(attachObj);
+        this.mapBridgeList = this.bridgeData_filter(attachObj); 
         this.updateMapPoi(this.mapBridgeList);
       });
     },
-    // 桥梁数据过滤-去掉没有坐标点的数据
+    // 桥梁数据过滤-去掉没有坐标点的数据-并去重
     bridgeData_filter(list) {
-      let arr = [];
+      let arrs = [];
       list.forEach((item) => {
         if (item.longitude && item.latitude) {
           const data = {
             ...item,
             addr: [item.longitude, item.latitude],
           };
-          arr.push(data);
+          arrs.push(data);
         }
       });
-      return arr;
+
+      return arrs;
     },
     //更新点图点标记
     updateMapPoi(poiArr) {
@@ -394,20 +438,51 @@ export default {
           maintenance, //养护维修
           acceptance, //验收信息
         } = res.attachObj;
-
+        //病害-数据处理
+        diseaseDetail = diseaseDetail || {};
+        //检查类型
         const paramIdObj = this.patrolTypeList.find(
           (a) => a.id === diseaseDetail.paramId
         );
         diseaseDetail.paramId = paramIdObj.name;
-        this.diseaseDetail = diseaseDetail || {};
-        this.detail_imgs_1 = this.diseaseDetail.attList || [];
+        //审核状态
+        const signStatusObj = this.auditStatusList.find(
+          (a) => a.id === diseaseDetail.signStatus
+        );
+        diseaseDetail.signStatus = signStatusObj.name;
+     
+        this.diseaseDetail = diseaseDetail;
+        // console.log(this.diseaseDetail.attList)
+        // this.diseaseDetail.attList.map((a) => a.attPath)
+        this.detail_imgs_1 = this.diseaseDetail.attList
+          ? this.diseaseDetail.attList.map((a) => a.attPath)
+          : [];
 
+        //养护-数据处理
         this.maintenance = maintenance || {};
-        this.detail_imgs_2 = this.maintenance.attList || [];
+   //预估工程量
+         this.maintenance.expectWorkloadVaule =  this.maintenance.expectWorkloadVaule
+          ?  this.maintenance.expectWorkloadVaule +
+            ( this.maintenance.expectWorkloadCompany || "")
+          : "";
+        //实际工程量
+         this.maintenance.realWorkload =  this.maintenance.realWorkload
+          ?  this.maintenance.realWorkload +
+            ( this.maintenance.expectWorkloadCompany || "")
+          : "";
+
+
+
+
+        this.detail_imgs_2 = this.maintenance.attList
+          ? this.maintenance.attList.map((a) => a.attPath)
+          : [];
+        //验收-数据处理
         this.acceptance = acceptance || {};
-        this.detail_imgs_3 = this.acceptance.attList || [];
-        // const { bridgeCompPhotoList } = attachObj;
-        // this.detailData = attachObj;
+        this.detail_imgs_3 = this.acceptance.attList
+          ? this.acceptance.attList.map((a) => a.attPath)
+          : [];
+
         this.isOpenBridgeDetail = true;
       });
     },
@@ -568,7 +643,7 @@ export default {
       }
       .show-imgs {
         height: 49px;
-        img {
+        .img {
           width: 72px;
           height: 49px;
           margin-right: 15px;

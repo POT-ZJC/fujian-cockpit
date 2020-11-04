@@ -97,7 +97,7 @@ export default {
       }
     },
     areaChange(){
-      this.$router.push('/bridge-cockpit/bridgeManage/maintenance')
+      this.$router.push('/bridge-cockpit/bridgeManage/maintenance-panoramic')
       this.$nextTick(()=>{
         this.currentUnit=''
       })
