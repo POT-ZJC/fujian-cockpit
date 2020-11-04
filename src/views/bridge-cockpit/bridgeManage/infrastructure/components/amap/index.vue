@@ -300,10 +300,15 @@ export default {
       const queryData = {
         ...this.queryBridge
       }; 
+
+
+
+      queryData.bridgeTypeId=queryData.bridgeTypeId.join(',');
+      queryData.technologyLevel=queryData.technologyLevel.join(',');
       queryData.times = queryData.times ? ["", ""] : queryData.times;
       queryData.buildDateStart = queryData.times[0]; //建设年份开始
       queryData.buildDateEnd = queryData.times[1]; //建设年份结束\
-      delete queryData.times
+      delete queryData.times 
       getBridgeListByParam(queryData).then((res) => {
         console.log(res);
         const { attachObj } = res;
