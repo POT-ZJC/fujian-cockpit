@@ -8,7 +8,7 @@
             v-model="queryBridge.bridgeName"
             size="medium "
             placeholder="搜索名称"
-             @keyup.enter.native="reqBridgeListByParam"
+            @keyup.enter.native="reqBridgeListByParam"
           />
         </el-col>
         <el-col :span="3">
@@ -115,14 +115,20 @@
       </div>
       <div class="detail-body">
         <div class="body-left">
-          <el-image
+          <el-carousel :interval="5000"  class="img"   v-show="bridgeCompPhotoList.length > 0">
+            <el-carousel-item v-for="item in bridgeCompPhotoList" :key="item" class="img">
+              <!-- v-show="bridgeCompPhotoList.length > 0" -->
+              <img class="img" :src="item" alt='桥梁图片' />
+            </el-carousel-item>
+          </el-carousel>
+          <!-- <el-image
             v-show="bridgeCompPhotoList.length > 0"
             class="img"
-            :src="bridgeCompPhotoList[0]"
-            :preview-src-list="bridgeCompPhotoList"
+            :src="item"
+            :preview-src-list="bridgeCompPhotoList[0]"
           >
-          </el-image>
-          <div v-show="bridgeCompPhotoList.length < 1">暂无桥梁图片</div>
+          </el-image> -->
+          <p v-show="bridgeCompPhotoList.length < 1">暂无桥梁图片</p>
           <!-- <img :src="detailData.imgUrl" alt="桥梁图片" /> -->
         </div>
         <div class="body-right">
@@ -439,16 +445,10 @@ export default {
         console.log(res);
         let { attachObj } = res;
 
-        const { bridgeCompPhotoList } = attachObj;
-        // attachObj.imgUrl = bridgeCompPhotoList.length
-        //   ? bridgeCompPhotoList[0].filePath
-        //   : "";
-        this.bridgeCompPhotoList = bridgeCompPhotoList || [];
+        let { bridgeCompPhotoList } = attachObj;
+        bridgeCompPhotoList = bridgeCompPhotoList || [];
+        this.bridgeCompPhotoList = bridgeCompPhotoList.map((a) => a.filePath);
         attachObj.buildDate = moment(attachObj.buildDate).format("yyyy-MM-DD");
-
-        //   this.detail_imgs_1 = this.diseaseDetail.attList
-        // ? this.diseaseDetail.attList.map((a) => a.attPath)
-        // : [];
         this.detailData = attachObj;
         this.isOpenBridgeDetail = true;
       });
@@ -593,6 +593,9 @@ export default {
       width: 290px;
       height: 396px;
       flex-shrink: 0;
+      /deep/.el-carousel__container{
+        height: 100%;
+      }
       .img {
         width: 100%;
         height: 100%;
