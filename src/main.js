@@ -3,6 +3,7 @@ import App from './App.vue'
 import elementUI from 'element-ui'
 // 自定义element-ui主题
 import './styles/element-variables.scss'
+import './styles/common.scss'
 import './registerServiceWorker'
 import store from './store'
 import router from './router'

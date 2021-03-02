@@ -11,6 +11,16 @@ const routes = [
     name: 'Home',
     component: Home
   }, 
+  {
+		path: "/demo",
+		name: "demo",
+		component: () => import("@/views/demo/index.vue")
+	},
+  {
+		path: "/cockpit-normalScreen",
+		name: " normalScreen",
+		component: () => import("@/views/cockpit-version-1/normalScreen.vue")
+	},
 ]
  
 const routeFiles = require.context('./modules', true, /\.js$/)

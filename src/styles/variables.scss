@@ -1,0 +1,34 @@
+ 
+ 
+  //  按照设计图百分比换算宽高
+  @function topw($px, $base-pw-size: 1920px) {
+
+	@return ($px / $base-pw-size) * 100%;
+}
+
+@function toph($px, $base-ph-size: 1080px) {
+
+	@return ($px / $base-ph-size) * 100%;
+}
+ 
+ 
+ 
+ 
+ 
+ 
+ @function tovw($px, $base-vw-size: 19.2px) {
+
+ 	@return ($px / $base-vw-size) * 1vw;
+ }
+
+ @function tovh($px, $base-vh-size: 10.8px) {
+
+ 	@return ($px / $base-vh-size) * 1vh;
+ }
+
+
+
+ @function torem($px, $base-font-size: 100px) {
+
+ 	@return ($px / $base-font-size) * 1rem;
+ }

@@ -24,7 +24,7 @@ module.exports = {
     // 设置为true的时候会启动两个窗口，用package.json文件中启动脚本加上--open参数代替
     // open: true,
     inline: false, // 关闭热更新
-    host:'0.0.0.0',
+    host: "0.0.0.0",
     disableHostCheck: true,
     overlay: {
       warnings: false,
@@ -32,12 +32,12 @@ module.exports = {
     },
     proxy: {
       "^/api": {
-        target: "http://10.192.34.65:8080",
+        target: "http://10.192.34.65:8555/cmct-bridge-demo",//http://10.192.34.65:8555/cmct-bridge-demo/login/getAreaList
         secure: false,
         changeOrigin: true,
-        pathRewrite:{
-          "^/api":''
-        }
+        pathRewrite: {
+          "^/api": "",
+        },
       },
     },
   },
@@ -54,6 +54,18 @@ module.exports = {
   chainWebpack: function(config) {
     config.plugins.delete("preload"); // TODO: need test
     config.plugins.delete("prefetch"); // TODO: need test
+
+    // 引入全局的sass资源
+    const oneOfsMap = config.module.rule("scss").oneOfs.store;
+    oneOfsMap.forEach((item) => {
+      item
+        .use("sass-resources-loader")
+        .loader("sass-resources-loader")
+        .options({
+          resources: ["./src/styles/variables.scss"],
+        })
+        .end();
+    });
 
     // set svg-sprite-loader
     // config.module
@@ -74,14 +86,14 @@ module.exports = {
   },
 
   css: {
-    loaderOptions: {
-      postcss: {
-        plugins: [
-          // 设计稿宽度1920/10/2=96
-          require("postcss-px2rem")({ remUnit: 96 }),
-        ],
-      },
-    },
+    // loaderOptions: {
+    //   postcss: {
+    //     plugins: [
+    //       // 设计稿宽度1920/10/2=96
+    //       require("postcss-px2rem")({ remUnit: 96 }),
+    //     ],
+    //   },
+    // },
   },
 
   pluginOptions: {

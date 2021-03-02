@@ -41,7 +41,7 @@ service.interceptors.request.use(
   (config) => {
     config.url = api_root + config.url;
     // do something before request is sent
-    config.headers["Content-Type"] = "application/json;charset=utf-8";
+    // config.headers["Content-Type"] = "application/json;charset=utf-8";
     config.timeout = 30 * 1000;
     //   const token = getToken()
     if (!config.headers["Content-Type"]) {
@@ -71,7 +71,7 @@ service.interceptors.response.use(
     closeGlobalLoading(config);
 
     // if the custom code is not 0, it is judged as an error.
-    if (res.statusCode !== "200") {
+    if (res.code !== "0") {
       Message({
         message: res.message || "Error",
         type: "error",

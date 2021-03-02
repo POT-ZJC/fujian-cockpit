@@ -13,7 +13,7 @@
           福建省长大桥梁 <span class="title-special">省级</span>平台-养护驾驶舱
         </div>
         <el-select style="width:1.2rem" v-model="currentUnit" @change="areaChange" size="medium" placeholder="下一级">
-          <el-option :label="'厦彰大桥'" value="厦彰大桥"></el-option>
+          <el-option :label="'厦漳大桥'" value="厦漳大桥"></el-option>
         </el-select>
       </template>
 
