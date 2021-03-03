@@ -363,7 +363,7 @@ export default {
 	position: absolute;
 	height: 100%;
 	right: 0;
-	width: 2.5rem;
+	width: ;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;

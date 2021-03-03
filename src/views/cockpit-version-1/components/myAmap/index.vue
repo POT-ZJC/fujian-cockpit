@@ -1,7 +1,7 @@
 <template>
   <div class=" pr" style="width:100%;height:100%">
     <div id="container" class="container" style="width:100%;height:100%"></div>
-   
+
     <!-- 区域公司/养护中心/养护站 -->
     <div class="area-level-count">
       <div class="area-level-item">
@@ -287,28 +287,117 @@ export default {
       console.log(markers);
       /*设置坐标点-结束 */
     },
-    openPoiLabel(temp) {
-      temp.setLabel({
-        offset: new AMap.Pixel(153, -28), // 设置文本标注偏移量
-        // <p>${setIcon}项目状态：${status}</p>
-        // style ="color: ${color}"
-        content: `
-				<div  class="poi-content" >
-				<div  class="poi-titel" >${temp.name}</div>
-				<div class="txt">发布了任务单详情</div>
-				<div class="link">查看详情>></div>
-				</div> 
-				<div class="map-poi-line-1" ></div>
-				<div class="map-poi-line-2" ></div>
-												`, // 设置文本标注内容
-        direction: "right", // 设置文本标注方位
+    //查询桥梁
+    reqBridgeListByParam() {
+      const queryData = {
+        ...this.queryBridge,
+      };
+
+      queryData.bridgeTypeId = queryData.bridgeTypeId.join(",");
+      queryData.technologyLevel = queryData.technologyLevel.join(",");
+      queryData.times = queryData.times ? ["", ""] : queryData.times;
+      queryData.buildDateStart = queryData.times[0]; //建设年份开始
+      queryData.buildDateEnd = queryData.times[1]; //建设年份结束\
+      delete queryData.times;
+      getBridgeListByParam(queryData).then((res) => {
+        console.log(res);
+        const { attachObj } = res;
+        this.mapBridgeList = this.bridgeData_filter(attachObj);
+        this.updateMapPoi(this.mapBridgeList);
+      });
+    },
+    // 桥梁数据过滤-去掉没有坐标点的数据
+    bridgeData_filter(list) {
+      let arr = [];
+      list.forEach((item) => {
+        const { bridgeId, technologyLevel } = item;
+        const index = this.bridgeList_demo.findIndex(
+          (a) => a.bridgeId === bridgeId
+        );
+        if (index !== -1) {
+          const data = {
+            ...this.bridgeList_demo[index],
+            technologyLevel,
+          };
+          arr.push(data);
+        }
+      });
+      return arr;
+    },
+    //更新地图点标记
+    updateMapPoi(poiArr) {
+      this.map.remove(this.markers_Arr);
+      let markers = poiArr.map((data) => {
+        let icon = poi_type_1;
+        // poi_type_1
+        switch (data.technologyLevel) {
+          case "1类":
+            icon = poi_type_1;
+            break;
+          case "2类":
+            icon = poi_type_2;
+            break;
+
+          case "3类":
+            icon = poi_type_3;
+            break;
+          case "4类":
+            icon = poi_type_4;
+            break;
+          case "5类":
+            icon = poi_type_5;
+            break;
+          default:
+            break;
+        }
+
+        let temp = new AMap.Marker({
+          map: this.map,
+          name: data.bridgeName,
+          icon: new AMap.Icon({
+            image: icon,
+            // size: new AMap.Size(22, 22), //图标大小
+            imageSize: new AMap.Size(26, 26),
+          }),
+          position: [data.addr[0], data.addr[1]],
+          offset: new AMap.Pixel(-13, -13),
+          // content: "<div class='info'>我是 marker 的 label 标签</div>", //设置文本标注内容
+          direction: "right", // 设置文本标注方位
+        });
+        // temp.on("mouseover", (e) => {
+        //   this.openPoiLabel(temp);
+        // });
+        // temp.on("mouseout", (e) => {
+        //   temp.setLabel(null);
+        // });
+        temp.on("click", (e) => {
+          console.log(e);
+          this.openPoiDetail(data);
+        });
+        temp.name = data.bridgeName;
+        return temp;
+      });
+      this.markers_Arr = markers;
+    },
+
+    //打开地图点标记桥梁详情
+    openPoiDetail(data) {
+      getBridgeDetailInfoById({ bridgeId: data.bridgeId }).then((res) => {
+        console.log(res);
+        let { attachObj } = res;
+
+        let { bridgeCompPhotoList } = attachObj;
+        bridgeCompPhotoList = bridgeCompPhotoList || [];
+        this.bridgeCompPhotoList = bridgeCompPhotoList.map((a) => a.filePath);
+        attachObj.buildDate = moment(attachObj.buildDate).format("yyyy-MM-DD");
+        this.detailData = attachObj;
+        this.isOpenBridgeDetail = true;
       });
     },
   },
 };
 </script>
 <style lang="scss" scoped>
-
 // 地图-区域个层级单位数量
 .area-level-count {
   position: absolute;
@@ -401,81 +490,89 @@ export default {
     }
   }
 }
-/deep/ .amap-marker-label {
-  background-image: url("~./img/tip-bg.svg");
-  background-color: rgba(255, 255, 255, 0);
-  background-size: 100%;
-  background-repeat: no-repeat;
-  background-position: center center;
+/*地图点位详情弹框*/
+.marker-detail {
+  position: absolute;
+  z-index: 112;
+  top: 190px;
+  left: 35%;
+  // background-image: url("~./img/tip-bg.svg");
+  background: linear-gradient(to bottom, #003639 4%, #001d29 89%);
   //   padding: 15px 15px 10px 10px;
-  width: 198px; /*no */
-  height: 138px; /*no */
-  /*overflow: hidden;*/
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  border: none;
-  position: relative;
-  cursor: pointer;
-  .map-poi-line-1 {
-    position: absolute;
-    width: 100px; /*no */
-    height: 1px; /*no */
-    background: red;
-    top: 123px; /*no */
-    z-index: 1111;
-    left: -186px; /*no */
+  box-shadow: 0 10px 30px 0 #12334b inset;
+  width: 690px;
+  height: 510px;
+
+  .detail-header {
+    display: flex;
+    justify-content: space-between;
+    height: 60px;
+    padding: 0 20px;
+    align-items: center;
+    .header-title {
+      height: 22px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #04caf0;
+      position: relative;
+      padding-left: 10px;
+      &::after {
+        content: "";
+        height: 80%;
+        position: absolute;
+        top: 10%;
+        left: 0;
+        width: 2px; /*no */
+        background: #04caf0;
+      }
+    }
+    .el-icon-circle-close {
+      font-size: 22px;
+      cursor: pointer;
+    }
   }
-  .map-poi-line-2 {
-    position: absolute;
-    width: 150px; /*no */
-    height: 1px; /*no */
-    background: red;
-    top: 71px; /*no */
-    z-index: 1111;
-    left: -110px; /*no */
-    transform: rotate(-45deg);
-  }
-  .poi-content {
-    padding: 30px; /*no */
-  }
-  .poi-titel {
-    height: 30px; /*no */
-    font-size: 18px; /*no */
-    font-family: MicrosoftYaHei, MicrosoftYaHei-Bold;
-    font-weight: 700;
-    text-align: left;
-    line-height: 24px; /*no */
-    letter-spacing: 1px; /*no */
-    color: #fb5a7a;
-    width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .txt {
-    height: 19px; /*no */
-    font-size: 16px; /*no */
-    font-family: MicrosoftYaHei;
-    text-align: left;
-    color: #eeeeee;
-    line-height: 19px; /*no */
-    letter-spacing: 1px; /*no */
-  }
-  .link {
-    margin-top: 16px; /*no */
-    height: 15px; /*no */
-    font-size: 12px; /*no */
-    font-family: MicrosoftYaHei;
-    text-align: left;
-    color: #00ffde;
-    line-height: 14px; /*no */
-    letter-spacing: 1px; /*no */
-  }
-  svg {
-    width: 16px; /*no */
-    height: 16px; /*no */
-    margin-right: 5px; /*no */
-    vertical-align: bottom;
+  .detail-body {
+    border-top: 1px solid #284d6a; /*no */
+    margin: 0 20px;
+    padding: 20px 5px;
+    display: flex;
+
+    .body-left {
+      width: 290px;
+      height: 396px;
+      flex-shrink: 0;
+      /deep/.el-carousel__container {
+        height: 100%;
+      }
+      .img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .body-right {
+      width: calc(100% - 290px);
+      padding-left: 20px;
+      .right-title {
+        margin: 17px 0 30px 0;
+        font-size: 18px;
+        font-weight: 700;
+        color: #ffffff;
+        line-height: 24px;
+        letter-spacing: 1px; /*no */
+      }
+      .item-block {
+        margin: 0;
+      }
+      .item-label {
+        width: auto;
+        text-align: left;
+      }
+      .item-content {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
   }
 }
 </style>
