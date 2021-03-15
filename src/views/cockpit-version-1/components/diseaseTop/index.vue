@@ -1,7 +1,28 @@
 <template>
   <moduleWrapper>
-    <template slot="head">
+    <template slot="head-title">
       <div class="module-title">病害TOP</div>
+
+    </template>
+       <template slot="head-right">
+      <div class="switch-box"> 
+        <cockpit-select
+            v-model="type1"
+            :optionData="optionData"
+            placeholder="规模"
+          />
+          <cockpit-select
+            v-model="type2"
+            :optionData="optionData"
+            placeholder="形式"
+          />
+           <cockpit-select
+            v-model="type3"
+            :hasClear="false"
+            :optionData="[{value:'正序'},{value:'倒序'}]"
+            placeholder="排序"
+          />
+      </div>
     </template>
     <div class="charts-left">
       <div class="charts-title">类型</div>
@@ -42,10 +63,11 @@
 import radar from "../charts/radar";
 import { mutationsSet, store } from "@/views/cockpit-version-1/cockpitStore";
 import moduleWrapper from "@/views/cockpit-version-1/components/ui/module-wrapper";
-import echarts from "echarts";
+// import echarts from "echarts";
+import cockpitSelect from "@/views/cockpit-version-1/components/ui/select";
 import bar from "../charts/bar";
 export default {
-  components: { radar, moduleWrapper, bar },
+  components: { radar, moduleWrapper, bar,cockpitSelect },
 
   data() {
     const typeBars = [
@@ -61,6 +83,10 @@ export default {
       "破损",
     ];
     return {
+       type1:'',
+      type2:'',
+      type3:'正序',
+      optionData:[{value:'xixihaha'}],
       typeBars,
       typeBarData: [
         {
@@ -76,7 +102,7 @@ export default {
       ],
       xAxisData1: [],
       xAxisData2: [],
-      colors: ["#00A6E3", "#87680C"],
+      colors: [["rgba(53,224,220,0.91)",'rgba(11,124,234,0.91)'], "#3a8ff6"],
 
       colorItemArr: [
         ["#00FFDE", "#007D6D"], //绿
@@ -105,6 +131,9 @@ export default {
         const str = this.typeBars.splice(index, 1);
         this.xAxisData1.push(str);
       }
+      objdata.sort(function(a, b) {
+        return b - a;
+      });
       this.typeBarData[0].data = objdata;
       //   console.log(this.typeBarData)
       this.$nextTick(() => {
@@ -141,6 +170,9 @@ export default {
         const str = partsBars.splice(index, 1);
         this.xAxisData2.push("部件-" + str);
       }
+      objdata.sort(function(a, b) {
+        return b - a;
+      });
       this.partsBarData[0].data = objdata;
       console.log(this.partsBarData);
       this.$nextTick(() => {
@@ -169,6 +201,17 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+ .charts-title {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    text-align: center;
+    font-size: torem(16px);
+    font-weight: bold;
+    color: #fff;
+  }
 .charts-left {
   float: left;
   height: 100%;
@@ -177,26 +220,14 @@ export default {
   .charts-radar {
     height: 100%;
   }
-  .charts-title {
-    margin: 0 auto;
-    text-align: center;
-    font-size: torem(16px);
-    font-weight: bold;
-    color: #fff;
-  }
+ 
 }
 .charts-right {
   float: right;
   height: 100%;
   width: 50%;
   position: relative;
-  .charts-title {
-    text-align: center;
-    margin: 0 auto;
-    font-size: torem(16px);
-    font-weight: bold;
-    color: #fff;
-  }
+
   .charts-radar {
     height: 100%;
   }

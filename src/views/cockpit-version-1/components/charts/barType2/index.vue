@@ -1,5 +1,5 @@
 <template>
-    <div :ref="refName" style="width:100%;height:100%"></div>
+    <div :ref="refName"  ></div>
 </template>
 
 <script>

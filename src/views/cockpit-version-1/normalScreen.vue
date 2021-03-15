@@ -109,10 +109,12 @@ export default {
           let areaList = areaListRes.data;
           areaList.forEach((val) => {
             if (
-              val.company.indexOf("厦门百城金安") == -1 ||
-              val.company.indexOf("福州市交建") == -1
+              val.company.indexOf("厦门百城金安") === -1 ||
+              val.company.indexOf("福州市交建") === -1
             ) {
+              val.companyStr = val.company;
               val.company = this.filterStr(val.company);
+              
             }
           });
           mutationsSet("areaList", areaList);
@@ -182,8 +184,9 @@ export default {
   height: 100%;
   background-color: rgba(147, 190, 199, 1);
   .main-layout {
+    overflow: hidden;
     box-sizing: border-box;
-    height: tovh(990px);
+    height: tovh(1000px);
     padding: tovh(10px) 0;
     width: 100%;
     display: flex;
@@ -205,86 +208,88 @@ export default {
       overflow: hidden;
       position: absolute;
       top: tovh(10px);
-      left: tovw(380px);
+      left: tovw(10px);
       border-radius: torem(6px);
-      width: tovw(1160px);
-      height: tovh(640px);
+      width: tovw(790px);
+      height: tovh(980px);
     }
     //实时监测/检测信息
     .realtimeMonitor {
-      z-index: 9;
-      overflow: hidden;
+      // z-index: 9;
+      // overflow: hidden;
       position: absolute;
-      top: tovh(10px);
-      left: tovw(380px);
+      top: tovh(340px);
+      right: tovw(10px);
       border-radius: torem(6px);
-      width: tovw(400px);
-      height: tovh(260px);
+      width: tovw(360px);
+      height: tovh(320px);
     }
     // 实时监测设备
     .monitorDevice {
-      z-index: 999;
+      // z-index: 10;
       // overflow: hidden;
       position: absolute;
-      top: tovh(10px);
+      top: tovh(340px);
       right: tovw(380px);
+      height: torem(320px);
       border-radius: torem(6px);
-      width: tovw(340px);
+      width: tovw(360px);
     }
     //桥梁分布统计
     .bridge-distribution {
       position: absolute;
       top: tovh(10px);
-      left: tovw(10px);
+      left: tovw(810px);
       width: tovw(360px);
-      height: tovh(315px);
+      height: tovh(320px);
     }
     //桥梁技术状况布局
     .bridge-levelCondition {
       position: absolute;
-      top: tovh(335px);
-      left: tovw(10px);
+      top: tovh(10px);
+      right: tovw(380px);
       width: tovw(360px);
-      height: tovh(315px);
+      height: tovh(320px);
     }
     //实时监测桥梁分布
     .realtime-bridge {
       position: absolute;
-      top: tovh(10px);
-      right: tovw(10px);
+      top: tovh(340px);
+      left: tovw(810px);
       width: tovw(360px);
-      height: tovh(315px);
+      height: tovh(320px);
     }
     //桥梁-技术状况走势
     .brideg-conditionsTrend {
       position: absolute;
-      top: tovh(335px);
+      top: tovh(10px);
       right: tovw(10px);
       width: tovw(360px);
-      height: tovh(315px);
+      height: tovh(320px);
     }
     //病害TOP
     .brideg-diseaseTop {
       position: absolute;
       bottom: tovh(10px);
-      left: tovw(10px);
-      width: tovw(626.6px);
+      left: tovw(810px);
+      width: tovw(545px);
       height: tovh(320px);
     }
     //桥梁总览布局
     .bridge-overview {
+      // display: none;
       position: absolute;
-      bottom: tovh(10px);
-      left: tovw(646.6px);
-      width: tovw(626.6px);
-      height: tovh(320px);
+      top: tovh(20px);
+      left: tovw(10px);
+      width: tovw(790px);
+      height: tovh(160px);
     }
     //养护绩效TOP
     .maintainKpiTop {
       position: absolute;
       bottom: tovh(10px);
       right: tovw(10px);
-      width: tovw(626.6px);
+      width: tovw(545px);
       height: tovh(320px);
     }
   }

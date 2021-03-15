@@ -6,21 +6,106 @@
 //     color: #fff;
 //     margin-left: torem(20px);
 // }
+body {
+  background-image: url('~@/assets/编组 5.jpg');
+}
+
 .normal-screen {
+  background-image: url('~@/assets/编组 5.jpg');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+
   .module-title {
-    font-size: torem(18px);
+    font-size: torem(16px);
     font-weight: bold;
     height: torem(30px);
     line-height: torem(30px);
     color: #fff;
+    text-align: center;
     // margin-left: torem(20px);
   }
 
-  /deep/.el-scrollbar__wrap {
-    overflow-y: auto;
-    overflow-x: hidden;
+  .switch-box {
+    box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.4);
+    border: solid 1px #384a67;
+    border-radius: torem(6px);
+    display: inline-block;
+    margin-right: torem(10px);
+
+    .switch-btn {
+      cursor: pointer;
+      display: inline-block;
+      // border: 1px solid #00baff;
+      position: relative;
+      min-width: 0.36rem;
+      max-width: 0.54rem;
+      font-size: torem(16px);
+      color: #fff;
+      text-align: center;
+      padding: torem(2px) torem(12px);
+      background-image: linear-gradient(261deg,
+          #11223d 0%,
+          #13375e 50%,
+          #154f87 100%),
+        linear-gradient(#1e2e47,
+          #1e2e47);
+      background-blend-mode: normal,
+        normal;
+
+    }
+
+    .switch-active {
+      color: #69a8f6;
+
+      background-image: linear-gradient(261deg,
+          #11223d 0%,
+          #13375e 50%,
+          #154f87 100%),
+        linear-gradient(#1e2e47,
+          #1e2e47);
+    }
   }
 
+  .select-box {
+    /deep/ .select-option {
+      box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.4);
+      border-radius: 0px 4px 4px 0px;
+      border: solid 1px #384a67;
+      border-radius: torem(6px);
+    }
+  }
+
+  .item-block {
+    margin-bottom: torem(15px);
+    height: torem(34px);
+    display: flex;
+    align-items: center;
+    color: #fff;
+
+    .item-label {
+      flex-shrink: 0;
+      width: torem(110px);
+      text-align: right;
+      padding-right: torem(10px);
+    }
+
+    .item-content {
+      flex: 1;
+    }
+  }
+
+
+
+  .module-btn {
+    width: 1;
+    color: rgba(1, 216, 255, 1);
+    background-color: rgba(14, 139, 255, 0.32);
+  }
+  .el-scrollbar__wrap {
+    overflow-y: auto;
+    overflow-x: hidden;
+    // padding-bottom: 17px;
+  }
   .div-table {
     box-sizing: border-box;
 
@@ -34,6 +119,8 @@
 
 
     }
+
+ 
 
     .th {
       border-top: 1px solid #ccc;

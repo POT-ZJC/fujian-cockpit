@@ -4,30 +4,76 @@
 
     <!-- 区域公司/养护中心/养护站 -->
     <div class="area-level-count">
-      <div class="area-level-item">
+      <div class="area-level-item" v-if="showLevel.compnayTotal">
         <div class="name">区域公司</div>
-        <div class="count">11个</div>
+        <div class="count">{{ mapLBNumber.compnayTotal }}个</div>
       </div>
-      <div class="area-level-item">
+      <div class="area-level-item" v-if="showLevel.centerTotal">
         <div class="name">养护中心</div>
-        <div class="count">111个</div>
+        <div class="count">{{ mapLBNumber.centerTotal }}个</div>
       </div>
-      <div class="area-level-item">
+      <div class="area-level-item" v-if="showLevel.stationTotal">
         <div class="name">养护站</div>
-        <div class="count">13个</div>
+        <div class="count">{{ mapLBNumber.stationTotal }}个</div>
       </div>
     </div>
     <!-- 路线路段标识 -->
     <div class="map-line-tips">
       <div class="line-tips-route">
         <div class="route">路线</div>
-        <div class="route-totalNum">{{ currentRouteTotalNum }}条</div>
+        <div class="route-totalNum">{{ mapLBNumber.currentRouteTotalNum }}条</div>
       </div>
       <div class="line-tips-road">
         <div class="road">路段</div>
-        <div class="road-totalNum">{{ currentRoadTotalNum }}条</div>
+        <div class="road-totalNum">{{ mapLBNumber.currentRoadTotalNum }}条</div>
       </div>
     </div>
+
+    <!-- 桥梁详情 -->
+    <div class="marker-detail" v-show="isOpenBridgeDetail">
+      <div class="detail-header">
+        <div class="header-title">桥梁管理</div>
+        <i class="el-icon-circle-close" @click="isOpenBridgeDetail = false" />
+      </div>
+      <div class="detail-body">
+        <div class="body-left">
+          <el-carousel
+            :interval="5000"
+            class="img"
+            v-show="bridgeCompPhotoList.length > 0"
+          >
+            <el-carousel-item
+              v-for="item in bridgeCompPhotoList"
+              :key="item"
+              class="img"
+            >
+              <!-- v-show="bridgeCompPhotoList.length > 0" -->
+              <img class="img" :src="item" alt="桥梁图片" />
+            </el-carousel-item>
+          </el-carousel>
+          <!-- <el-image
+            v-show="bridgeCompPhotoList.length > 0"
+            class="img"
+            :src="item"
+            :preview-src-list="bridgeCompPhotoList[0]"
+          >
+          </el-image> -->
+          <p v-show="bridgeCompPhotoList.length < 1">暂无桥梁图片</p>
+          <!-- <img :src="bridgeDetail.imgUrl" alt="桥梁图片" /> -->
+        </div>
+        <div class="body-right">
+          <div class="right-title">{{ bridgeDetail.bridgeName }}</div>
+
+          <div class="item-block" v-for="item in detailFormat" :key="item.key">
+            <div class="item-label">{{ item.name + "：" }}</div>
+            <div class="item-content" :title="bridgeDetail[item.key] || '-'">
+              {{ bridgeDetail[item.key] || "-" }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 桥梁详情结束 -->
   </div>
 </template>
 <script>
@@ -45,8 +91,12 @@
 // websocketUrl,
 // getGis
 // } from '@api/home'
-import { getRouteLnglatList } from "@/api/cockpit-version-1";
+import { getRouteLnglatList, getQueryBridge } from "@/api/cockpit-version-1";
 import { mutationsSet, store } from "@/views/cockpit-version-1/cockpitStore";
+import moment from "moment";
+import bridge1 from "./img/map-bridge-1.jpg";
+import bridge2 from "./img/map-bridge-2.jpg";
+import poi_type_1 from "./img/poi-type-1.svg";
 export default {
   props: {
     id: {
@@ -55,29 +105,96 @@ export default {
     },
   },
   computed: {
+    //   currentAreaLevelType:'',//当前区域/路线层级类型
+    // currentAreaLevelTypeName:'',//当前区域/路线层级类型名称
+    // currentAreaLevelValue:'',//当前区域/路线层级的值
+    // searchMapKeyword:'',//搜索地图关键字
+    mapLBNumber() {
+      return {
+        currentRouteTotalNum: store.currentRouteTotalNum, //当前路线总数
+        currentRoadTotalNum: store.currentRouteTotalNum, //当前路段总数
+        compnayTotal: store.compnayTotal, //区域公司总数
+        centerTotal: store.centerTotal, //养护中心总数
+        stationTotal: store.stationTotal, //养护站总数
+      };
+    },
+    //当前层级类型
+    currentAreaLevelType() {
+      return store.currentAreaLevelType;
+    },
+    currentAreaLevelValue() {
+      return store.currentAreaLevelValue;
+    },
+    // 搜多地图关键字
+    searchMapKeyword() {
+      return store.searchMapKeyword;
+    },
+
     routeLnglatList() {
       return store.routeLnglatList;
     },
-    currentRouteTotalNum() {
-      //当前路线总数
-      return store.currentRouteTotalNum;
+     
+    
+
+    bridgeScaleTotal() {
+      //桥梁规模总览
+      return store.bridgeScaleTotal;
     },
-    currentRoadTotalNum() {
-      //当前路段总数
-      return store.currentRoadTotalNum;
+    bridgeTypeTotal() {
+      //桥梁形式总览
+      return store.bridgeTypeTotal;
     },
   },
   watch: {
-    id(val) {
-      this.$nextTick(() => {
-        this.loopPlayMarkers();
-      });
+    bridgeScaleTotal: {
+      handler(val) {
+        this.reqBridgeListByParam();
+      },
+      deep: true,
+    },
+    bridgeTypeTotal: {
+      handler(val) {
+        this.reqBridgeListByParam();
+      },
+      deep: true,
+    },
+
+    // id(val) {
+    //   this.$nextTick(() => {
+    //     this.loopPlayMarkers();
+    //   });
+    // },
+    searchMapKeyword(val) {
+      this.reqBridgeListByParam();
+    },
+    currentAreaLevelType(val) {
+      // this.reqBridgeListByParam();
+      this.handleShowLevel(val);
+    },
+    currentAreaLevelValue(val) {
+      this.reqBridgeListByParam();
     },
     routeLnglatList() {},
   },
   data() {
     return {
       myAmap: null,
+      markers: [],
+      bridgeDetail: {}, //桥梁详情
+      bridgeCompPhotoList: [bridge1, bridge2],
+      isOpenBridgeDetail: false,
+      //桥梁详情-格式
+      detailFormat: [
+        { name: "中心桩号", key: "centerLocation" },
+        { name: "桥梁全长(m)", key: "bridgeLength" },
+        { name: "桥梁跨径组合(孔*米)", key: "combination" },
+        { name: "桥梁属性", key: "bridgeType" },
+        { name: "上部结构类型", key: "structureType" },
+        { name: "通车时间", key: "startRunCarDate" },
+        { name: "技术状况评定", key: "level" },
+        { name: "养护单位", key: "curingUnit" },
+        { name: "管理单位", key: "managerUnit" },
+      ],
       poi_Arr: [
         {
           name: "厦门大桥",
@@ -102,12 +219,48 @@ export default {
       ],
       markers_Arr: [],
       currentMarkerIndex: -1,
+      showLevel: {
+        currentRouteTotalNum: false, //当前路线
+        currentRoadTotalNum: false, //当前路段
+        compnayTotal: false, //区域公司
+        centerTotal: false, //养护中心
+        stationTotal: false, //养护站
+      },
     };
   },
   mounted() {
     this.initMap();
+    // this.reqBridgeListByParam();
+    this.handleShowLevel()
   },
   methods: {
+    handleShowLevel(str) {
+      let showLevel = {
+        currentRouteTotalNum: true, //当前路线
+        currentRoadTotalNum: true, //当前路段
+        compnayTotal: true, //区域公司
+        centerTotal: true, //养护中心
+        stationTotal: true, //养护站
+      };
+      switch (str) {
+        case "company":
+          // showLevel.currentRouteTotalNum = false;
+          showLevel.currentRoadTotalNum = false;
+          break;
+        case "centerTotal":
+          showLevel.company = false;
+          showLevel.centerTotal = false;
+          break;
+        case "stationTotal":
+          showLevel.company = false;
+          showLevel.centerTotal = false;
+          showLevel.stationTotal = false;
+          break; 
+        default:
+          null;
+      }
+      this.showLevel=showLevel
+    },
     //轮播坐标点
     loopPlayMarkers() {
       if (this.currentMarkerIndex !== -1) {
@@ -174,7 +327,7 @@ export default {
 
         return backColorArr[randomNIndex];
       };
-      // 给国家的省市区域添加背景色
+      // // 给国家的省市区域添加背景色
       const disCountryLayer = new window.AMap.DistrictLayer.Country({
         zIndex: 10,
         SOC: "CHN",
@@ -188,12 +341,13 @@ export default {
             if (props.adcode === 350000) {
               return "";
             } else {
-              return "#3a4758";
+              return "#042E4F"; //042E4F-122246
             }
           },
         },
       });
       disCountryLayer.setMap(myAmap);
+      //给福建省添加背景色
       //350000 =350000福建省
       let disProvince = new AMap.DistrictLayer.Province({
         zIndex: 12,
@@ -218,6 +372,7 @@ export default {
 
       this.myAmap = myAmap;
       this.reqRouteLnglatList();
+      this.reqBridgeListByParam();
     },
     //获取路线路段坐标
     reqRouteLnglatList() {
@@ -287,23 +442,58 @@ export default {
       console.log(markers);
       /*设置坐标点-结束 */
     },
+    //处理地图上需要展示的桥梁规模和形式
+    handleMapBridgeType() {
+      const bridgeScaleTotal = this.bridgeScaleTotal,
+        bridgeTypeTotal = this.bridgeTypeTotal;
+      let bridgeSize = "", //规模
+        structureType = ""; //形式
+      bridgeScaleTotal.forEach((val, index) => {
+        if (val.active) {
+          bridgeSize += (bridgeSize ? "," : "") + val.title;
+        }
+      });
+      bridgeTypeTotal.forEach((val, index) => {
+        if (val.active) {
+          structureType += (structureType ? "," : "") + val.title;
+        }
+      });
+      return { structureType, bridgeSize };
+    },
     //查询桥梁
     reqBridgeListByParam() {
-      const queryData = {
-        ...this.queryBridge,
+      //currentAreaLevelType
+
+      // "bridgeId": "桥梁id"
+      // "bridgeName": "桥梁名称"
+      // "company": "区域公司"
+      // "maintenanceCenter": "养护中心"
+      // "maintenanceStation": "养护站"
+      // "routeName": "路线名称"
+      // "sectionName": "路段名称"
+      // "bridgeSize": "桥梁类型（大桥、小桥），多个用,切割"
+      // "structureType": "桥梁结构（拱桥、刚构桥），多个用,切割"
+
+      let queryData = {
+        bridgeName: this.searchMapKeyword,
+        ...this.handleMapBridgeType(),
       };
 
-      queryData.bridgeTypeId = queryData.bridgeTypeId.join(",");
-      queryData.technologyLevel = queryData.technologyLevel.join(",");
-      queryData.times = queryData.times ? ["", ""] : queryData.times;
-      queryData.buildDateStart = queryData.times[0]; //建设年份开始
-      queryData.buildDateEnd = queryData.times[1]; //建设年份结束\
-      delete queryData.times;
-      getBridgeListByParam(queryData).then((res) => {
+      this.currentAreaLevelType &&
+        (queryData[this.currentAreaLevelType] = this.currentAreaLevelValue);
+      //桥梁搜索
+      // getQueryBridge({
+      //   bridgeName: "", //关键词
+      //   bridgeId: "", //桥梁id
+      // }).then(res=>{
+
+      // })
+
+      getQueryBridge(queryData).then((res) => {
         console.log(res);
-        const { attachObj } = res;
-        this.mapBridgeList = this.bridgeData_filter(attachObj);
-        this.updateMapPoi(this.mapBridgeList);
+        const { data } = res;
+        // this.myAmapBridgeList = this.bridgeData_filter(data);
+        this.updateMapPoi(data);
       });
     },
     // 桥梁数据过滤-去掉没有坐标点的数据
@@ -326,73 +516,77 @@ export default {
     },
     //更新地图点标记
     updateMapPoi(poiArr) {
-      this.map.remove(this.markers_Arr);
-      let markers = poiArr.map((data) => {
+      // this.myAmap.remove(this.markers_Arr);
+      // console
+      this.markers_Arr.forEach((val) => val.setMap(null));
+      // this.myAmap.clearMap();
+      let markers = [];
+      poiArr.forEach((data) => {
         let icon = poi_type_1;
         // poi_type_1
-        switch (data.technologyLevel) {
-          case "1类":
-            icon = poi_type_1;
-            break;
-          case "2类":
-            icon = poi_type_2;
-            break;
+        // switch (data.technologyLevel) {
+        //   case "1类":
+        //     icon = poi_type_1;
+        //     break;
+        //   case "2类":
+        //     icon = poi_type_2;
+        //     break;
 
-          case "3类":
-            icon = poi_type_3;
-            break;
-          case "4类":
-            icon = poi_type_4;
-            break;
-          case "5类":
-            icon = poi_type_5;
-            break;
-          default:
-            break;
+        //   case "3类":
+        //     icon = poi_type_3;
+        //     break;
+        //   case "4类":
+        //     icon = poi_type_4;
+        //     break;
+        //   case "5类":
+        //     icon = poi_type_5;
+        //     break;
+        //   default:
+        //     break;
+        // }
+        if (data.latitudeLongitude) {
+          const addr = data.latitudeLongitude.split(",");
+          // console.log("addr", addr);
+          let temp = new AMap.Marker({
+            map: this.myAmap,
+            name: data.bridgeName,
+            icon: new AMap.Icon({
+              image: icon,
+              // size: new AMap.Size(22, 22), //图标大小
+              imageSize: new AMap.Size(26, 26),
+            }),
+            position: [addr[0], addr[1]],
+            offset: new AMap.Pixel(-13, -13),
+            // content: "<div class='info'>我是 marker 的 label 标签</div>", //设置文本标注内容
+            direction: "right", // 设置文本标注方位
+          });
+          // temp.on("mouseover", (e) => {
+          //   this.openPoiLabel(temp);
+          // });
+          // temp.on("mouseout", (e) => {
+          //   temp.setLabel(null);
+          // });
+          temp.on("click", (e) => {
+            console.log(e);
+            this.openPoiDetail(data);
+          });
+          temp.name = data.bridgeName;
+          markers.push(temp);
         }
-
-        let temp = new AMap.Marker({
-          map: this.map,
-          name: data.bridgeName,
-          icon: new AMap.Icon({
-            image: icon,
-            // size: new AMap.Size(22, 22), //图标大小
-            imageSize: new AMap.Size(26, 26),
-          }),
-          position: [data.addr[0], data.addr[1]],
-          offset: new AMap.Pixel(-13, -13),
-          // content: "<div class='info'>我是 marker 的 label 标签</div>", //设置文本标注内容
-          direction: "right", // 设置文本标注方位
-        });
-        // temp.on("mouseover", (e) => {
-        //   this.openPoiLabel(temp);
-        // });
-        // temp.on("mouseout", (e) => {
-        //   temp.setLabel(null);
-        // });
-        temp.on("click", (e) => {
-          console.log(e);
-          this.openPoiDetail(data);
-        });
-        temp.name = data.bridgeName;
-        return temp;
       });
       this.markers_Arr = markers;
     },
 
     //打开地图点标记桥梁详情
     openPoiDetail(data) {
-      getBridgeDetailInfoById({ bridgeId: data.bridgeId }).then((res) => {
-        console.log(res);
-        let { attachObj } = res;
-
-        let { bridgeCompPhotoList } = attachObj;
-        bridgeCompPhotoList = bridgeCompPhotoList || [];
-        this.bridgeCompPhotoList = bridgeCompPhotoList.map((a) => a.filePath);
-        attachObj.buildDate = moment(attachObj.buildDate).format("yyyy-MM-DD");
-        this.detailData = attachObj;
-        this.isOpenBridgeDetail = true;
-      });
+      const newData = {
+        ...data,
+        startRunCarDate: moment(Number(data.startRunCarDate)).format(
+          "yyyy-MM-DD"
+        ),
+      };
+      this.bridgeDetail = newData;
+      this.isOpenBridgeDetail = true;
     },
   },
 };
@@ -494,28 +688,28 @@ export default {
 .marker-detail {
   position: absolute;
   z-index: 112;
-  top: 190px;
-  left: 35%;
+  top: torem(200px);
+  left: torem(100px);
   // background-image: url("~./img/tip-bg.svg");
   background: linear-gradient(to bottom, #003639 4%, #001d29 89%);
   //   padding: 15px 15px 10px 10px;
-  box-shadow: 0 10px 30px 0 #12334b inset;
-  width: 690px;
-  height: 510px;
+  box-shadow: 0 torem(10px) torem(30px) 0 #12334b inset;
+  width: torem(690px);
+  height: torem(510px);
 
   .detail-header {
     display: flex;
     justify-content: space-between;
-    height: 60px;
-    padding: 0 20px;
+    height: torem(60px);
+    padding: 0 torem(20px);
     align-items: center;
     .header-title {
-      height: 22px;
-      font-size: 16px;
+      height: torem(22px);
+      font-size: torem(16px);
       font-weight: 700;
       color: #04caf0;
       position: relative;
-      padding-left: 10px;
+      padding-left: torem(10px);
       &::after {
         content: "";
         height: 80%;
@@ -527,19 +721,20 @@ export default {
       }
     }
     .el-icon-circle-close {
-      font-size: 22px;
+      color: #fff;
+      font-size: torem(22px);
       cursor: pointer;
     }
   }
   .detail-body {
     border-top: 1px solid #284d6a; /*no */
-    margin: 0 20px;
-    padding: 20px 5px;
+    margin: 0 torem(20px);
+    padding: torem(20px) torem(5px);
     display: flex;
 
     .body-left {
-      width: 290px;
-      height: 396px;
+      width: torem(290px);
+      height: torem(396px);
       flex-shrink: 0;
       /deep/.el-carousel__container {
         height: 100%;
@@ -550,14 +745,14 @@ export default {
       }
     }
     .body-right {
-      width: calc(100% - 290px);
-      padding-left: 20px;
+      width: calc(100% - 2.9rem);
+      padding-left: (20px);
       .right-title {
-        margin: 17px 0 30px 0;
-        font-size: 18px;
+        margin: torem(17px) 0 torem(30px) 0;
+        font-size: torem(18px);
         font-weight: 700;
         color: #ffffff;
-        line-height: 24px;
+        line-height: (24px);
         letter-spacing: 1px; /*no */
       }
       .item-block {
