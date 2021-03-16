@@ -1,7 +1,7 @@
 <template>
   <moduleWrapper>
     <template slot="head-title">
-      <div class="module-title">实时监测桥梁分布</div>
+      <div class="module-title">在线监测桥梁</div>
     </template>
    <template slot="head-right">
       <div class="switch-box"> 

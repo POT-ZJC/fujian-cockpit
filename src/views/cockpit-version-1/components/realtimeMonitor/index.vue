@@ -1,7 +1,7 @@
 <template>
   <moduleWrapper>
     <template slot="head-title">
-      <div class="module-title">实时监测(检测)</div>
+      <div class="module-title">实时监(检)测信息</div>
     </template>
    <template slot="head-right">
       <div class="select-box"> 

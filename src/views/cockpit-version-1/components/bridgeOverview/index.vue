@@ -301,18 +301,18 @@ export default {
         font-size: torem(18px);
         color: #f9fafa;
         font-family: MicrosoftYaHei-Bold;
-        padding-right: torem(18px);
+        padding-right: torem(12px);
         font-weight: bold;
       }
       .item-up-number {
         font-size: torem(18px);
-        padding-right: torem(10px);
+        padding-right: torem(8px);
         color: #76eefb;
       }
       .item-up {
         font-size: torem(16px);
         color: #76eefb;
-        padding-right: torem(8px);
+        padding-right: torem(5px);
         position: relative;
         &::after {
           content: "↑";

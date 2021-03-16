@@ -79,7 +79,7 @@ export default {
                     {
                         data: this.dataList.length
                             ? this.dataList
-                            : [{ name: '一级故障设备', value: 1 }]
+                            : [{ name: '暂无数据', value: 1 }]
                     }
                 ]
             }

@@ -4,7 +4,7 @@ import store from "@/store";
 // import { getToken } from '@/utils/auth'
 
 const api_root =
-  process.env.NODE_ENV == "development" ? "/api" : "/BMS";
+  process.env.NODE_ENV == "development" ? "/api" : "";
   // process.env.NODE_ENV == "development" ? "http://120.32.125.113:9010/BMS" : "http://120.32.125.113:9010/BMS";
 // const api_root = process.env.NODE_ENV == "development" ? "http://10.192.34.65:8080" : "/api";
 
@@ -33,7 +33,7 @@ function closeGlobalLoading(config) {
 // create an axios instance
 const service = axios.create({
   // withCredentials: true, // send cookies when cross-domain requests
-  timeout: 30 * 1000, // request timeout
+  timeout: 120 * 1000, // request timeout
 });
 
 // request interceptor

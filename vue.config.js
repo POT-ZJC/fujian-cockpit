@@ -32,7 +32,7 @@ module.exports = {
     },
     proxy: {
       "^/api": {
-        target: "http://10.192.34.65:9017/cmct-bridge-demo",//http://10.192.34.65:8555/cmct-bridge-demo/login/getAreaList
+        target: "http://10.192.34.65:9017",//http://10.192.34.65:8555/cmct-bridge-demo/login/getAreaList
         secure: false,
         changeOrigin: true,
         pathRewrite: {

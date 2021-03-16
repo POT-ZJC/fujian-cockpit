@@ -1,7 +1,7 @@
 <template>
   <moduleWrapper>
     <template slot="head-title">
-      <div class="module-title">在线监测设备</div>
+      <div class="module-title">在线监测设备数量</div>
     </template>
 
     <!-- <moduleTitle title="监测设备" /> -->
@@ -13,12 +13,14 @@
         <div class="switch-btn switch-active">形式</div> -->
         <cockpit-select
           v-model="type1"
-          :optionData="optionData"
+          :optionData="optionData1"
+          @change="handleType1Data"
           placeholder="规模"
         />
         <cockpit-select
           v-model="type2"
-          :optionData="optionData"
+          :optionData="optionData2"
+          @change="handleType2Data"
           placeholder="形式"
         />
       </div>
@@ -45,39 +47,41 @@ import echarts from "echarts";
 import moduleWrapper from "@/views/cockpit-version-1/components/ui/module-wrapper";
 import bar from "@/views/cockpit-version-1/components/charts/barType2";
 import cockpitSelect from "@/views/cockpit-version-1/components/ui/select";
+import { mutationsSet, store } from "@/views/cockpit-version-1/cockpitStore";
+import { demoData } from "./在线监测设备数量.js";
 export default {
   components: { moduleWrapper, bar, cockpitSelect },
-  props: {
-    // params: {
-    //     type: Object,
-    //     default: () => {}
-    // },
-    // fontSize: {
-    //     type: Number,
-    //     default: 14
-    // }
+  props: {},
+  computed: {
+    pageLevelValue(val) {
+      return store.currentAreaLevelValue;
+    },
   },
-
   watch: {
-    // fontSize: {
-    //     handler(val) {
-    //         this.$nextTick(() => {
-    //             this.$refs.echartsBar.echartsResize()
-    //         })
-    //     },
-    //     immediate: true
-    // },
-    // id(val) {
-    //     this.$nextTick(() => {
-    //         this.setEcharts()
-    //     })
-    // }
+    pageLevelValue(val) {
+      this.type1 = "";
+      this.type2 = "";
+      this.handleDemoData();
+    },
   },
   data() {
     return {
       type1: "",
       type2: "",
-      type3: "",
+      // type3:'正序',
+      optionData1: [
+        { value: "特大桥" },
+        { value: "大桥" },
+        { value: "中桥" },
+        { value: "小桥" },
+      ],
+      optionData2: [
+        { value: "梁桥" },
+        { value: "拱桥" },
+        { value: "悬索桥" },
+        { value: "刚构桥" },
+        { value: "组合桥" },
+      ],
       optionData: [{ value: "xixihaha" }],
       isShow: false,
       grid: { containLabel: false, right: "5%" },
@@ -96,13 +100,7 @@ export default {
             fontSize: "12",
           },
         },
-        data: [
-          "环境荷载",
-          "结构整体响应",
-          "结构局部响应",
-          "车辆荷载监测",
-          "视频监测",
-        ],
+        data: [],
       },
       moreYAxis: [],
       colorItemArr: [
@@ -117,20 +115,20 @@ export default {
   },
   mounted() {
     // this.$forceUpdate()
-    this.setEcharts();
+    this.handleDemoData();
   },
   methods: {
-    openCharts() {
-      if (this.isShow) {
-        this.isShow = false;
-      } else {
-        this.isShow = true;
-        this.$nextTick(() => {
-          this.$refs.echartsBar.echartsResize();
-        });
-      }
+    handleType1Data(data) {
+      let type = data.value || "";
+      this.type2 = "";
+      this.handleDemoData(type);
     },
-    setEcharts() {
+    handleType2Data(data) {
+      let type = data.value || "";
+      this.type1 = "";
+      this.handleDemoData(type);
+    },
+    handleDemoData(type) {
       const moreYAxisdata = {
         splitLine: "none",
         axisTick: "none",
@@ -162,25 +160,35 @@ export default {
           // }
         },
       };
-      let demoData = [];
-      const arr = [233, 208, 179, 153, 122];
-      let total = this.total;
-      this.yAxis.data.forEach((val, index) => {
+      //  { 设备: "环境", 数量: 87 },
+      // { 设备: "车辆荷载", 数量: 103 },
+      // { 设备: "结构整体响应", 数量: 123 },
+      // { 设备: "结构局部响应", 数量: 135 },
+      // { 设备: "视频", 数量: 205 },
+      let dataSource = [];
+      try {
+        dataSource = demoData[this.pageLevelValue || "福建省"][type||'全部']||[];
+      } catch (err) {}
+      let demoDataList = [];
+      let total = 0;
+      this.yAxis.data=[]
+      dataSource.forEach((val, index) => {
         // const value = window.MathRandom(5*index, total);
         // total = total - value;
-        demoData.push(arr[index]);
+        demoDataList.push(val["数量"]);
+        this.yAxis.data.push(val["设备"]);
+        total += val["数量"];
       });
 
-      demoData.sort((a, b) => {
+      demoDataList.sort((a, b) => {
         return b - a;
       });
 
-      this.dataList = this.yAxis.data.map((aItem, index) => {
-        moreYAxisdata.data.push(demoData[index]);
-
+      this.dataList = dataSource.map((aItem, index) => {
+        moreYAxisdata.data.push(demoDataList[index]); 
         return {
           name: aItem,
-          value: demoData[index],
+          value: demoDataList[index],
           barCategoryGap: 15,
           label: {
             normal: {
@@ -198,7 +206,7 @@ export default {
       this.moreYAxis.push(moreYAxisdata);
       this.$nextTick(() => {
         this.$refs.echartsBar.setEcharts();
-        this.$refs.echartsBar.echartsResize(); 
+        this.$refs.echartsBar.echartsResize();
       });
     },
   },

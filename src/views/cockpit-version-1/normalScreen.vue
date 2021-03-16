@@ -89,6 +89,16 @@ export default {
     wideScreenLevel() {
       return store.wideScreenLevel;
     },
+    currentAreaLevelValue() {
+      return store.currentAreaLevelValue;
+    },
+    currentAreaLevelType() {
+      return store.currentAreaLevelValue;
+    },
+  },
+  watch: {
+    // currentAreaLevelValue(val) {},
+    // currentAreaLevelType(val) {},
   },
   mounted() {
     this.windowResize();
@@ -103,6 +113,7 @@ export default {
     },
     //获取区域
     reqAreaList() {
+      
       getAreaList().then((areaListRes) => {
         if (areaListRes) {
           console.log(areaListRes);
@@ -114,7 +125,6 @@ export default {
             ) {
               val.companyStr = val.company;
               val.company = this.filterStr(val.company);
-              
             }
           });
           mutationsSet("areaList", areaList);

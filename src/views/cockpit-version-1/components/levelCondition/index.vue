@@ -126,9 +126,7 @@ export default {
         { value: "拱桥" },
         { value: "悬索桥" },
         { value: "刚构桥" },
-        { value: "组合桥" },
-        { value: "组合桥2" },
-        { value: "组合桥3" },
+        { value: "组合桥" }, 
       ],
       tableData: [],
     };

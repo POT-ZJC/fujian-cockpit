@@ -159,11 +159,7 @@ export default {
       deep: true,
     },
 
-    // id(val) {
-    //   this.$nextTick(() => {
-    //     this.loopPlayMarkers();
-    //   });
-    // },
+    
     searchMapKeyword(val) {
       this.reqBridgeListByParam();
     },
@@ -188,35 +184,14 @@ export default {
         { name: "中心桩号", key: "centerLocation" },
         { name: "桥梁全长(m)", key: "bridgeLength" },
         { name: "桥梁跨径组合(孔*米)", key: "combination" },
-        { name: "桥梁属性", key: "bridgeType" },
+        { name: "桥梁属性", key: "bridgeSize" },
         { name: "上部结构类型", key: "structureType" },
         { name: "通车时间", key: "startRunCarDate" },
         { name: "技术状况评定", key: "level" },
         { name: "养护单位", key: "curingUnit" },
         { name: "管理单位", key: "managerUnit" },
       ],
-      poi_Arr: [
-        {
-          name: "厦门大桥",
-          addr: [118.102497, 24.557011],
-        },
-        {
-          name: "厦漳大桥",
-          addr: [117.953236, 24.437039],
-        },
-        {
-          name: "泉州湾大桥",
-          addr: [118.695328, 24.813429],
-        },
-        {
-          name: "集美大桥",
-          addr: [118.133139, 24.566769],
-        },
-        {
-          name: "杏林大桥",
-          addr: [118.087691, 24.557753],
-        },
-      ],
+     
       markers_Arr: [],
       currentMarkerIndex: -1,
       showLevel: {
@@ -263,23 +238,9 @@ export default {
     },
     //轮播坐标点
     loopPlayMarkers() {
-      if (this.currentMarkerIndex !== -1) {
-        this.markers_Arr[this.currentMarkerIndex].setLabel(null); // 关闭当前的点标记，打开下一个点标记
-        if (this.currentMarkerIndex >= this.markers_Arr.length - 1) {
-          this.currentMarkerIndex = 0;
-        } else {
-          ++this.currentMarkerIndex;
-        }
-      } else {
-        this.currentMarkerIndex = 0;
-      }
-
+     
       this.openPoiLabel(this.markers_Arr[this.currentMarkerIndex]);
-      this.$nextTick(() => {
-        setTimeout(() => {
-          this.myAmap.setCenter(this.poi_Arr[this.currentMarkerIndex].addr);
-        }, 200);
-      });
+    
     },
     initMap() {
       // let map = new AMap.Map("container", {
@@ -295,7 +256,7 @@ export default {
         viewMode: "3D",
         resizeEnable: true,
         // features: ["bg", "road"],
-        center: this.poi_Arr[0].addr,
+        center: [117.997286,26.379269],
         zoom: 7.5,
       });
       const scale = new window.AMap.Scale({ position: "RB" });

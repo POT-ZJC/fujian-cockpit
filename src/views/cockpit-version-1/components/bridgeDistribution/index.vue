@@ -1,7 +1,7 @@
 <template>
   <moduleWrapper>
     <template slot="head-title">
-      <div class="module-title">桥梁分布统计</div>
+      <div class="module-title">桥梁分布</div>
     </template>
     <template slot="head-right">
       <div class="switch-box">

@@ -2,26 +2,27 @@
   <moduleWrapper>
     <template slot="head-title">
       <div class="module-title">病害TOP</div>
-
     </template>
-       <template slot="head-right">
-      <div class="switch-box"> 
+    <template slot="head-right">
+      <div class="switch-box">
         <cockpit-select
-            v-model="type1"
-            :optionData="optionData"
-            placeholder="规模"
-          />
-          <cockpit-select
-            v-model="type2"
-            :optionData="optionData"
-            placeholder="形式"
-          />
-           <cockpit-select
+          v-model="type1"
+          :optionData="optionData1"
+          @change="handleType1Data"
+          placeholder="规模"
+        />
+        <cockpit-select
+          v-model="type2"
+          :optionData="optionData2"
+          @change="handleType2Data"
+          placeholder="形式"
+        />
+        <!-- <cockpit-select
             v-model="type3"
             :hasClear="false"
             :optionData="[{value:'正序'},{value:'倒序'}]"
             placeholder="排序"
-          />
+          /> -->
       </div>
     </template>
     <div class="charts-left">
@@ -66,9 +67,22 @@ import moduleWrapper from "@/views/cockpit-version-1/components/ui/module-wrappe
 // import echarts from "echarts";
 import cockpitSelect from "@/views/cockpit-version-1/components/ui/select";
 import bar from "../charts/bar";
+import { demoData1, demoData2 } from "./demoData";
 export default {
-  components: { radar, moduleWrapper, bar,cockpitSelect },
-
+  components: { radar, moduleWrapper, bar, cockpitSelect },
+  computed: {
+    pageLevelValue(val) {
+      return store.currentAreaLevelValue;
+    },
+  },
+  watch: {
+    pageLevelValue(val) {
+      this.type1 = "";
+      this.type2 = "";
+      this.typeDemoData();
+      this.partsDemoData();
+    },
+  },
   data() {
     const typeBars = [
       "不完整",
@@ -83,10 +97,23 @@ export default {
       "破损",
     ];
     return {
-       type1:'',
-      type2:'',
-      type3:'正序',
-      optionData:[{value:'xixihaha'}],
+      // level: "福建省",
+      type1: "",
+      type2: "",
+      // type3:'正序',
+      optionData1: [
+        { value: "特大桥" },
+        { value: "大桥" },
+        { value: "中桥" },
+        { value: "小桥" },
+      ],
+      optionData2: [
+        { value: "梁桥" },
+        { value: "拱桥" },
+        { value: "悬索桥" },
+        { value: "刚构桥" },
+        { value: "组合桥" },
+      ],
       typeBars,
       typeBarData: [
         {
@@ -102,7 +129,7 @@ export default {
       ],
       xAxisData1: [],
       xAxisData2: [],
-      colors: [["rgba(53,224,220,0.91)",'rgba(11,124,234,0.91)'], "#3a8ff6"],
+      colors: [["rgba(53,224,220,0.91)", "rgba(11,124,234,0.91)"], "#3a8ff6"],
 
       colorItemArr: [
         ["#00FFDE", "#007D6D"], //绿
@@ -121,20 +148,33 @@ export default {
     this.partsDemoData();
   },
   methods: {
-    typeDemoData() {
-      let objdata = [];
-      //   debugger
-      for (let i = 0; i < 6; i++) {
-        objdata.push(window.MathRandom(10, 50));
-        const length = this.typeBars.length;
-        const index = window.MathRandom(1, length) - 1;
-        const str = this.typeBars.splice(index, 1);
-        this.xAxisData1.push(str);
-      }
-      objdata.sort(function(a, b) {
-        return b - a;
-      });
-      this.typeBarData[0].data = objdata;
+    handleType1Data(data) {
+      let type = data.value || "";
+      this.type2 = "";
+      this.typeDemoData(type);
+      this.partsDemoData(type);
+    },
+    handleType2Data(data) {
+      let type = data.value || "";
+      this.type1 = "";
+      this.typeDemoData(type);
+      this.partsDemoData(type);
+    },
+
+    typeDemoData(type) {
+      let xAxisData1 = [],
+        arr = [],
+        data = [];
+      try {
+        // debugger
+        arr = demoData1[this.pageLevelValue || "福建省"][type || "all"];
+        arr.forEach((val) => {
+          xAxisData1.push(val["病害类型"]);
+          data.push(val["数量"]);
+        });
+      } catch (err) {}
+      this.typeBarData[0].data = data;
+      this.xAxisData1 = xAxisData1;
       //   console.log(this.typeBarData)
       this.$nextTick(() => {
         this.$refs.typeBar.setEcharts();
@@ -158,60 +198,41 @@ export default {
 
       //   console.log("xAxisData", this.xAxisData);
     },
-    partsDemoData() {
-      let partsBars = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+    partsDemoData(type) {
+      let xAxisData2 = [],
+        arr = [],
+        data = [];
+      try {
+        arr = demoData2[this.pageLevelValue || "福建省"][type || "all"];
 
-      let objdata = [];
-      //   debugger
-      for (let i = 0; i < 6; i++) {
-        objdata.push(window.MathRandom(10, 50));
-        const length = partsBars.length;
-        const index = window.MathRandom(1, length) - 1;
-        const str = partsBars.splice(index, 1);
-        this.xAxisData2.push("部件-" + str);
-      }
-      objdata.sort(function(a, b) {
-        return b - a;
-      });
-      this.partsBarData[0].data = objdata;
+        arr.forEach((val) => {
+          xAxisData2.push(val["病害部件"]);
+          data.push(val["数量"]);
+        });
+       
+      } catch (err) {}
+      this.partsBarData[0].data = data;
+      this.xAxisData2 = xAxisData2;
       console.log(this.partsBarData);
       this.$nextTick(() => {
         this.$refs.partsBar.setEcharts();
       });
-      //   this.xAxisData = this.companyList.map((val) => val.company);
-      //     const dataList = this.companyList.map((bItem) => {
-      //       //   this.xAxisData.push(bItem.company);
-      //       return window.MathRandom(15, 150);
-      //     });
-
-      //     return {
-      //       name: aItem,
-      //       data: dataList,
-      //       itemStyle: {
-      //         color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-      //           { offset: 0, color: this.colorItemArr[index][0] },
-      //           { offset: 1, color: this.colorItemArr[index][1] },
-      //         ]),
-      //       },
-      //     };
-
-      //   console.log("xAxisData", this.xAxisData);
     },
   },
 };
 </script>
 <style lang="scss" scoped>
- .charts-title {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
-    text-align: center;
-    font-size: torem(16px);
-    font-weight: bold;
-    color: #fff;
-  }
+.charts-title {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  text-align: center;
+  font-size: torem(16px);
+  font-weight: bold;
+  color: #fff;
+}
 .charts-left {
   float: left;
   height: 100%;
@@ -220,7 +241,6 @@ export default {
   .charts-radar {
     height: 100%;
   }
- 
 }
 .charts-right {
   float: right;

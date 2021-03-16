@@ -343,11 +343,11 @@ export default {
     display: flex;
     align-items: center;
     .head-title {
-      font-size: torem(43px);
+      font-size: torem(36px);
       font-family: BDZYJT--GB1-0;
       transform: skewX(-10deg);
       font-weight: bold;
-      margin-left: torem(40px);
+      margin-left: torem(20px);
       width: tovw(560px);
       letter-spacing: 6px;
       // color: #03c0f3;
@@ -438,16 +438,16 @@ export default {
     align-items: center;
     padding-left: tovw(30px);
     .map-search {
-      margin-left: tovw(30px);
-      width: torem(450px);
+      margin-left: torem(30px);
+      width: torem(420px);
       border: solid 1px #69a8f6;
       display: flex;
       align-items: center;
       height: torem(40px);
-      margin-right: 1rem;
+      margin-right: torem(70px);
       padding-left: torem(12px);
       input {
-        width: torem(400px);
+        width: torem(375px);
         height: torem(36px);
         font-size: torem(16px);
         color: #fff;
