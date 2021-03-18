@@ -1,5 +1,6 @@
 import Vue from "vue";
 const obj = {
+  fontSize:86,
   areaList: [], //区域
   routeList: null, //路线
   currentAreaLevelType: "", //当前区域/路线层级类型 // "routeName": "" "sectionName": "路段名称","company": "区域名称", "maintenanceCenter": "养护中心", "maintenanceStation": "养护站"

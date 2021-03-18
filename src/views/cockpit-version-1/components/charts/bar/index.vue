@@ -4,7 +4,19 @@
 
 <script>
 import echarts from "echarts";
+// fontSize
+import { store } from "@/views/cockpit-version-1/cockpitStore";
 export default {
+  computed: {
+    fontSize() {
+      return store.fontSize;
+    },
+  },
+   watch: {
+    fontSize(val) {
+      this.echartsResize();
+    },
+  },
   props: {
     isToAmount: {
       type: Boolean,
@@ -61,6 +73,7 @@ export default {
       ],
     },
   },
+ 
   data() {
     return {
       myChart: null,
@@ -72,7 +85,7 @@ export default {
           color: "#273b58",
           shadowColor: "rgba(0, 0, 0, 0.8)",
           shadowBlur: 4,
-          shadowOffsetX:4,
+          shadowOffsetX: 4,
         },
         label: {
           normal: {

@@ -28,7 +28,18 @@
 <script>
 import echarts from 'echarts'
 // import Legend from "@/views/cockpit-bigdata/components/legend";
+import { store } from "@/views/cockpit-version-1/cockpitStore";
 export default {
+  computed: {
+    fontSize() {
+      return store.fontSize;
+    },
+  },
+   watch: {
+    fontSize(val) {
+      this.echartsResize();
+    },
+  },
 	name: 'circle-echarts',
 	components: {
 		//  Legend

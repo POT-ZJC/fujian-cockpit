@@ -3,7 +3,18 @@
 </template>
 <script>
 import echarts from 'echarts'
+import { store } from "@/views/cockpit-version-1/cockpitStore";
 export default {
+  computed: {
+    fontSize() {
+      return store.fontSize;
+    },
+  },
+   watch: {
+    fontSize(val) {
+      this.echartsResize();
+    },
+  },
 	props: {
 		// refName: {
 		// 	type: String,

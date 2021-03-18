@@ -31,7 +31,7 @@
       </div>
     </div>
     <!-- 桥梁图例颜色 -->
-    <div class="bridge-legend" v-show="false">
+    <div class="bridge-legend" v-show="true">
       <div
         class="legend-item"
         style=""
@@ -249,15 +249,15 @@ export default {
         },
         大桥: {
           name: "大桥",
-          color: "#60d6d5",
+          color: "#023c82",
         },
         中桥: {
           name: "中桥",
-          color: "#93f1f4",
+          color: "#60d6d5",
         },
         小桥: {
           name: "小桥",
-          color: "#fff",
+          color: "#f27878",
         },
       },
       mapActiveBridge: [],
@@ -342,18 +342,19 @@ export default {
       let backColorArr = [
         // "#a2bff3",
         // "#a2a9b6",
-        "rgba(162,184,222,0.4)",
+        "rgba(162,184,222,0.6)",
+        // "#023c82",
         // "#014655",
         // "#016b83",
         // "rgba(76,245,246,0.53)",
       ];
       let getColorByAdcode = function(adcode) {
         ++areaItemTotal;
-        const randomNIndex =
-          areaItemTotal -
-          Math.floor(areaItemTotal / backColorArr.length) * backColorArr.length;
-
-        return backColorArr[randomNIndex];
+        // const randomNIndex =
+          // areaItemTotal -
+          // Math.floor(areaItemTotal / backColorArr.length) * backColorArr.length;
+        // return "#023c82";
+        return backColorArr[0];
       };
       // // 给国家的省市区域添加背景色
       const disCountryLayer = new window.AMap.DistrictLayer.Country({
@@ -369,7 +370,7 @@ export default {
             if (props.adcode === 350000) {
               return "";
             } else {
-              return "#042E4F"; //042E4F-122246
+              return "#09152A"; //042E4F-122246-023c82-09152A
             }
           },
         },
@@ -387,7 +388,8 @@ export default {
           // opacity: 0.86
           fill: function(properties, b, c, d) {
             let adcode = properties.adcode;
-            return getColorByAdcode();
+            // return getColorByAdcode();
+            return 'rgba(118,238,251,0.7)'
           },
           "province-stroke": "#d8f7ff",
           "city-stroke": "#d8f7ff", // 中国地级市边界
@@ -490,9 +492,14 @@ export default {
           }
         }
       }
+      if (bridgeSize) {
+        this.mapActiveBridge = bridgeSize.split(",");
+      } else if (structureType) {
+        this.mapActiveBridge = structureType.split(",");
+      } else {
+        this.mapActiveBridge = [];
+      }
 
-      bridgeSize && (this.mapActiveBridge = bridgeSize.split(","));
-      structureType && (this.mapActiveBridge = structureType.split(","));
       return { structureType, bridgeSize };
     },
     //查询桥梁
@@ -557,40 +564,44 @@ export default {
       this.markers_Arr.forEach((val) => val.setMap(null));
       // this.myAmap.clearMap();
       let markers = [];
-      poiArr.forEach((data) => {
-        let icon = poi_type_1;
-        // poi_type_1
-        // switch (data.technologyLevel) {
-        //   case "1类":
-        //     icon = poi_type_1;
-        //     break;
-        //   case "2类":
-        //     icon = poi_type_2;
-        //     break;
 
-        //   case "3类":
-        //     icon = poi_type_3;
-        //     break;
-        //   case "4类":
-        //     icon = poi_type_4;
-        //     break;
-        //   case "5类":
-        //     icon = poi_type_5;
-        //     break;
-        //   default:
-        //     break;
-        // }
+      poiArr.forEach((data) => {
+        let typeColor = "#c72727"; //structureType-bridgeSize
+        if (this.bridgeOverviewActive.structureType[data.bridgeTypeDes]) {
+          typeColor = this.bridgeLegend[data.bridgeTypeDes].color;
+        } else if (this.bridgeOverviewActive.bridgeSize[data.bridgeSize]) {
+          typeColor = this.bridgeLegend[data.bridgeSize].color;
+        }
+        let iconColor = typeColor;
+        let contentStr = `<svg
+            t="1615976296444"
+            class="icon"
+            viewBox="0 0 1024 1024"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            p-id="4697"
+            width="26"
+            height="26"
+          >
+            <path
+              d="M712.341 246.982a278.637 278.637 0 0 0-400.682 0c-110.496 114.278-110.496 295.585 0 409.866L512.001 862 712.34 656.848c110.497-114.281 110.497-295.588 0.001-409.866z"
+              fill="${iconColor}"
+              p-id="4698"
+            ></path>
+          </svg>`;
+
         if (data.latitudeLongitude) {
           const addr = data.latitudeLongitude.split(",");
           // console.log("addr", addr);
           let temp = new AMap.Marker({
             map: this.myAmap,
             name: data.bridgeName,
-            icon: new AMap.Icon({
-              image: icon,
-              // size: new AMap.Size(22, 22), //图标大小
-              imageSize: new AMap.Size(26, 26),
-            }),
+            content: contentStr,
+            // icon: new AMap.Icon({
+            //   image: icon,
+            //   // size: new AMap.Size(22, 22), //图标大小
+            //   imageSize: new AMap.Size(26, 26),
+            // }),
             position: [addr[0], addr[1]],
             offset: new AMap.Pixel(-13, -13),
             // content: "<div class='info'>我是 marker 的 label 标签</div>", //设置文本标注内容
@@ -689,6 +700,7 @@ export default {
       font-weight: bold;
       color: #76eefb;
       position: relative;
+      margin-right: torem(15px);
       width: torem(76px);
       &::before {
         position: absolute;
@@ -701,7 +713,7 @@ export default {
       }
     }
     .route-totalNum {
-      margin-left: torem(20px);
+      // margin-left: torem(20px);
       font-size: torem(30px);
       letter-spacing: 2px;
       font-weight: bold;
@@ -719,6 +731,7 @@ export default {
       font-weight: bold;
       color: #76eefb;
       width: torem(76px);
+      margin-right: torem(15px);
       position: relative;
       &::before {
         position: absolute;
@@ -738,7 +751,7 @@ export default {
       }
     }
     .road-totalNum {
-      margin-left: torem(20px);
+      // margin-left: torem(20px);
       font-size: torem(30px);
       letter-spacing: 2px;
       font-weight: bold;

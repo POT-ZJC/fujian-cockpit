@@ -113,7 +113,6 @@ export default {
     },
     //获取区域
     reqAreaList() {
-      
       getAreaList().then((areaListRes) => {
         if (areaListRes) {
           console.log(areaListRes);
@@ -158,9 +157,11 @@ export default {
     windowResize() {
       // 监听屏幕
       function watchClien() {
-        computedFontSize(document.querySelector("html"));
-        const _w = document.body.clientWidth,
-          _h = document.body.clientHeight;
+        const fontSize = computedFontSize(document.querySelector("html"));
+        mutationsSet("fontSize", fontSize);
+        // debugger
+        const _w = window.innerWidt || document.body.clientWidth,
+          _h = window.innerHeight || document.body.clientHeight;
         const clientRatio = _w / _h;
         //设置宽屏等级
         if (clientRatio >= 3.4) {

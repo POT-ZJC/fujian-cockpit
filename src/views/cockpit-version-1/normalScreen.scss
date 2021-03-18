@@ -38,7 +38,7 @@ body {
       // border: 1px solid #00baff;
       position: relative;
       min-width: 0.36rem;
-      max-width: 0.54rem;
+      // max-width: 0.54rem;
       box-sizing: border-box;
       font-weight: bold;
       font-size: torem(14px);
@@ -144,7 +144,7 @@ body {
   }
 
   .el-scrollbar__wrap {
-    overflow-y: auto;
+    // overflow-y: auto;
     overflow-x: hidden;
     // padding-bottom: 17px;
   }

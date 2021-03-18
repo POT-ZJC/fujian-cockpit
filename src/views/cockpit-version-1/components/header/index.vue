@@ -80,9 +80,26 @@
           </svg>
         </div>
       </div>
-      <div class="link-outurl">检测</div>
+      <div
+        class="link-outurl"
+        @click="
+          openNewUrl([
+            'https://mis.zsjczx.com/#/datongjiance/login',
+            'http://120.32.125.113:9010/BMS/loginPlatform.jsp',
+          ])
+        "
+      >
+        检测
+      </div>
       <div class="divide-line"></div>
-      <div class="link-outurl">监测</div>
+      <div
+        class="link-outurl"
+        @click="
+          openNewUrl(['http://120.32.125.113:9080/bmsplatform/core/login'])
+        "
+      >
+        监测
+      </div>
     </div>
   </div>
 </template>
@@ -188,6 +205,11 @@ export default {
   methods: {
     searchMap() {
       mutationsSet("searchMapKeyword", this.searchMapKeyword);
+    },
+    openNewUrl(url) {
+      url.forEach((val) => {
+        window.open(val);
+      });
     },
     handleRoute(data) {
       let currentRouteTotalNum = 0,
