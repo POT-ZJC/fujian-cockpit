@@ -33,7 +33,7 @@ function closeGlobalLoading(config) {
 // create an axios instance
 const service = axios.create({
   // withCredentials: true, // send cookies when cross-domain requests
-  timeout: 120 * 1000, // request timeout
+  timeout: 120 * 1000, // request 
 });
 
 // request interceptor
@@ -42,7 +42,7 @@ service.interceptors.request.use(
     config.url = api_root + config.url;
     // do something before request is sent
     // config.headers["Content-Type"] = "application/json;charset=utf-8";
-    config.timeout = 30 * 1000;
+    config.timeout = 120 * 1000;
     //   const token = getToken()
     if (!config.headers["Content-Type"]) {
       config.headers["Content-Type"] = "application/json";
@@ -52,7 +52,7 @@ service.interceptors.request.use(
     //   }
     config.headers["scope"] = "web";
 
-    console.log(config);
+    // console.log(config);
     addGlobalLoading(config);
     return config;
   },

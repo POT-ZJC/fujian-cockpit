@@ -14,6 +14,11 @@ const obj = {
   routeLnglatList: [], //路线坐标
   bridgeScaleTotal: [], //桥梁规模总览
   bridgeTypeTotal: [], //桥梁形式总览
+  bridgeOverviewActive: {
+    all: true,
+    bridgeSize: {}, //桥长/规模
+    structureType: {}, //桥型/形式
+  },
   bridgeLevelCondition: [], //桥梁技术状况
   //     桥梁规模分类：bridgeScaleStatistics
   // 桥梁形式分类：bridgeTypeData

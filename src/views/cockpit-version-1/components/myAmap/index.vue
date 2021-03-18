@@ -21,14 +21,44 @@
     <div class="map-line-tips">
       <div class="line-tips-route">
         <div class="route">路线</div>
-        <div class="route-totalNum">{{ mapLBNumber.currentRouteTotalNum }}条</div>
+        <div class="route-totalNum">
+          {{ mapLBNumber.currentRouteTotalNum }}条
+        </div>
       </div>
       <div class="line-tips-road">
         <div class="road">路段</div>
         <div class="road-totalNum">{{ mapLBNumber.currentRoadTotalNum }}条</div>
       </div>
     </div>
-
+    <!-- 桥梁图例颜色 -->
+    <div class="bridge-legend" v-show="false">
+      <div
+        class="legend-item"
+        style=""
+        v-for="(item, index) in mapActiveBridge"
+        :key="index"
+      >
+        <div class="legend-dot" :style="''">
+          <svg
+            t="1615976296444"
+            class="icon"
+            viewBox="0 0 1024 1024"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            p-id="4697"
+            width="32"
+            height="32"
+          >
+            <path
+              d="M712.341 246.982a278.637 278.637 0 0 0-400.682 0c-110.496 114.278-110.496 295.585 0 409.866L512.001 862 712.34 656.848c110.497-114.281 110.497-295.588 0.001-409.866z"
+              :fill="`${bridgeLegend[item].color}`"
+              p-id="4698"
+            ></path>
+          </svg>
+        </div>
+        {{ item }}
+      </div>
+    </div>
     <!-- 桥梁详情 -->
     <div class="marker-detail" v-show="isOpenBridgeDetail">
       <div class="detail-header">
@@ -133,33 +163,33 @@ export default {
     routeLnglatList() {
       return store.routeLnglatList;
     },
-     
-    
-
-    bridgeScaleTotal() {
-      //桥梁规模总览
-      return store.bridgeScaleTotal;
+    //桥梁总览激活
+    bridgeOverviewActive() {
+      return store.bridgeOverviewActive;
     },
-    bridgeTypeTotal() {
-      //桥梁形式总览
-      return store.bridgeTypeTotal;
-    },
+    // bridgeScaleTotal() {
+    //   //桥梁规模总览
+    //   return store.bridgeScaleTotal;
+    // },
+    // bridgeTypeTotal() {
+    //   //桥梁形式总览
+    //   return store.bridgeTypeTotal;
+    // },
   },
   watch: {
-    bridgeScaleTotal: {
+    bridgeOverviewActive: {
       handler(val) {
         this.reqBridgeListByParam();
       },
       deep: true,
     },
-    bridgeTypeTotal: {
-      handler(val) {
-        this.reqBridgeListByParam();
-      },
-      deep: true,
-    },
+    // bridgeTypeTotal: {
+    //   handler(val) {
+    //     this.reqBridgeListByParam();
+    //   },
+    //   deep: true,
+    // },
 
-    
     searchMapKeyword(val) {
       this.reqBridgeListByParam();
     },
@@ -191,7 +221,46 @@ export default {
         { name: "养护单位", key: "curingUnit" },
         { name: "管理单位", key: "managerUnit" },
       ],
-     
+      //桥梁分类图例-颜色值-bridgeTypeDes
+      bridgeLegend: {
+        梁桥: {
+          name: "梁桥",
+          color: "#78aff2",
+        },
+        拱桥: {
+          name: "拱桥",
+          color: "#d778f2",
+        },
+        悬索桥: {
+          name: "悬索桥",
+          color: "#f2df78",
+        },
+        刚构桥: {
+          name: "刚构桥",
+          color: "#7ef278",
+        },
+        组合桥: {
+          name: "组合桥",
+          color: "#f27878",
+        },
+        特大桥: {
+          name: "特大桥",
+          color: "#148d90",
+        },
+        大桥: {
+          name: "大桥",
+          color: "#60d6d5",
+        },
+        中桥: {
+          name: "中桥",
+          color: "#93f1f4",
+        },
+        小桥: {
+          name: "小桥",
+          color: "#fff",
+        },
+      },
+      mapActiveBridge: [],
       markers_Arr: [],
       currentMarkerIndex: -1,
       showLevel: {
@@ -206,7 +275,7 @@ export default {
   mounted() {
     this.initMap();
     // this.reqBridgeListByParam();
-    this.handleShowLevel()
+    this.handleShowLevel();
   },
   methods: {
     handleShowLevel(str) {
@@ -230,17 +299,15 @@ export default {
           showLevel.company = false;
           showLevel.centerTotal = false;
           showLevel.stationTotal = false;
-          break; 
+          break;
         default:
           null;
       }
-      this.showLevel=showLevel
+      this.showLevel = showLevel;
     },
     //轮播坐标点
     loopPlayMarkers() {
-     
       this.openPoiLabel(this.markers_Arr[this.currentMarkerIndex]);
-    
     },
     initMap() {
       // let map = new AMap.Map("container", {
@@ -256,7 +323,7 @@ export default {
         viewMode: "3D",
         resizeEnable: true,
         // features: ["bg", "road"],
-        center: [117.997286,26.379269],
+        center: [117.997286, 26.379269],
         zoom: 7.5,
       });
       const scale = new window.AMap.Scale({ position: "RB" });
@@ -405,24 +472,32 @@ export default {
     },
     //处理地图上需要展示的桥梁规模和形式
     handleMapBridgeType() {
-      const bridgeScaleTotal = this.bridgeScaleTotal,
-        bridgeTypeTotal = this.bridgeTypeTotal;
-      let bridgeSize = "", //规模
-        structureType = ""; //形式
-      bridgeScaleTotal.forEach((val, index) => {
-        if (val.active) {
-          bridgeSize += (bridgeSize ? "," : "") + val.title;
+      const overviewActive = { ...this.bridgeOverviewActive };
+
+      let structureType = "",
+        bridgeSize = "";
+      if (!overviewActive.all) {
+        const structureTypeSource = overviewActive.structureType;
+        const bridgeSizeSource = overviewActive.bridgeSize;
+        for (let key in structureTypeSource) {
+          if (structureTypeSource[key]) {
+            structureType += structureType ? "," + key : key;
+          }
         }
-      });
-      bridgeTypeTotal.forEach((val, index) => {
-        if (val.active) {
-          structureType += (structureType ? "," : "") + val.title;
+        for (let key in bridgeSizeSource) {
+          if (bridgeSizeSource[key]) {
+            bridgeSize += bridgeSize ? "," + key : key;
+          }
         }
-      });
+      }
+
+      bridgeSize && (this.mapActiveBridge = bridgeSize.split(","));
+      structureType && (this.mapActiveBridge = structureType.split(","));
       return { structureType, bridgeSize };
     },
     //查询桥梁
     reqBridgeListByParam() {
+      this.isOpenBridgeDetail = false;
       //currentAreaLevelType
 
       // "bridgeId": "桥梁id"
@@ -542,9 +617,9 @@ export default {
     openPoiDetail(data) {
       const newData = {
         ...data,
-        startRunCarDate: moment(Number(data.startRunCarDate)).format(
-          "yyyy-MM-DD"
-        ),
+        // startRunCarDate: moment(Number(data.startRunCarDate)).format(
+        //   "yyyy-MM-DD"
+        // ),
       };
       this.bridgeDetail = newData;
       this.isOpenBridgeDetail = true;
@@ -557,21 +632,41 @@ export default {
 .area-level-count {
   position: absolute;
   left: torem(15px);
-  bottom: torem(80px);
+  bottom: torem(65px);
+  font-family: MicrosoftYaHei-Bold;
   .area-level-item {
     display: flex;
     align-items: center;
-    height: 32px;
+    height: torem(42px);
     .name {
-      color: #eac922;
-      font-size: 16px;
+      color: #76eefb;
+      font-size: torem(18px);
       font-weight: bold;
-      width: 70px;
+      width: torem(76px);
+      margin-right: torem(15px);
     }
     .count {
-      font-size: 20px;
+      font-size: torem(30px);
       font-weight: bold;
-      color: #fff;
+      color: #76eefb;
+      font-family: DINEngschriftStd;
+    }
+  }
+}
+//地图桥梁-图例
+.bridge-legend {
+  position: absolute;
+  right: 10px;
+  bottom: 190px;
+  width: 90px;
+  z-index: 1;
+  color: #fff;
+  text-align: right;
+  .legend-item {
+    display: flex;
+    font-size: 14px;
+    align-items: center;
+    .legend-dot {
     }
   }
 }
@@ -580,53 +675,58 @@ export default {
   position: absolute;
   left: torem(15px);
   // right: 0;
-  bottom: torem(30px);
+  bottom: torem(20px);
   display: flex;
   justify-content: center;
+  font-family: MicrosoftYaHei-Bold;
   .line-tips-route {
     display: flex;
-    // margin-left: torem(30px);
-    padding: 0 torem(10px);
+    margin-right: torem(30px);
+    padding: 0 torem(0px);
     .route {
       cursor: pointer;
-      font-size: torem(16px);
+      font-size: torem(18px);
       font-weight: bold;
-      color: #fff;
+      color: #76eefb;
       position: relative;
+      width: torem(76px);
       &::before {
         position: absolute;
         content: "";
-        width: 140%;
+        width: torem(60px);
         height: torem(5px);
-        bottom: -2px;
-        left: -20%;
+        bottom: torem(-2px);
+        left: -2px;
         background-color: #e30c9c;
       }
     }
     .route-totalNum {
-      margin-left: torem(10px);
-      font-size: (18px);
+      margin-left: torem(20px);
+      font-size: torem(30px);
+      letter-spacing: 2px;
       font-weight: bold;
-      color: #fff;
+      color: #76eefb;
+      font-family: DINEngschriftStd;
     }
   }
   .line-tips-road {
     display: flex;
     // margin-left: torem(30px);
-    padding: 0 torem(10px);
+    // padding: 0 torem(10px);
     .road {
       cursor: pointer;
-      font-size: torem(16px);
+      font-size: torem(18px);
       font-weight: bold;
-      color: #fff;
+      color: #76eefb;
+      width: torem(76px);
       position: relative;
       &::before {
         position: absolute;
         content: "";
-        width: 140%;
+        width: torem(60px);
         height: torem(5px);
-        bottom: -2px;
-        left: -20%;
+        bottom: torem(-2px);
+        left: torem(-2px);
         background: linear-gradient(
           to right,
           #e30c0c 0%,
@@ -638,10 +738,12 @@ export default {
       }
     }
     .road-totalNum {
-      margin-left: torem(10px);
-      font-size: (18px);
+      margin-left: torem(20px);
+      font-size: torem(30px);
+      letter-spacing: 2px;
       font-weight: bold;
-      color: #fff;
+      color: #76eefb;
+      font-family: DINEngschriftStd;
     }
   }
 }
@@ -652,9 +754,18 @@ export default {
   top: torem(200px);
   left: torem(100px);
   // background-image: url("~./img/tip-bg.svg");
-  background: linear-gradient(to bottom, #003639 4%, #001d29 89%);
+  // background: linear-gradient(to bottom, #003639 4%, #001d29 89%);
   //   padding: 15px 15px 10px 10px;
-  box-shadow: 0 torem(10px) torem(30px) 0 #12334b inset;
+  // box-shadow: 0 torem(10px) torem(30px) 0 #12334b inset;
+  background-image: linear-gradient(
+      to top,
+      #112038 0%,
+      #1b2c46 50%,
+      #263958 100%
+    ),
+    linear-gradient(#64cebf, #64cebf);
+  background-blend-mode: normal, normal;
+  box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.4);
   width: torem(690px);
   height: torem(510px);
 

@@ -5,18 +5,39 @@
     </template>
     <template slot="head-right">
       <div class="switch-box">
-        <div class="switch-btn ">规模</div>
-        <div class="switch-btn switch-active">形式</div>
+        <div
+          v-if="
+            currentAreaLevelType === 'maintenanceStation' ||
+              currentAreaLevelType === 'sectionName'
+          "
+        ></div>
+        <div
+          class="switch-btn "
+          @click="handleSwitchType('范围')"
+          :class="{ 'switch-active': switchType === '范围' }"
+          v-else
+        >
+          范围
+        </div>
+        <div
+          class="switch-btn "
+          @click="handleSwitchType('桥梁')"
+          :class="{ 'switch-active': switchType === '桥梁' }"
+        >
+          桥梁
+        </div>
       </div>
-      <div class="switch-box">
+      <div class="select-box">
         <cockpit-select
           v-model="type1"
-          :optionData="optionData"
+          @change="handleType1Data"
+          :optionData="optionData1"
           placeholder="规模"
         />
         <cockpit-select
           v-model="type2"
-          :optionData="optionData"
+          @change="handleType2Data"
+          :optionData="optionData2"
           placeholder="形式"
         />
       </div>
@@ -24,20 +45,26 @@
     <div class="div-table">
       <el-scrollbar style="height:100%" class="scrollbar">
         <el-row class="th">
-          <el-col class="td" :span="4">统计范围</el-col>
+          <el-col class="td" :span="4">{{ switchType }}</el-col>
           <el-col class="td" :span="4">病害类型</el-col>
           <el-col class="td" :span="4">病害数量</el-col>
           <el-col class="td" :span="4">病害部件</el-col>
           <el-col class="td" :span="4">预警次数</el-col>
-          <el-col class="td" :span="4">技术状况等级</el-col>
+          <el-col class="td" :span="4">{{
+            switchType === "范围" ? "危桥数量" : "技术状况等级"
+          }}</el-col>
         </el-row>
-        <el-row class="tr" v-for="(item, index) in showDemoData" :key="index">
-          <el-col class="td" :span="4"   style='color:#3a8ff6'>{{ item.name }}</el-col>
-          <el-col class="td" :span="4">{{ item.key1 || "-" }}</el-col>
-          <el-col class="td" :span="4">{{ item.key2 || "-" }}</el-col>
-          <el-col class="td" :span="4">{{ item.key3 || "-" }}</el-col>
-          <el-col class="td" :span="4">{{ item.key4 || "-" }}</el-col>
-          <el-col class="td" :span="4">{{ item.key5 || "-" }}</el-col>
+        <el-row class="tr" v-for="(item, index) in tableData" :key="index">
+          <el-col class="td" :span="4" style="color:#3a8ff6">{{
+            item["统计范围"]
+          }}</el-col>
+          <el-col class="td" :span="4">{{ item["病害类型"] || "-" }}</el-col>
+          <el-col class="td" :span="4">{{ item["病害数量"] || "-" }}</el-col>
+          <el-col class="td" :span="4">{{ item["病害部件"] || "-" }}</el-col>
+          <el-col class="td" :span="4">{{ item["预警次数"] || "-" }}</el-col>
+          <el-col class="td" :span="4">{{
+            item[switchType === "范围" ? "危桥数量" : "技术状况等级"] || "-"
+          }}</el-col>
         </el-row>
       </el-scrollbar>
     </div>
@@ -66,38 +93,77 @@
 import moduleWrapper from "@/views/cockpit-version-1/components/ui/module-wrapper"; //bridgeLevelCondition
 import { mutationsSet, store } from "@/views/cockpit-version-1/cockpitStore";
 import cockpitSelect from "@/views/cockpit-version-1/components/ui/select";
+import { demoData1, demoData2 } from "./养护绩效TOP.js";
 export default {
   components: { moduleWrapper, cockpitSelect },
   computed: {
-    companyList() {
-      return store.areaList;
+    pageLevelValue(val) {
+      return store.currentAreaLevelValue;
+    },
+    currentAreaLevelType() {
+      return store.currentAreaLevelType;
     },
   },
-
   watch: {
-    companyList: {
-      handler(val) {
-        this.demoData();
-      },
-      deep: true,
+    pageLevelValue(val) {
+      this.type1 = "";
+      this.type2 = "";
+      if (
+        this.currentAreaLevelType === "maintenanceStation" ||
+        this.currentAreaLevelType === "sectionName"
+      ) {
+        this.switchType = "桥梁";
+        this.handleDemoData("桥梁");
+      } else {
+        this.switchType = "范围";
+        this.handleDemoData("范围");
+      }
     },
   },
   data() {
     return {
       type1: "",
       type2: "",
-      type3: "",
-      optionData: [{ value: "xixihaha" }],
-      showDemoData: [],
+      switchType: "范围",
+      optionData1: [
+        { value: "特大桥" },
+        { value: "大桥" },
+        { value: "中桥" },
+        { value: "小桥" },
+      ],
+      optionData2: [
+        { value: "梁桥" },
+        { value: "拱桥" },
+        { value: "悬索桥" },
+        { value: "刚构桥" },
+        { value: "组合桥" },
+      ],
+      tableData: [],
     };
   },
-  mounted() {},
+  mounted() {
+    this.handleDemoData(this.switchType);
+  },
   methods: {
+    handleType1Data(data) {
+      let type = data.value || "";
+      this.type2 = "";
+      this.handleDemoData(this.switchType, type);
+    },
+    handleType2Data(data) {
+      let type = data.value || "";
+      this.type1 = "";
+      this.handleDemoData(this.switchType, type);
+    },
+    handleSwitchType(type) {
+      this.switchType = type;
+      this.handleDemoData(type, this.type1 || this.type2);
+    },
     demoData() {
       //   const total=
 
       this.companyList.forEach((val, index) => {
-        this.showDemoData.push({
+        this.tableData.push({
           name: val.company,
           key1: window.MathRandom(index + 1, (index + 1) * 2),
           key2: window.MathRandom(index + 5, (index + 1) * 5),
@@ -106,6 +172,22 @@ export default {
           key5: window.MathRandom(index > 5 ? 2 : 1, index < 5 ? index + 1 : 5),
         });
       });
+    },
+    handleDemoData(source, type) {
+      let dataSource = [];
+
+      try {
+        if (source === "范围") {
+          dataSource =
+            demoData1[this.pageLevelValue || "福建省"][type || "全部"] || [];
+        } else if (source === "桥梁") {
+          dataSource =
+            demoData2[this.pageLevelValue || "福建省"][type || "全部"] || [];
+        }
+      } catch (err) {
+        console.log(err);
+      }
+      this.tableData = dataSource;
     },
   },
 };

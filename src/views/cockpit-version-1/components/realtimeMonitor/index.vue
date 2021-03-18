@@ -3,18 +3,18 @@
     <template slot="head-title">
       <div class="module-title">实时监(检)测信息</div>
     </template>
-   <template slot="head-right">
-      <div class="select-box"> 
-        <cockpit-select
+    <template slot="head-right">
+      <div class="select-box">
+        <!-- <cockpit-select
             v-model="type1"
             :optionData="optionData1"
             placeholder="类型"
-          />
-          <cockpit-select
-            v-model="type2"
-            :optionData="optionData2"
-            placeholder="时间"
-          />
+          /> -->
+        <cockpit-select
+          v-model="type2"
+          :optionData="optionData2"
+          placeholder="时间"
+        />
       </div>
     </template>
     <div class="div-table">
@@ -22,30 +22,32 @@
         <el-row class="th">
           <el-col class="td" :span="5">桥名</el-col>
           <el-col class="td" :span="4">构件</el-col>
-          <el-col class="td" :span="5">预警等级</el-col>
           <el-col class="td" :span="5">内容</el-col>
-          <el-col class="td" :span="5">时间</el-col>
+          <el-col class="td" :span="4">预警</el-col>
+
+          <el-col class="td" :span="6">时间</el-col>
           <!-- <el-col class="td" :span="3">5类</el-col> -->
         </el-row>
-        <el-row
-          class="tr"
-        
-          v-for="(item, index) in demoData"
-          :key="index"
-        >
-          <el-col class="td" :span="5">{{
-            item.name || "大桥" + (index + 1)
-          }}</el-col>
-          <el-col class="td" :span="4">{{
-            item.key1 || "构件" + (index + 1)
-          }}</el-col>
-          <el-col class="td" :span="5"    :style="`color:${item.type===1? 'yellow' :(item.type===2?'red': 'white')}`">{{
-            item.key2 || (index & 1 ? "黄色" : "红色")
-          }}</el-col>
-          <el-col class="td" :span="5"  :title="item.key3 ">{{
-            item.key3 || "预警内容" + (index + 1)
-          }}</el-col>
-          <el-col class="td" :span="5">{{ item.key4 || "2021-3-01" }}</el-col>
+        <el-row class="tr" v-for="(item, index) in tableData" :key="index">
+          <el-col class="td" :span="5"  :title="item['桥梁名称']">{{ item["桥梁名称"] }}</el-col>
+          <el-col class="td" :span="4" :title="item['构件']">{{ item["构件"] }}</el-col>
+          <el-col class="td" :span="5" :title="item['内容']">{{ item["内容"] }}</el-col>
+          <el-col
+            class="td"
+            :span="4"
+            :style="
+              `color:${
+                item['预警等级'] === '黄色'
+                  ? 'yellow'
+                  : item['预警等级'] === '红色'
+                  ? 'red'
+                  : 'white'
+              }`
+            "
+            :title="item['预警等级'] "
+            >{{ item["预警等级"] }}</el-col
+          >
+          <el-col class="td" :span="6" :title="item['时间']">{{ item["时间"] }}</el-col>
           <!-- <el-col class="td" :span="3">{{ item.fiveLevel || "-" }}</el-col> -->
         </el-row>
       </el-scrollbar>
@@ -75,98 +77,43 @@
 import moduleWrapper from "@/views/cockpit-version-1/components/ui/module-wrapper"; //bridgeLevelCondition
 import { mutationsSet, store } from "@/views/cockpit-version-1/cockpitStore";
 import cockpitSelect from "@/views/cockpit-version-1/components/ui/select";
+import { demoData } from "./demoData.js";
 export default {
-  components: { moduleWrapper,cockpitSelect },
+  components: { moduleWrapper, cockpitSelect },
   computed: {
-    bridgeLevelCondition() {
-      return store.bridgeLevelCondition;
+    pageLevelValue(val) {
+      return store.currentAreaLevelValue;
+    },
+  },
+  watch: {
+    pageLevelValue(val) {
+      // this.type1 = "";
+      this.type2 = "";
+      this.handleDemoData();
     },
   },
   data() {
     return {
-       type1:'检测',
-      type2:'今日', 
-      optionData1:[{value:'检测'},{value:'监测'}],
-      optionData2:[{value:'今日'},{value:'近7日'},{value:'近1月'}],
-      demoData: [
-        {
-          name: "营前特大桥左桥",
-          key1: "第2跨3#T梁",
-          key2: "标度：3	",
-          type:3,
-          key3: "T梁腹板斜向裂缝	",
-          key4: "2021-3-5	",
-        },
-        {
-          name: "太城岭大桥左桥",
-          key1: "第3跨1#箱梁",
-          key2: "黄色预警	",
-           type:1,
-          key3: "裂缝宽度值接近限值	",
-          key4: "2021-3-3",
-        },
-        {
-          name: "青口大桥右桥",
-          key1: "第1跨2#板梁",
-          key2: "标度：3	",
-           type:3,
-          key3: "板底横向裂缝	",
-          key4: "2021-3-2",
-        },
-        {
-          name: "里仁特大桥右桥",
-          key1: "第8跨1#箱梁",
-          key2: "红色预警	",
-           type:2,
-          key3: "温度超标	",
-          key4: "2021-3-1",
-        },
-        {
-          name: "来福大桥右幅",
-          key1: "第2跨2#桥墩",
-          key2: "标度：4	",
-           type:3,
-          key3: "墩顶混凝土破损、露筋	",
-          key4: "2021-2-29",
-        },
-        {
-          name: "车里湾大桥左幅",
-          key1: "第6跨1#T梁",
-          key2: "黄色预警	",
-           type:1,
-          key3: "应力变化较大	",
-          key4: "2021-2-28",
-        },
-        {
-          name: "下庄大桥右桥",
-          key1: "第3跨4#支座",
-          key2: "标度：3	",
-           type:3,
-          key3: "支座剪切变形位移较大	",
-          key4: "2021-2-27",
-        },
-        {
-          name: "叶坊大桥左幅",
-          key1: "第2跨1#T梁",
-          key2: "红色预警	",
-           type:2,
-          key3: "下挠位移接近限值	",
-          key4: "2021-2-25",
-        },
-      ],
+      type1: "",
+      type2: "",
+      optionData1: [{ value: "检测" }, { value: "监测" }],
+      optionData2: [{ value: "今日" }, { value: "近7日" }, { value: "近1月" }],
+      tableData: [],
     };
   },
-  // watch:{
-  //     bridgeLevelCondition:{
-  //         handler(val){
-
-  //         },
-  //         deep:true
-  //     }
-  // }
+  mounted(){
+    this.handleDemoData()
+  },
+  methods: {
+    handleDemoData() {
+      let dataSource = [];
+      try {
+        dataSource = demoData[this.pageLevelValue || "福建省"] || [];
+      } catch (err) {}
+      this.tableData = dataSource;
+    },
+  },
 };
 </script>
 
-<style lang="scss" scoped>
- 
-</style>
+<style lang="scss" scoped></style>

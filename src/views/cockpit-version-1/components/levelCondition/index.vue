@@ -4,7 +4,7 @@
       <div class="module-title">桥梁技术状况</div>
     </template>
     <template slot="head-right">
-      <div class="switch-box">
+      <div class="select-box">
         <!-- <div class="switch-btn ">规模</div>
         <div class="switch-btn switch-active">形式</div> -->
         <cockpit-select
@@ -32,11 +32,11 @@
       <el-scrollbar style="height:100%" class="scrollbar">
         <el-row class="th">
           <el-col class="td title">范围</el-col>
-          <el-col class="td field">1类</el-col>
-          <el-col class="td field">2类</el-col>
-          <el-col class="td field">3类</el-col>
-          <el-col class="td field">4类</el-col>
           <el-col class="td field">5类</el-col>
+          <el-col class="td field">4类</el-col>
+          <el-col class="td field">3类</el-col>
+          <el-col class="td field">2类</el-col>
+          <el-col class="td field">1类</el-col>
         </el-row>
         <el-row
           class="tr"
@@ -45,19 +45,22 @@
         >
           <el-col class="td title">{{ filterStr(item.title) }}</el-col>
           <el-col class="td field">{{
-            item.oneNumber + tableTdStr + item.oneProportion
-          }}</el-col>
-          <el-col class="td field">{{
-            item.twoNumber + tableTdStr + item.twProportion
-          }}</el-col>
-          <el-col class="td field">{{
-            item.threeNumber + tableTdStr + item.threeProportion
+            item.fiveNumber + tableTdStr + item.fiveProportion
           }}</el-col>
           <el-col class="td field">{{
             item.fourNumber + tableTdStr + item.fourProportion
           }}</el-col>
+
           <el-col class="td field">{{
-            item.fiveNumber + tableTdStr + item.fiveProportion
+            item.threeNumber + tableTdStr + item.threeProportion
+          }}</el-col>
+
+          <el-col class="td field">{{
+            item.twoNumber + tableTdStr + item.twProportion
+          }}</el-col>
+
+          <el-col class="td field">{{
+            item.oneNumber + tableTdStr + item.oneProportion
           }}</el-col>
         </el-row>
       </el-scrollbar>
@@ -94,9 +97,9 @@ export default {
     bridgeTechnicalStatus() {
       return store.bridgeTechnicalStatus;
     },
-    currentAreaLevelValue(){
-      return store.currentAreaLevelValue
-    }
+    currentAreaLevelValue() {
+      return store.currentAreaLevelValue;
+    },
   },
   watch: {
     bridgeTechnicalStatus: {
@@ -105,14 +108,14 @@ export default {
       },
       deep: true,
     },
-    currentAreaLevelValue(){
-      this.type1=''
-      this.type2=''
-    }
+    currentAreaLevelValue() {
+      this.type1 = "";
+      this.type2 = "";
+    },
   },
   data() {
     return {
-      tableTdStr: ",",
+      tableTdStr: "，",
       type1: "",
       type2: "",
       optionData1: [
@@ -126,13 +129,13 @@ export default {
         { value: "拱桥" },
         { value: "悬索桥" },
         { value: "刚构桥" },
-        { value: "组合桥" }, 
+        { value: "组合桥" },
       ],
       tableData: [],
     };
   },
   methods: {
-      //过滤分公司和公司字符串
+    //过滤分公司和公司字符串
     filterStr(data) {
       const strs = ["分公司", "公司"];
       strs.forEach((val) => {
@@ -171,4 +174,11 @@ export default {
     font-family: DINEngschriftStd;
   }
 }
+/deep/.el-scrollbar__view {
+  width: 150%;
+}
+/deep/.el-scrollbar__bar.is-horizontal {
+  height: 8px;
+}
+
 </style>

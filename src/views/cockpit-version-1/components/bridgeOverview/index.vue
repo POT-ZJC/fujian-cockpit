@@ -2,14 +2,16 @@
   <div class="bridge-overviewbox">
     <div
       class="bridge-total common-wrapper"
-      :class="{ active: bridgeIsAllActive }"
+      :class="{ active: activeBridge.all }"
       @click="setAll()"
     >
       <div class="total-title">桥梁座数</div>
       <div class="total-number">{{ bridegTotal }}</div>
       <div class="total-year-up">
         <div class="year-txt">年</div>
-        <div class="year-up-number">{{numToFixed(bridegTotal*0.01,0)}}</div>
+        <div class="year-up-number">
+          {{ numToFixed(bridegTotal * 0.01, 0) }}
+        </div>
         <div class="year-up">1%</div>
       </div>
     </div>
@@ -17,7 +19,7 @@
       <div class="overview-type-1">
         <div
           class="type-1-item common-wrapper"
-          :class="{ active: item.active }"
+          :class="{ active: activeBridge.bridgeSize[item.title] }"
           v-for="(item, index) in bridgeScaleTotal"
           @click="setType1Active(item, index)"
           :key="index"
@@ -40,7 +42,7 @@
       <div class="overview-type-2">
         <div
           class="type-2-item common-wrapper"
-          :class="{ active: item.active }"
+          :class="{ active: activeBridge.structureType[item.title] }"
           v-for="(item, index) in bridgeTypeTotal"
           @click="setType2Active(item, index)"
           :key="index"
@@ -71,9 +73,6 @@ import moduleWrapper from "@/views/cockpit-version-1/components/ui/module-wrappe
 export default {
   components: { radar, moduleWrapper },
   computed: {
-    // bridgeIsAllActive() {
-
-    // },
     currentAreaLevelValue() {
       this.bridegTotal = 0;
       return store.currentAreaLevelValue;
@@ -94,20 +93,6 @@ export default {
         let total = 0;
         data.forEach((val) => (total += Number(val.number)));
         this.bridegTotal = total;
-        // this.$nextTick(() => {
-        // this.$refs["bridgeScaleTotalRadar"].setEcharts();
-        // });
-      },
-      deep: true,
-    },
-    bridgeTypeTotal: {
-      handler(data) {
-        // let total = 0;
-        // data.forEach((val) => (total += Number(val.number)));
-        // this.bridegTotal += total;
-        // // this.$nextTick(() => {
-        // // this.$refs["bridgeTypeTotalRadar"].setEcharts();
-        // // });
       },
       deep: true,
     },
@@ -118,7 +103,11 @@ export default {
       bridegTotalYearUpNum: 0,
       bridegTotalYearUp: 0,
       total: false,
-      bridgeIsAllActive: true,
+      activeBridge: {
+        all: true,
+        bridgeSize: {}, //桥长/规模
+        structureType: {}, //桥型/形式
+      },
     };
   },
   methods: {
@@ -126,60 +115,63 @@ export default {
       return window.numToFixed(a, b);
     },
     computedIsAll() {
-      for (let i = 0; i < this.bridgeScaleTotal.length; i++) {
-        if (this.bridgeScaleTotal[i].active) {
-          this.bridgeIsAllActive = false;
-          return;
+      let { bridgeSize, structureType } = this.activeBridge,
+        isAll = true;
+// debugger
+      for (let key in bridgeSize) {
+        if (bridgeSize[key]) {
+          isAll = false;
+          break;
         }
       }
-      for (let i = 0; i < this.bridgeTypeTotal.length; i++) {
-        if (this.bridgeTypeTotal[i].active) {
-          this.bridgeIsAllActive = false;
-          return;
+
+      for (let key in structureType) {
+        if (structureType[key]) {
+          isAll = false;
+          break;
         }
       }
-      this.bridgeIsAllActive = true;
+      this.activeBridge.all = isAll;
+      this.$set(this.activeBridge, "bridgeSize", {...bridgeSize});
+      this.$set(this.activeBridge, "structureType", {...structureType});
+      mutationsSet("bridgeOverviewActive", {...this.activeBridge});
     },
     setAll() {
-      this.bridgeIsAllActive = true;
-      const arr1 = this.bridgeScaleTotal;
-      const arr2 = this.bridgeTypeTotal;
-      arr1.forEach((val) => (val.active = false));
-      arr2.forEach((val) => (val.active = false));
-      mutationsSet("bridgeScaleTotal", arr1);
-      mutationsSet("bridgeTypeTotal", arr2);
+      let { bridgeSize, structureType } = this.activeBridge;
+      for (let key in bridgeSize) {
+        bridgeSize[key] = false;
+      }
+      for (let key in structureType) {
+        structureType[key] = false;
+      }
+      this.activeBridge.all = true;
+      this.$set(this.activeBridge, "bridgeSize", {...bridgeSize});
+      this.$set(this.activeBridge, "structureType", {...structureType});
+      mutationsSet("bridgeOverviewActive", this.activeBridge);
     },
     // 规模=type1
     setType1Active(data, index) {
-      this.bridgeIsAllActive = false;
       const { title, active } = data;
-      const arr = this.bridgeScaleTotal;
-      for (let i = 0; i < arr.length; i++) {
-        if (arr[i].title === title) {
-          arr[i].active = !active;
-          break;
-        }
+      const isActive = this.activeBridge.bridgeSize[title];
+      let { structureType } = this.activeBridge;
+      for (let key in structureType) {
+        structureType[key] = false;
+        // break
       }
-
-      mutationsSet("bridgeScaleTotal", arr);
+      this.activeBridge.bridgeSize[data.title] = !isActive;
       this.computedIsAll();
-      // mutationsSet("bridgeTypeTotal", res.data.bridgeTypeData);
     },
     //形式
     setType2Active(data, index) {
-      this.bridgeIsAllActive = false;
       const { title, active } = data;
-      const arr = this.bridgeTypeTotal;
-      for (let i = 0; i < arr.length; i++) {
-        if (arr[i].title === title) {
-          arr[i].active = !active;
-          break;
-        }
+      const isActive = this.activeBridge.structureType[title];
+      let { bridgeSize } = this.activeBridge;
+      for (let key in bridgeSize) {
+        bridgeSize[key] = false;
+        // break
       }
-
-      mutationsSet("bridgeTypeTotal", arr);
+      this.activeBridge.structureType[data.title] = !isActive;
       this.computedIsAll();
-      // mutationsSet("bridgeTypeTotal", res.data.bridgeTypeData);
     },
   },
 };

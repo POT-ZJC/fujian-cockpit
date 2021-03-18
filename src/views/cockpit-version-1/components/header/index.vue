@@ -3,10 +3,10 @@
     <div class="head-left">
       <div class="head-title">福建省桥梁技术状况驾驶舱</div>
       <div class="area-select">
-        <div class="pa angle-tl"></div>
+        <!-- <div class="pa angle-tl"></div>
         <div class="pa angle-tr"></div>
         <div class="pa angle-bl"></div>
-        <div class="pa angle-br"></div>
+        <div class="pa angle-br"></div> -->
 
         <div
           class="cascader-open-btn"
@@ -325,6 +325,9 @@ export default {
       border: 0;
       background: none;
       font-size: torem(28px);
+      .el-scrollbar__wrap {
+        padding-bottom: 17px;
+      }
     }
   }
   .yaer-select {
@@ -352,9 +355,9 @@ export default {
       letter-spacing: 6px;
       // color: #03c0f3;
       background: linear-gradient(
-        172deg,
-        rgba(53, 224, 220, 0.91) 50%,
-        rgba(11, 124, 234, 0.91)
+        175deg,
+        rgba(53, 224, 220, 1) 0%,
+        rgba(11, 124, 234, 1)
       );
       -webkit-background-clip: text;
       background-clip: text;
@@ -400,14 +403,22 @@ export default {
       .cascader-open-btn {
         cursor: pointer;
         width: torem(130px);
-        height: torem(40px);
+        height: torem(50px);
         display: flex;
         justify-content: center;
         align-items: center;
         font-size: torem(26px);
         font-weight: bold;
-        background-color: rgba(24, 33, 47, 0.8);
-        color: #d0c383;
+        // background-color: rgba(24, 33, 47, 0.8);
+        color: #fff;
+        background-image: linear-gradient(
+          -61deg,
+          #11223d 0%,
+          #13375e 50%,
+          #154f87 100%
+        );
+        border-radius: 4px;
+        border: solid 2px #384a67;
       }
       .area-select-dialog {
         z-index: 999;
@@ -474,6 +485,17 @@ export default {
     font-size: torem(16px);
     color: #ffffff;
     text-shadow: rgba(255, 255, 255, 0.8) 0 0 0.3rem;
+    &:hover {
+      color: #3a8ff6;
+      &::after {
+        background: linear-gradient(
+          68deg,
+          rgba(2, 5, 42, 0) 0%,
+          #3a8ff6 50%,
+          rgba(2, 5, 42, 0) 100%
+        );
+      }
+    }
     // inset 0px torem(4px) torem(13px) 0px rgba(175, 204, 247, 0.53);
     &::after {
       position: absolute;

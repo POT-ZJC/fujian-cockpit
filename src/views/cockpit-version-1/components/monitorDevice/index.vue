@@ -8,7 +8,7 @@
     <!-- 监测设备总数 -->
 
     <template slot="head-right">
-      <div class="switch-box">
+      <div class="select-box">
         <!-- <div class="switch-btn ">规模</div>
         <div class="switch-btn switch-active">形式</div> -->
         <cockpit-select

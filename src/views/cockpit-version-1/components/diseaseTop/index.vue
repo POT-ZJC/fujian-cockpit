@@ -4,7 +4,7 @@
       <div class="module-title">病害TOP</div>
     </template>
     <template slot="head-right">
-      <div class="switch-box">
+      <div class="select-box">
         <cockpit-select
           v-model="type1"
           :optionData="optionData1"
@@ -64,7 +64,7 @@
 import radar from "../charts/radar";
 import { mutationsSet, store } from "@/views/cockpit-version-1/cockpitStore";
 import moduleWrapper from "@/views/cockpit-version-1/components/ui/module-wrapper";
-// import echarts from "echarts";
+import echarts from "echarts";
 import cockpitSelect from "@/views/cockpit-version-1/components/ui/select";
 import bar from "../charts/bar";
 import { demoData1, demoData2 } from "./demoData";
@@ -119,6 +119,12 @@ export default {
         {
           name: "病害类型TOP",
           data: [],
+          itemStyle: {
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                { offset: 0, color: 'rgba(53,224,220,0.91)' },
+                { offset: 1, color: 'rgba(11,124,234,0.91)' },
+              ]),
+            },
         },
       ],
       partsBarData: [
@@ -150,7 +156,7 @@ export default {
   methods: {
     handleType1Data(data) {
       let type = data.value || "";
-      this.type2 = "";
+      this.type2 = ""; 
       this.typeDemoData(type);
       this.partsDemoData(type);
     },

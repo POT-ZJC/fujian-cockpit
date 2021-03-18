@@ -162,12 +162,12 @@ export default {
   // border: 1px solid #00baff;
   position: relative;
   min-width: 0.36rem;
-  max-width: 0.7rem;
+  max-width: 1rem;
   font-size: torem(16px);
   color: #fff;
   text-align: left;
   background-color: cornflowerblue;
-  padding: torem(2px) torem(10px);
+  padding: torem(2px) torem(13px);
   padding-right: 0.22rem;
   &::after {
     content: "";
@@ -186,6 +186,7 @@ export default {
   }
   .select-txt {
     overflow: hidden;
+    width:100% ;
   }
   .select-clear {
     position: absolute;
@@ -235,11 +236,11 @@ export default {
     &::before {
       content: "";
       position: absolute;
-      top: torem(-8px);
+      top: torem(-7px);
       left: torem(14px);
       width: 0;
       height: 0;
-      border-width: torem(8px);
+      border-width: torem(9px);
       border-top-width: 0;
       // border-color: transparent transparent #014382 transparent;
       border-color: transparent;
