@@ -5,11 +5,11 @@
     </template>
     <template slot="head-right">
       <div class="select-box">
-        <!-- <cockpit-select
-            v-model="type1"
-            :optionData="optionData1"
-            placeholder="类型"
-          /> -->
+        <cockpit-select
+          v-model="type1"
+          :optionData="optionData1"
+          placeholder="类型"
+        />
         <cockpit-select
           v-model="type2"
           :optionData="optionData2"
@@ -28,12 +28,18 @@
           <el-col class="td" :span="6">时间</el-col>
           <!-- <el-col class="td" :span="3">5类</el-col> -->
         </el-row>
-        <el-row class="tr" v-for="(item, index) in tableData" :key="index">
-          <el-col class="td" :span="5"  :title="item['桥梁名称']">{{ item["桥梁名称"] }}</el-col>
-          <el-col class="td" :span="4" :title="item['构件']">{{ item["构件"] }}</el-col>
-          <el-col class="td" :span="5" :title="item['内容']">{{ item["内容"] }}</el-col>
+
+        <el-row
+          class="tr"
+          v-for="(item, index) in tableData"
+          :key="index"
+          :title="handleShowRow(item)"
+        >
+          <el-col class="td" :span="5">{{ item["桥梁名称"] }}</el-col>
+          <el-col class="td" :span="4">{{ item["构件"] }}</el-col>
+          <el-col class="td" :span="5">{{ item["内容"] }}</el-col>
           <el-col
-            class="td"
+            class="td "
             :span="4"
             :style="
               `color:${
@@ -44,10 +50,9 @@
                   : 'white'
               }`
             "
-            :title="item['预警等级'] "
             >{{ item["预警等级"] }}</el-col
           >
-          <el-col class="td" :span="6" :title="item['时间']">{{ item["时间"] }}</el-col>
+          <el-col class="td tc" :span="6">{{ item["时间"] }}</el-col>
           <!-- <el-col class="td" :span="3">{{ item.fiveLevel || "-" }}</el-col> -->
         </el-row>
       </el-scrollbar>
@@ -87,7 +92,7 @@ export default {
   },
   watch: {
     pageLevelValue(val) {
-      // this.type1 = "";
+      this.type1 = "";
       this.type2 = "";
       this.handleDemoData();
     },
@@ -101,10 +106,18 @@ export default {
       tableData: [],
     };
   },
-  mounted(){
-    this.handleDemoData()
+  mounted() {
+    this.handleDemoData();
   },
   methods: {
+    handleShowRow(data) {
+      let str = "";
+      const arr = ["桥梁名称", "构件", "内容", "预警等级", "时间"];
+      arr.forEach((val, index) => {
+        str += index === 0 ? data[val] : "   " + data[val];
+      }); 
+      return str;
+    },
     handleDemoData() {
       let dataSource = [];
       try {

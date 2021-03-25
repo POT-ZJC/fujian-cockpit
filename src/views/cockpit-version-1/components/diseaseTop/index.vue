@@ -17,12 +17,12 @@
           @change="handleType2Data"
           placeholder="形式"
         />
-        <!-- <cockpit-select
+        <cockpit-select
             v-model="type3"
             :hasClear="false"
             :optionData="[{value:'正序'},{value:'倒序'}]"
             placeholder="排序"
-          /> -->
+          />
       </div>
     </template>
     <div class="charts-left">
@@ -100,7 +100,7 @@ export default {
       // level: "福建省",
       type1: "",
       type2: "",
-      // type3:'正序',
+      type3:'正序',
       optionData1: [
         { value: "特大桥" },
         { value: "大桥" },

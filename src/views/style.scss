@@ -1,12 +1,18 @@
  @function tovw($px, $base-vw-size: 19.2px) {
 
-	@return ($px / $base-vw-size) * 1vw;
-}
-@function tovh($px, $base-vw-size: 10.8px) {
+ 	@return ($px / $base-vw-size) * 1vw;
+ }
 
-	@return ($px / $base-vh-size) * 1vh;
-}
-@function torem($px, $base-font-size: 96px) {
+ @function tovh($px, $base-vw-size: 10.8px) {
 
-	@return ($px / $base-font-size) * 1rem;
-}
+ 	@return ($px / $base-vh-size) * 1vh;
+ }
+
+ @function torem($px, $base-font-size: 96px) {
+
+ 	@return ($px / $base-font-size) * 1rem;
+ }
+
+ .tc {
+ 	text-align: center !important;
+ }

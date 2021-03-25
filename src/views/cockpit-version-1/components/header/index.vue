@@ -80,26 +80,32 @@
           </svg>
         </div>
       </div>
-      <div
-        class="link-outurl"
-        @click="
-          openNewUrl([
-            'https://mis.zsjczx.com/#/datongjiance/login',
-            'http://120.32.125.113:9010/BMS/loginPlatform.jsp',
-          ])
-        "
-      >
-        检测
+      <div class="link-outurl" @click="openUrlDialog('1')">
+        检测系统
       </div>
       <div class="divide-line"></div>
-      <div
-        class="link-outurl"
-        @click="
-          openNewUrl(['http://120.32.125.113:9080/bmsplatform/core/login'])
-        "
-      >
-        监测
+      <div class="link-outurl" @click="openUrlDialog('2')">
+        监测系统
       </div>
+
+      <el-dialog
+        title="选择系统"
+        :visible.sync="urlDialogVisible"
+        width="20%"
+      >
+        <span
+          ><el-radio v-model="dialogUrl" :label="dialogUrlArr[0].url">{{
+            dialogUrlArr[0].name
+          }}</el-radio>
+          <el-radio v-model="dialogUrl" :label="dialogUrlArr[1].url">{{
+            dialogUrlArr[1].name
+          }}</el-radio></span
+        >
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="urlDialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="openNewUrl()">确 定</el-button>
+        </span>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -138,6 +144,26 @@ export default {
   },
   data() {
     return {
+      dialogUrl: "",
+      jianceUrl1: [
+        { url: "https://mis.zsjczx.com/#/datongjiance/login", name: "普通桥梁管理" },
+        {
+          url: "http://120.32.125.113:9010/BMS/common/welcome",
+          name: "长大桥梁管理",
+        },
+      ],
+      jianceUrl2: [
+        {
+          url: "http://120.32.125.113:9080/bmsplatform/core/home.html",
+          name: "长大桥梁监管",
+        },
+        {
+          url: "http://www.cqzjydq.com:4933/#/cockpit2/index/min",
+          name: "结构监测云平台",
+        },
+      ],
+      dialogUrlArr: [{}, {}],
+      urlDialogVisible: false,
       nowYear: "2021",
       areaModel: "福建省",
       areaModelShow: "福建省",
@@ -207,9 +233,20 @@ export default {
       mutationsSet("searchMapKeyword", this.searchMapKeyword);
     },
     openNewUrl(url) {
-      url.forEach((val) => {
-        window.open(val);
-      });
+      // url.forEach((val) => {
+      window.open(this.dialogUrl);
+      this.urlDialogVisible = false;
+      // });
+    },
+    openUrlDialog(type) {
+      if (type === "1") {
+        this.dialogUrlArr = this.jianceUrl1;
+        this.dialogUrl = this.jianceUrl1[0].url;
+      } else if (type === "2") {
+        this.dialogUrlArr = this.jianceUrl2;
+        this.dialogUrl = this.jianceUrl2[0].url;
+      }
+      this.urlDialogVisible = true;
     },
     handleRoute(data) {
       let currentRouteTotalNum = 0,
@@ -217,22 +254,30 @@ export default {
       let cascader_data = this.cascader_options[0];
       let routeChildren = cascader_data.children[1].children;
       try {
-        for (let key in data) {
+        data.forEach((val) => {
           currentRouteTotalNum++;
-          let obj = { children: [], levelName: "路线", type: "routeName" };
-          obj.value = key;
-          obj.label = key;
-          data[key].forEach((val) => {
+          let obj = {
+            children: [],
+            levelName: "路线",
+            type: "routeName",
+            value: val.name,
+            label: val.name,
+          };
+
+          const arr = val.sectionList || [];
+          arr.forEach((item) => {
             currentRoadTotalNum++;
             obj.children.push({
-              value: val.sectionName,
-              label: val.sectionName,
+              value: item.name,
+              label: item.name,
               levelName: "路段",
               type: "sectionName",
             });
           });
+
           routeChildren.push(obj);
-        }
+        });
+
         this.$set(this.cascader_options, 0, cascader_data);
         mutationsSet("currentRouteTotalNum", currentRouteTotalNum);
         mutationsSet("currentRoadTotalNum", currentRoadTotalNum);
@@ -341,7 +386,7 @@ export default {
     display: flex;
     align-items: center;
     .year-select {
-      width: torem(80px);
+      width: torem(50px);
     }
     /deep/.cockpit-select {
       border: 0;
@@ -351,6 +396,9 @@ export default {
         padding-bottom: 17px;
       }
     }
+  }
+  /deep/.select-txt {
+    font-family: DINENGSCHRIFTSTD;
   }
   .yaer-select {
     width: torem(110px);
@@ -369,9 +417,9 @@ export default {
     align-items: center;
     .head-title {
       font-size: torem(36px);
-      font-family: BDZYJT--GB1-0;
+      font-family: 百度综艺简体;
       transform: skewX(-10deg);
-      font-weight: bold;
+      // font-weight: bold;
       margin-left: torem(20px);
       width: tovw(560px);
       letter-spacing: 6px;

@@ -9,10 +9,10 @@
       <div class="total-number">{{ bridegTotal }}</div>
       <div class="total-year-up">
         <div class="year-txt">年</div>
-        <div class="year-up-number">
+        <div class="year-up-number after-up">
           {{ numToFixed(bridegTotal * 0.01, 0) }}
         </div>
-        <div class="year-up">1%</div>
+        <div class="year-up after-up">1%</div>
       </div>
     </div>
     <div class="overview-right">
@@ -26,10 +26,10 @@
         >
           <div class="item-top">
             <div class="item-name">{{ item.title }}</div>
-            <div class="item-up-number">
-              {{ numToFixed(item.number * 0.01, 0) }}
+            <div class="item-up-number  ">
+              {{  item.proportion  }}
             </div>
-            <div class="item-up">{{ item.proportion }}</div>
+            <div class="item-up after-up">{{ 15 }}</div>
           </div>
           <div class="item-bottom">
             <div class="item-number">
@@ -55,9 +55,9 @@
             </div>
             <div class="desc-bottom">
               <div class="desc-up-number">
-                {{ numToFixed(item.number * 0.01, 0) }}
+                {{ item.proportion  }}
               </div>
-              <div class="desc-up">{{ item.proportion }}</div>
+              <div class="desc-up after-up">{{ 15}}</div>
             </div>
           </div>
         </div>
@@ -117,7 +117,7 @@ export default {
     computedIsAll() {
       let { bridgeSize, structureType } = this.activeBridge,
         isAll = true;
-// debugger
+      // debugger
       for (let key in bridgeSize) {
         if (bridgeSize[key]) {
           isAll = false;
@@ -132,9 +132,9 @@ export default {
         }
       }
       this.activeBridge.all = isAll;
-      this.$set(this.activeBridge, "bridgeSize", {...bridgeSize});
-      this.$set(this.activeBridge, "structureType", {...structureType});
-      mutationsSet("bridgeOverviewActive", {...this.activeBridge});
+      this.$set(this.activeBridge, "bridgeSize", { ...bridgeSize });
+      this.$set(this.activeBridge, "structureType", { ...structureType });
+      mutationsSet("bridgeOverviewActive", { ...this.activeBridge });
     },
     setAll() {
       let { bridgeSize, structureType } = this.activeBridge;
@@ -145,8 +145,8 @@ export default {
         structureType[key] = false;
       }
       this.activeBridge.all = true;
-      this.$set(this.activeBridge, "bridgeSize", {...bridgeSize});
-      this.$set(this.activeBridge, "structureType", {...structureType});
+      this.$set(this.activeBridge, "bridgeSize", { ...bridgeSize });
+      this.$set(this.activeBridge, "structureType", { ...structureType });
       mutationsSet("bridgeOverviewActive", this.activeBridge);
     },
     // 规模=type1
@@ -182,6 +182,7 @@ export default {
   width: 100%;
   height: 100%;
   color: #fff;
+
   .common-wrapper {
     cursor: pointer;
     background-image: linear-gradient(
@@ -196,6 +197,17 @@ export default {
     box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.4);
     border-radius: 4px;
     border: solid 1px #6d86ac;
+  }
+  .after-up {
+    &::after {
+      content: "↑";
+      color: red;
+      right: torem(-2px);
+      top: torem(-3px);
+      font-weight: bold;
+      // position: absolute;
+      font-size: torem(14px);
+    }
   }
   .active {
     background-image: linear-gradient(
@@ -213,9 +225,8 @@ export default {
     top: 0;
     width: torem(110px);
     height: 100%;
-    font-family: DINEngschriftStd;
+
     .total-title {
-      font-family: MicrosoftYaHei-Bold;
       font-size: torem(20px);
       color: #f9fafa;
       font-weight: bold;
@@ -229,6 +240,7 @@ export default {
       text-align: center;
       margin: torem(16px) 0;
       line-height: torem(32px);
+      font-family: DINENGSCHRIFTSTD;
     }
 
     .total-year-up {
@@ -237,7 +249,6 @@ export default {
       justify-content: center;
       align-items: center;
       .year-txt {
-        font-family: MicrosoftYaHei-Bold;
         font-size: torem(14px);
         color: #f9fafa;
       }
@@ -245,21 +256,14 @@ export default {
         font-size: torem(16px);
         color: #76eefb;
         padding-right: torem(3px);
+        font-family: DINENGSCHRIFTSTD;
+        position: relative;
       }
       .year-up {
         font-size: torem(16px);
         color: #76eefb;
         position: relative;
-        &::after {
-          content: "↑";
-          color: red;
-          right: torem(-10px);
-          top: torem(-3px);
-          font-weight: bold;
-          position: absolute;
-          font-family: MicrosoftYaHei-Bold;
-          font-size: torem(18px);
-        }
+        font-family: DINENGSCHRIFTSTD;
       }
     }
   }
@@ -273,7 +277,6 @@ export default {
         margin: 1px;
         flex: 1;
         padding: 0 torem(15px);
-        font-family: DINEngschriftStd;
       }
       .item-top {
         padding-top: torem(5px);
@@ -292,7 +295,6 @@ export default {
       .item-name {
         font-size: torem(18px);
         color: #f9fafa;
-        font-family: MicrosoftYaHei-Bold;
         padding-right: torem(12px);
         font-weight: bold;
       }
@@ -300,34 +302,27 @@ export default {
         font-size: torem(18px);
         padding-right: torem(8px);
         color: #76eefb;
+        position: relative;
+        font-family: DINENGSCHRIFTSTD;
       }
       .item-up {
         font-size: torem(16px);
         color: #76eefb;
         padding-right: torem(5px);
         position: relative;
-        &::after {
-          content: "↑";
-          color: red;
-          right: torem(0px);
-          top: torem(-2px);
-          font-weight: bold;
-          position: absolute;
-          font-family: MicrosoftYaHei-Bold;
-          font-size: torem(18px);
-        }
+        font-family: DINENGSCHRIFTSTD;
       }
       .item-number {
         // font-weight: bold;
         font-size: torem(33px);
         color: #76eefb;
         letter-spacing: 3px;
+        font-family: DINENGSCHRIFTSTD;
       }
       .item-unit {
         color: #76eefb;
         font-size: torem(16px);
         margin-top: torem(10px);
-        font-family: MicrosoftYaHei-Bold;
       }
     }
     .overview-type-2 {
@@ -337,7 +332,6 @@ export default {
         margin: 1px;
         flex: 1;
         display: flex;
-        font-family: DINEngschriftStd;
       }
       .item-name {
         width: torem(16px);
@@ -345,7 +339,6 @@ export default {
         padding: 0 torem(15px);
         display: flex;
         flex-wrap: wrap;
-        font-family: MicrosoftYaHei-Bold;
         font-size: torem(18px);
         color: #f9fafa;
         align-items: center;
@@ -373,6 +366,7 @@ export default {
         .desc-number {
           font-size: torem(28px);
           color: #76eefb;
+          font-family: DINENGSCHRIFTSTD;
         }
         .desc-unit {
           font-size: torem(16px);
@@ -385,21 +379,14 @@ export default {
           color: #76eefb;
           max-width: 48%;
           padding-right: torem(8px);
+          position: relative;
+          font-family: DINENGSCHRIFTSTD;
         }
         .desc-up {
           font-size: torem(18px);
           color: #76eefb;
           position: relative;
-          &::after {
-            content: "↑";
-            color: red;
-            right: torem(-10px);
-            top: torem(-3px);
-            font-weight: bold;
-            position: absolute;
-            font-family: MicrosoftYaHei-Bold;
-            font-size: torem(18px);
-          }
+          font-family: DINENGSCHRIFTSTD;
         }
       }
     }

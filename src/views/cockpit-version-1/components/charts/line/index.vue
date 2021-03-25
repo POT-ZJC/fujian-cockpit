@@ -10,7 +10,7 @@ export default {
       return store.fontSize;
     },
   },
-   watch: {
+  watch: {
     fontSize(val) {
       this.echartsResize();
     },
@@ -59,8 +59,8 @@ export default {
         name: "",
         type: "line",
         // stack: '总量1',
-        symbolSize: 4,
-        // smooth: true,
+        symbolSize: 3,
+        smooth: true,
         data: [],
       },
     };
@@ -79,7 +79,8 @@ export default {
       this.myChart.setOption(option);
     },
     setEcharts() {
-      let maxVal = 0;
+      let maxVal = 0,
+        lineWidth = 2;
       const seriesItemArr = this.dataList.map((item, index) => {
         const color = this.colors[index];
         if (typeof color === "string") {
@@ -87,7 +88,7 @@ export default {
             normal: {
               lineStyle: {
                 color: color,
-                width: 1,
+                width: lineWidth,
               },
             },
           };
@@ -96,8 +97,9 @@ export default {
             normal: {
               lineStyle: {
                 color: color[0],
-                width: 1,
+                width: lineWidth,
               },
+              
               areaStyle: {
                 //color: '#94C9EC'
                 color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
@@ -149,10 +151,10 @@ export default {
       option = {
         backgroundColor: "rgba(10,37,64,0.1)",
         grid: {
-          left: "6%",
-          right: "6%",
+          left: "3%",
+          right: "3%",
           top: "20%",
-          bottom: "15%",
+          bottom: "5%",
           containLabel: true,
         },
         tooltip: {
@@ -189,6 +191,7 @@ export default {
               // color: fontColor,
               textStyle: {
                 color: fontColor,
+                fontFamily: "DINENGSCHRIFTSTD",
               },
             },
             axisLine: {
@@ -212,11 +215,13 @@ export default {
             max: 100,
             nameTextStyle: {
               color: "#fff",
+              // fontFamily: "DINENGSCHRIFTSTD",
             },
             axisLabel: {
               // formatter: '{value}',
               textStyle: {
                 color: fontColor,
+                fontFamily: "DINENGSCHRIFTSTD",
               },
             },
             axisLine: {

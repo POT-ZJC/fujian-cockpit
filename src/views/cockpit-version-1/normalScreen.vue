@@ -230,9 +230,10 @@ export default {
       // overflow: hidden;
       position: absolute;
       top: tovh(340px);
-      right: tovw(10px);
+      left: tovw(810px);
+
       border-radius: torem(6px);
-      width: tovw(360px);
+      width: tovw(400px);
       height: tovh(320px);
     }
     // 实时监测设备
@@ -241,16 +242,16 @@ export default {
       // overflow: hidden;
       position: absolute;
       top: tovh(340px);
-      right: tovw(380px);
+      right: tovw(10px);
       height: torem(320px);
       border-radius: torem(6px);
-      width: tovw(360px);
+      width: tovw(320px);
     }
     //桥梁分布统计
     .bridge-distribution {
       position: absolute;
       top: tovh(10px);
-      left: tovw(810px);
+      right: tovw(340px);
       width: tovw(360px);
       height: tovh(320px);
     }
@@ -258,15 +259,16 @@ export default {
     .bridge-levelCondition {
       position: absolute;
       top: tovh(10px);
-      right: tovw(380px);
-      width: tovw(360px);
+      left: tovw(810px);
+
+      width: tovw(400px);
       height: tovh(320px);
     }
     //实时监测桥梁分布
     .realtime-bridge {
       position: absolute;
       top: tovh(340px);
-      left: tovw(810px);
+      right: tovw(340px);
       width: tovw(360px);
       height: tovh(320px);
     }
@@ -275,7 +277,7 @@ export default {
       position: absolute;
       top: tovh(10px);
       right: tovw(10px);
-      width: tovw(360px);
+      width: tovw(320px);
       height: tovh(320px);
     }
     //病害TOP

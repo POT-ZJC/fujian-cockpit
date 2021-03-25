@@ -45,24 +45,47 @@
     <div class="div-table">
       <el-scrollbar style="height:100%" class="scrollbar">
         <el-row class="th">
-          <el-col class="td" :span="4">{{ switchType }}</el-col>
-          <el-col class="td" :span="4">病害类型</el-col>
-          <el-col class="td" :span="4">病害数量</el-col>
-          <el-col class="td" :span="4">病害部件</el-col>
-          <el-col class="td" :span="4">预警次数</el-col>
-          <el-col class="td" :span="4">{{
-            switchType === "范围" ? "危桥数量" : "技术状况等级"
-          }}</el-col>
+          <el-col class="td" :span="4">{{ switchType }} </el-col>
+          <el-col class="td tc" :span="4"
+            >病害类型
+            <span class="sort-arrow" @click="tableSort.type=!tableSort.type">{{
+              tableSort.type ? "↑" : "↓"
+            }}</span></el-col
+          >
+          <el-col class="td tc" :span="4"
+            >病害数量
+            <span class="sort-arrow" @click="tableSort.number=!tableSort.number">{{
+              tableSort.number ? "↑" : "↓"
+            }}</span></el-col
+          >
+          <el-col class="td tc" :span="4"
+            >病害部件
+            <span class="sort-arrow" @click="tableSort.part=!tableSort.part">{{
+              tableSort.part ? "↑" : "↓"
+            }}</span></el-col
+          >
+          <el-col class="td tc" :span="4"
+            >预警次数
+            <span class="sort-arrow" @click="tableSort.warning=!tableSort.warning">{{
+              tableSort.warning ? "↑" : "↓"
+            }}</span></el-col
+          >
+          <el-col class="td tc" :span="4"
+            >{{ switchType === "范围" ? "危桥数量" : "技术状况"
+            }}<span class="sort-arrow" @click="tableSort.condition=!tableSort.condition">{{
+              tableSort.condition ? "↑" : "↓"
+            }}</span>
+          </el-col>
         </el-row>
         <el-row class="tr" v-for="(item, index) in tableData" :key="index">
           <el-col class="td" :span="4" style="color:#3a8ff6">{{
             item["统计范围"]
           }}</el-col>
-          <el-col class="td" :span="4">{{ item["病害类型"] || "-" }}</el-col>
-          <el-col class="td" :span="4">{{ item["病害数量"] || "-" }}</el-col>
-          <el-col class="td" :span="4">{{ item["病害部件"] || "-" }}</el-col>
-          <el-col class="td" :span="4">{{ item["预警次数"] || "-" }}</el-col>
-          <el-col class="td" :span="4">{{
+          <el-col class="td tc" :span="4">{{ item["病害类型"] || "-" }}</el-col>
+          <el-col class="td tc" :span="4">{{ item["病害数量"] || "-" }}</el-col>
+          <el-col class="td tc" :span="4">{{ item["病害部件"] || "-" }}</el-col>
+          <el-col class="td tc" :span="4">{{ item["预警次数"] || "-" }}</el-col>
+          <el-col class="td tc" :span="4">{{
             item[switchType === "范围" ? "危桥数量" : "技术状况等级"] || "-"
           }}</el-col>
         </el-row>
@@ -139,6 +162,13 @@ export default {
         { value: "组合桥" },
       ],
       tableData: [],
+      tableSort: {
+        type: true,//类型
+        number: true,//数量
+        part: true,//部件
+        warning: true,//预警
+        condition: true,//状况
+      },
     };
   },
   mounted() {

@@ -184,12 +184,14 @@ export default {
 						lineHeight: 18,
 						// offset
 						// fontWeight: "bold",
+						  fontFamily:'DINENGSCHRIFTSTD',
 						color: ['#fff'],
 						textAlign: 'center'
 					},
 					subtextStyle: {
 						color: '#fff',
 						fontSize: 16,
+						
 						textAlign: 'center'
 					}
 				},

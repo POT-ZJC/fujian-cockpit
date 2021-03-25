@@ -12,7 +12,7 @@ export default {
       return store.fontSize;
     },
   },
-   watch: {
+  watch: {
     fontSize(val) {
       this.echartsResize();
     },
@@ -73,7 +73,7 @@ export default {
       ],
     },
   },
- 
+
   data() {
     return {
       myChart: null,
@@ -83,7 +83,7 @@ export default {
         showBackground: true,
         backgroundStyle: {
           color: "#273b58",
-          shadowColor: "rgba(0, 0, 0, 0.8)",
+          shadowColor: "rgba(0, 0, 0, 0.5)",
           shadowBlur: 4,
           shadowOffsetX: 4,
         },
@@ -96,7 +96,7 @@ export default {
             textStyle: {
               color: "white", //color of value
             },
-            fontFamily: "DINEngschriftStd",
+            fontFamily: "DINENGSCHRIFTSTD",
             fontSize: 14,
           },
         },
@@ -203,7 +203,7 @@ export default {
         dataZoom: [{ type: "inside", ...this.dataZoom }],
         grid: {
           containLabel: true,
-          top: 30,
+          top: '20%',
           left: 10,
           right: 20,
           bottom: 5,
@@ -222,6 +222,7 @@ export default {
             //    rotate:40 ,
             textStyle: {
               color: fontColor,
+              fontFamily: "DINENGSCHRIFTSTD",
             },
             // formatter: '{a|{value} a}',
             // width: 40,
@@ -246,6 +247,7 @@ export default {
           axisLabel: {
             textStyle: {
               color: fontColor,
+              fontFamily: "DINENGSCHRIFTSTD",
             },
           },
           axisLine: {

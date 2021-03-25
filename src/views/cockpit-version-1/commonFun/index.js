@@ -45,7 +45,7 @@ export const ajaxFunObj = {
       mutationsSet("bridgeTypeTotal", res.data.bridgeTypeData);
       // mutationsSet("bridgeLevelCondition", res.data.bridgeLevelData);
     });
-  },
+  }, 
   //桥梁分布
   getBridgeDistribution: (data) => {
     data = data || {};
@@ -70,7 +70,7 @@ export const ajaxFunObj = {
       ...data,
       type: getLevelToType(store.currentAreaLevelType || ""),
     }).then((res) => {
-      mutationsSet("bridgeTechnicalStatus", res.data.bridgeDistributionScale);
+      mutationsSet("bridgeTechnicalStatus", res.data); 
     });
   },
 };

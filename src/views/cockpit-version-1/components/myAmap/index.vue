@@ -5,22 +5,89 @@
     <!-- 区域公司/养护中心/养护站 -->
     <div class="area-level-count">
       <div class="area-level-item" v-if="showLevel.compnayTotal">
-        <div class="name">区域公司</div>
+        <svg
+          t="1616467520893"
+          class="icon"
+          viewBox="0 0 1024 1024"
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          p-id="3997"
+          width="48"
+          height="48"
+        >
+          <path
+            d="M928 832 896 832 896 384c0-70.4-57.6-128-128-128L576 256l0 544C576 817.92 561.92 832 544 832S512 817.92 512 800L512 192c0-70.4-57.6-128-128-128L192 64C121.6 64 64 121.6 64 192l0 640L32 832C14.08 832 0 846.08 0 864 0 881.92 14.08 896 32 896l896 0c17.92 0 32-14.08 32-32C960 846.08 945.92 832 928 832zM352 704l-128 0C206.08 704 192 689.92 192 672S206.08 640 224 640l128 0C369.92 640 384 654.08 384 672S369.92 704 352 704zM352 512l-128 0C206.08 512 192 497.92 192 480 192 462.08 206.08 448 224 448l128 0C369.92 448 384 462.08 384 480 384 497.92 369.92 512 352 512zM352 320l-128 0C206.08 320 192 305.92 192 288 192 270.08 206.08 256 224 256l128 0C369.92 256 384 270.08 384 288 384 305.92 369.92 320 352 320zM800 704l-128 0c-17.92 0-32-14.08-32-32s14.08-32 32-32l128 0c17.92 0 32 14.08 32 32S817.92 704 800 704zM800 512l-128 0C654.08 512 640 497.92 640 480 640 462.08 654.08 448 672 448l128 0C817.92 448 832 462.08 832 480 832 497.92 817.92 512 800 512z"
+            p-id="3998"
+            fill="#56d1ed"
+          ></path>
+        </svg>
+
         <div class="count">{{ mapLBNumber.compnayTotal }}个</div>
+        <div class="name">区域公司</div>
       </div>
       <div class="area-level-item" v-if="showLevel.centerTotal">
-        <div class="name">养护中心</div>
+        <svg
+          t="1616468812658"
+          class="icon"
+          viewBox="0 0 1024 1024"
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          p-id="33318"
+          width="48"
+          height="48"
+        >
+          <path
+            d="M552.362667 101.034667l406.954666 373.034666a34.133333 34.133333 0 0 1-23.04 59.306667L896 533.333333v298.666667a85.333333 85.333333 0 0 1-85.333333 85.333333H213.333333a85.333333 85.333333 0 0 1-85.333333-85.333333v-298.666667h-40.234667a34.133333 34.133333 0 0 1-23.04-59.264l406.912-373.034666a59.733333 59.733333 0 0 1 80.725334 0zM400.896 614.826667a34.901333 34.901333 0 0 0-49.237333 3.541333l-6.357334 7.978667a129.834667 129.834667 0 0 0-25.301333 77.056v46.677333c0 26.453333 21.504 48 48 48h288c26.496 0 48-21.504 48-48v-46.677333c0-30.549333-10.666667-59.349333-29.184-82.005334l-1.92-2.176-2.048-2.048a38.442667 38.442667 0 0 0-54.357333 2.688l-2.389334 2.602667a80.085333 80.085333 0 0 1-5.504 5.674667 152.96 152.96 0 0 1-96.597333 34.176 152.874667 152.874667 0 0 1-111.104-47.488zM512 353.194667a115.2 115.2 0 0 0-115.2 115.2v40.32a115.2 115.2 0 0 0 230.4 0v-40.32a115.2 115.2 0 0 0-115.2-115.2z"
+            fill="#76eefb"
+            p-id="33319"
+          ></path>
+        </svg>
         <div class="count">{{ mapLBNumber.centerTotal }}个</div>
+        <div class="name">养护中心</div>
       </div>
       <div class="area-level-item" v-if="showLevel.stationTotal">
-        <div class="name">养护站</div>
+        <svg
+          t="1616468492756"
+          class="icon"
+          viewBox="0 0 1024 1024"
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          p-id="23058"
+          width="48"
+          height="48"
+        >
+          <path
+            d="M84 362.7h109.3c11 0 20 9 20 20V940c0 11-9 20-20 20H84c-11 0-20-9-20-20V382.7c0-11.1 9-20 20-20zM308 64h109.3c11 0 20 9 20 20v856c0 11-9 20-20 20H308c-11 0-20-9-20-20V84c0-11 9-20 20-20zM532 549.3h109.3c11.1 0 20 9 20 20V940c0 11.1-9 20-20 20H532c-11.1 0-20-9-20-20V569.4c0-11.1 9-20.1 20-20.1zM960 586.7c0-47.5-29.9-89.8-74.7-105.6v105.6h-74.7V481c-58.3 20.6-88.9 84.6-68.4 142.9 11.3 31.9 36.4 57.1 68.4 68.4v252.4c0 8.5 6.9 15.4 15.4 15.4h44c8.5 0 15.4-6.9 15.4-15.4V692.3c44.7-15.8 74.6-58.2 74.6-105.6z"
+            p-id="23059"
+            fill="#76eefb"
+          ></path>
+        </svg>
         <div class="count">{{ mapLBNumber.stationTotal }}个</div>
+        <div class="name">养护站</div>
       </div>
     </div>
     <!-- 路线路段标识 -->
     <div class="map-line-tips">
       <div class="line-tips-route">
-        <div class="route">路线</div>
+        <!-- <svg
+          t="1616469056169"
+          class="icon"
+          viewBox="0 0 1024 1024"
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          p-id="37942"
+          width="48"
+          height="48"
+        >
+          <path
+            d="M473.75872 668.16V242.56c0-67.51232-54.7072-122.24-122.17856-122.24-67.47648 0-122.18368 54.72768-122.18368 122.24v680.00256c0 40.448-52.39808 56.41728-74.9568 22.84032L44.78976 782.20288a40.96 40.96 0 0 1 67.99872-45.68576l34.688 51.63008V242.56C147.47648 129.80736 238.85312 38.4 351.58016 38.4c112.72192 0 204.09856 91.40736 204.09856 204.16v544c0 67.51232 54.7072 122.24 122.17856 122.24 67.4816 0 122.18368-54.72768 122.18368-122.24V106.55744c0-40.60672 52.736-56.46336 75.13088-22.5792l107.85792 163.2a40.96 40.96 0 1 1-68.34176 45.16352l-32.72704-49.51552v543.73376c0 112.75264-91.37664 204.16-204.10368 204.16-112.72192 0-204.09856-91.40736-204.09856-204.16V668.16z"
+            fill="#76eefb"
+            p-id="37943"
+          ></path>
+        </svg> -->
+        <div class="route">
+          路线
+        </div>
         <div class="route-totalNum">
           {{ mapLBNumber.currentRouteTotalNum }}条
         </div>
@@ -93,7 +160,38 @@
         </div>
         <div class="body-right">
           <div class="right-title">{{ bridgeDetail.bridgeName }}</div>
-
+          <div class="link-sys">
+            <div
+              class="link-btn"
+              v-if="handleXiaZhang(bridgeDetail.bridgeName)"
+              @click="
+                openNewUrl('http://120.32.125.113:9010/BMS/common/menu?prjId=EA063603FE7D4315B7D7E3BAE88BE0B6')
+              "
+            >
+              <svg
+                t="1616464473366"
+                class="icon"
+                viewBox="0 0 1024 1024"
+                version="1.1"
+                xmlns="http://www.w3.org/2000/svg"
+                p-id="2883"
+                width="32"
+                height="32"
+              >
+                <path
+                  d="M192 344.64H128V192a96 96 0 0 1 96-96h608a96 96 0 0 1 96 96v640a96 96 0 0 1-96 96H224a96 96 0 0 1-96-96v-126.272h64V832a32 32 0 0 0 32 32h608a32 32 0 0 0 32-32V192a32 32 0 0 0-32-32H224a32 32 0 0 0-32 32v152.64z"
+                  p-id="2884"
+                  fill="#ffffff"
+                ></path>
+                <path
+                  d="M538.688 410.848a32 32 0 1 1 39.808-50.112l148.32 117.856c23.744 18.848 10.4 57.056-19.904 57.056H72.832a32 32 0 1 1 0-64h542.368l-76.48-60.8z"
+                  p-id="2885"
+                  fill="#ffffff"
+                ></path>
+              </svg>
+              BIM模型
+            </div>
+          </div>
           <div class="item-block" v-for="item in detailFormat" :key="item.key">
             <div class="item-label">{{ item.name + "：" }}</div>
             <div class="item-content" :title="bridgeDetail[item.key] || '-'">
@@ -123,7 +221,8 @@
 // } from '@api/home'
 import { getRouteLnglatList, getQueryBridge } from "@/api/cockpit-version-1";
 import { mutationsSet, store } from "@/views/cockpit-version-1/cockpitStore";
-import moment from "moment";
+import routeLnglatJson from "@/views/cockpit-version-1/utils/路线路段.json";
+// import moment from "moment";
 import bridge1 from "./img/map-bridge-1.jpg";
 import bridge2 from "./img/map-bridge-2.jpg";
 import poi_type_1 from "./img/poi-type-1.svg";
@@ -209,6 +308,7 @@ export default {
       bridgeDetail: {}, //桥梁详情
       bridgeCompPhotoList: [bridge1, bridge2],
       isOpenBridgeDetail: false,
+      // levelIcon:{route:''}
       //桥梁详情-格式
       detailFormat: [
         { name: "中心桩号", key: "centerLocation" },
@@ -278,6 +378,16 @@ export default {
     this.handleShowLevel();
   },
   methods: {
+    handleXiaZhang(name) {
+      if (name === "厦漳大桥(北汊主桥)") {
+        return true;
+      }
+      return false;
+    },
+    openNewUrl(url) {
+      window.open(url);
+    },
+    //
     handleShowLevel(str) {
       let showLevel = {
         currentRouteTotalNum: true, //当前路线
@@ -340,21 +450,25 @@ export default {
       /*设置云南区域背景色*/
       let areaItemTotal = 0;
       let backColorArr = [
-        // "#a2bff3",
-        // "#a2a9b6",
-        "rgba(162,184,222,0.6)",
-        // "#023c82",
+        "#012761",
+        "#113771",
+        // "rgba(162,184,222,0.6)",
+        "#355b95",
         // "#014655",
         // "#016b83",
         // "rgba(76,245,246,0.53)",
       ];
       let getColorByAdcode = function(adcode) {
         ++areaItemTotal;
+        if (areaItemTotal === backColorArr.length) {
+          areaItemTotal = 0;
+        }
         // const randomNIndex =
-          // areaItemTotal -
-          // Math.floor(areaItemTotal / backColorArr.length) * backColorArr.length;
+        // areaItemTotal -
+        // Math.floor(areaItemTotal / backColorArr.length) * backColorArr.length;
         // return "#023c82";
-        return backColorArr[0];
+        return backColorArr[areaItemTotal];
+        // return backColorArr[0];
       };
       // // 给国家的省市区域添加背景色
       const disCountryLayer = new window.AMap.DistrictLayer.Country({
@@ -388,8 +502,9 @@ export default {
           // opacity: 0.86
           fill: function(properties, b, c, d) {
             let adcode = properties.adcode;
-            // return getColorByAdcode();
-            return 'rgba(118,238,251,0.7)'
+            return getColorByAdcode();
+            // return "rgba(118,238,251,0.7)";
+            // return "#113771";
           },
           "province-stroke": "#d8f7ff",
           "city-stroke": "#d8f7ff", // 中国地级市边界
@@ -406,22 +521,28 @@ export default {
     },
     //获取路线路段坐标
     reqRouteLnglatList() {
-      getRouteLnglatList().then((res) => {
-        mutationsSet("routeLnglatList", res.data || []);
-        this.renderRouteToMap(res.data || []);
-      });
+      // getRouteLnglatList().then((res) => {
+      // mutationsSet("routeLnglatList", res.data || []);
+      // this.renderRouteToMap(res.data || []);
+      // });
+      this.renderRouteToMap(routeLnglatJson);
     },
     //渲染地图路线
-    renderRouteToMap(routeData) {
-      let routeLanlat = [];
-      routeData = routeData.splice(1, routeData.length / 2 + 70);
-      routeData.forEach((val) => {
-        routeLanlat.push(
-          new window.AMap.LngLat(Number(val.longitude), Number(val.latitude))
-        );
+    renderRouteToMap(jsondata) {
+      let routeLanlat = [],
+        routeData = [];
+      routeData = jsondata.sort((a, b) => a.id - b.id);
+      routeData.forEach((val, index) => {
+        if (val.direction === 1) {
+          if (val.is_deleted === 0) {
+            routeLanlat.push(
+              new window.AMap.LngLat(val.longitude, val.latitude)
+              // new window.AMap.LngLat(Number(val.longitude), Number(val.latitude))
+            );
+          }
+        }
       });
-      console.log(routeLanlat);
-
+      // console.log(routeLanlat);
       let mapRouteObj = new window.AMap.Polyline({
         //   //  zIndex:10,//默认10 路线覆盖物层级
         path: routeLanlat,
@@ -645,22 +766,31 @@ export default {
   left: torem(15px);
   bottom: torem(65px);
   font-family: MicrosoftYaHei-Bold;
+  // display: flex;
   .area-level-item {
     display: flex;
     align-items: center;
     height: torem(42px);
+    .icon {
+      width: 0.28rem;
+      height: 0.28rem;
+      padding-right: torem(15px);
+    }
     .name {
       color: #76eefb;
       font-size: torem(18px);
       font-weight: bold;
       width: torem(76px);
       margin-right: torem(15px);
+      margin-top: 0.1rem;
     }
     .count {
       font-size: torem(30px);
       font-weight: bold;
       color: #76eefb;
+      // width: torem(76px);
       font-family: DINEngschriftStd;
+      // margin-right: torem(15px);
     }
   }
 }
@@ -694,9 +824,14 @@ export default {
     display: flex;
     margin-right: torem(30px);
     padding: 0 torem(0px);
+    .icon {
+      width: 0.28rem;
+      height: 0.28rem;
+      padding-right: torem(5px);
+    }
     .route {
       cursor: pointer;
-      font-size: torem(18px);
+      font-size: torem(20px);
       font-weight: bold;
       color: #76eefb;
       position: relative;
@@ -833,12 +968,33 @@ export default {
       width: calc(100% - 2.9rem);
       padding-left: (20px);
       .right-title {
-        margin: torem(17px) 0 torem(30px) 0;
+        margin: torem(17px) 0 torem(5px) 0;
         font-size: torem(18px);
         font-weight: 700;
         color: #ffffff;
         line-height: (24px);
         letter-spacing: 1px; /*no */
+      }
+      .link-sys {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        color: #04caf0;
+        font-size: torem(18px);
+        height: torem(18px);
+        padding-right: torem(50px);
+        padding-bottom: torem(10px);
+        line-height: torem(18px);
+        .link-btn {
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+        }
+        svg {
+          height: torem(20px);
+          width: torem(20px);
+          padding-right: torem(10px);
+        }
       }
       .item-block {
         margin: 0;

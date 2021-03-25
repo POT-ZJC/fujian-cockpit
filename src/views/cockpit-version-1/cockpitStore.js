@@ -30,7 +30,10 @@ const obj = {
     bridgeDistributionForm: [], //规模
     bridgeDistributionScale: [], //形式
   },
-  bridgeTechnicalStatus: [], //桥梁技术状况
+  bridgeTechnicalStatus: { //桥梁技术状况
+    bridgeDistributionScale:[],//规模
+    bridgeDistributionForm:[] //形式
+  },
 };
 export const store = Vue.observable(obj);
 export const mutations = {};

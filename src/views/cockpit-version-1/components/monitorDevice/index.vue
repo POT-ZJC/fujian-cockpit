@@ -31,26 +31,26 @@
       <div class="value">{{ total }}</div>
     </div> -->
 
-    <bar
-      ref="echartsBar"
-      style="width:100%;height:100%"
+    <barCircle
+      :ref="refName"
+      :polar="polar"
       :colors="colors"
-      :dataList="dataList"
-      :yAxis="yAxis"
-      :grid="grid"
-      :moreYAxis="moreYAxis"
+      :title="title"
+      :dataList="dataList" 
+      style="height:100%;width:100%"
+      :startAngle="startAngle"
     />
   </moduleWrapper>
 </template>
 <script>
 import echarts from "echarts";
 import moduleWrapper from "@/views/cockpit-version-1/components/ui/module-wrapper";
-import bar from "@/views/cockpit-version-1/components/charts/barType2";
+import barCircle from "@/views/cockpit-version-1/components/charts/barCircle";
 import cockpitSelect from "@/views/cockpit-version-1/components/ui/select";
 import { mutationsSet, store } from "@/views/cockpit-version-1/cockpitStore";
 import { demoData } from "./在线监测设备数量.js";
 export default {
-  components: { moduleWrapper, bar, cockpitSelect },
+  components: { moduleWrapper, barCircle, cockpitSelect },
   props: {},
   computed: {
     pageLevelValue(val) {
@@ -81,29 +81,27 @@ export default {
         { value: "悬索桥" },
         { value: "刚构桥" },
         { value: "组合桥" },
-      ],
-      optionData: [{ value: "xixihaha" }],
+      ], 
       isShow: false,
       grid: { containLabel: false, right: "5%" },
+      polar: {
+        center: ["50%", "35%"],
+        radius: "115%",
+      },
       dataTotal: 0,
       total: 895,
-      colors: ["#00A6E3", "#87680C"],
-      yAxis: {
-        position: "right",
-        axisLabel: {
-          verticalAlign: "bottom",
-          //   show:false,
-          align: "right",
-          padding: [0, 0, 12, 12],
-          textStyle: {
-            color: "#FFFFFF",
-            fontSize: "12",
-          },
-        },
-        data: [],
+      refName: "echartsBar",
+      startAngle: 90,
+      dataList: [], 
+      name: "设备",
+      title: {
+        text: "",
+        top: "40%",
+        subtext: "总数",
       },
-      moreYAxis: [],
-      colorItemArr: [
+      // colors: [['#8963FF', '#0190FF'], '#9475CD'],
+      //  colors:['#00ffff','#00cfff','#006ced','#ffe000','#ffa800','#ff5b00','#ff3000'],
+      colors: [
         ["#f4af54", "#f4af54"],
         ["#5fd0d3", "#5fd0d3"],
         ["#f1918c", "#f1918c"],
@@ -124,86 +122,52 @@ export default {
       this.handleDemoData(type);
     },
     handleType2Data(data) {
-      let type = data.value || "";
+      let type = data.value || ""; 
       this.type1 = "";
       this.handleDemoData(type);
     },
     handleDemoData(type) {
-      const moreYAxisdata = {
-        splitLine: "none",
-        axisTick: "none",
-        position: "right",
-        axisLine: "none",
-        data: [],
-        inverse: true,
-        axisLabel: {
-          show: false,
-          verticalAlign: "bottom",
-          align: "right",
-          padding: [0, 10, 12, 0],
-          textStyle: {
-            color: "#fff",
-            fontSize: "14",
-          },
-          formatter: function(value) {
-            return value; //+ 'W'
-          },
-          // rich: {
-          // y: {
-          //     color: '#befbff',
-          //     fontSize: 16
-          // },
-          // x: {
-          //     color: '#f6cf42',
-          //     fontSize: 16
-          // }
-          // }
-        },
-      };
-      //  { 设备: "环境", 数量: 87 },
-      // { 设备: "车辆荷载", 数量: 103 },
-      // { 设备: "结构整体响应", 数量: 123 },
-      // { 设备: "结构局部响应", 数量: 135 },
-      // { 设备: "视频", 数量: 205 },
       let dataSource = [];
       try {
-        dataSource = demoData[this.pageLevelValue || "福建省"][type||'全部']||[];
+        dataSource =
+          demoData[this.pageLevelValue || "福建省"][type || "全部"] || [];
       } catch (err) {}
       let demoDataList = [];
       let total = 0;
-      this.yAxis.data=[]
+      // this.yAxis.data = [];
       dataSource.forEach((val, index) => {
         // const value = window.MathRandom(5*index, total);
         // total = total - value;
         demoDataList.push(val["数量"]);
-        this.yAxis.data.push(val["设备"]);
+        // this.yAxis.data.push(val["设备"]);
         total += val["数量"];
       });
 
       demoDataList.sort((a, b) => {
         return b - a;
       });
-
-      this.dataList = dataSource.map((aItem, index) => {
-        moreYAxisdata.data.push(demoDataList[index]); 
-        return {
-          name: aItem,
-          value: demoDataList[index],
-          barCategoryGap: 15,
-          label: {
-            normal: {
-              formatter: "{c}个",
-            },
-          },
-          itemStyle: {
-            color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-              { offset: 0, color: this.colorItemArr[index][0] },
-              { offset: 1, color: this.colorItemArr[index][1] },
-            ]),
+      this.total = total; 
+      this.setEcharts(dataSource, demoDataList);
+    },
+    setEcharts(dataSource, demoDataList) {
+      let dataList = [];
+      dataList = dataSource.map((item, index) => {
+        const value = demoDataList[index];
+        let obj = {
+          name: item['设备'],
+          value: value,
+          tooltip: {
+            show:true,
+            formatter: item['设备']+`:${value};占比: ${
+              (value / this.total).toFixed(2).split(".")[1]
+            }%`,
           },
         };
+
+        return obj; 
       });
-      this.moreYAxis.push(moreYAxisdata);
+      this.title.text = this.total;
+      this.dataList = dataList;
       this.$nextTick(() => {
         this.$refs.echartsBar.setEcharts();
         this.$refs.echartsBar.echartsResize();

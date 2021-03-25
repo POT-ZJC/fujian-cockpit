@@ -80,11 +80,11 @@ export default {
       optionData: [{ value: "xixihaha" }],
       xAxisData: [],
       colors: [
-        ["rgba(84,212,144,1)", "rgba(84,212,144,0.1)"],
-        ["rgba(29,121,210,1)", "rgba(29,121,210,0.1)"],
-        ["rgba(225,185,20,1)", "rgba(225,185,20,0.1)"],
-        ["rgba(187,14,202,1)", "rgba(187,14,202,0.1)"],
-        ["rgba(125,11,31,1)", "rgba(125,11,31,0.1)"],
+        ["rgba(84,212,144,0.6)", "rgba(84,212,144,0)"],
+        ["rgba(29,121,210,0.6)", "rgba(29,121,210,0)"],
+        ["rgba(225,185,20,0.6)", "rgba(225,185,20,0)"],
+        ["rgba(187,14,202,0.6)", "rgba(187,14,202,0)"],
+        ["rgba(125,11,31,0.6)", "rgba(125,11,31,0)"],
       ],
       legendData: ["1类", "2类", "3类", "4类", "5类"],
       //   dataZoom: {
@@ -128,8 +128,8 @@ export default {
       try {
         dataSource = demoData[this.pageLevelValue || "福建省"][type];
       } catch (err) {}
-      this.legendData.forEach((val) => {
-        let obj = { name: val, smooth: true, data: [] };
+      this.legendData.forEach((val) => { 
+        let obj = { name: val, smooth: false, data: [] };
         dataList.push(obj);
       });
       // debugger;

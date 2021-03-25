@@ -2,7 +2,7 @@
   <div
     class="cockpit-select"
     @click.stop="openSelect"
-    :class="{ open: optionVisible, 'select-active': value }"
+    :class="{ open: optionVisible, 'select-active ': value, hasValue: value }"
   >
     <div class="select-txt">
       {{ currentData.label || currentData.value || placeholder }}
@@ -46,7 +46,7 @@
   </div>
 </template>
 <script>
-import { clear, initData, updateState ,store } from "./commonState";
+import { clear, initData, updateState, store } from "./commonState";
 export default {
   name: "cockpit-select",
   props: {
@@ -73,11 +73,20 @@ export default {
       // if (val !== newVal) {
       for (let i = 0; i < this.optionData.length; i++) {
         const obj = this.optionData[i];
-        if (obj.value && val === obj.value) {
+        let hasValue = false;
+        if (
+          obj.value === "" ||
+          obj.value ||
+          obj.value === "0" ||
+          obj.value === 0
+        ) {
+          hasValue = true;
+        }
+        if (hasValue && val === obj.value) {
           this.currentData = obj;
           return;
         }
-        if (!obj.value && obj.label === val) {
+        if (!hasValue && obj.label === val) {
           this.currentData = obj;
           return;
         }
@@ -107,14 +116,18 @@ export default {
   },
   mounted() {
     const val = this.value;
-    if (val) {
+    let hasValue = false;
+    if (val === "" || val || val=== "0" ||val === 0) {
+      hasValue = true;
+    }
+    if (hasValue) {
       for (let i = 0; i < this.optionData.length; i++) {
         const obj = this.optionData[i];
-        if (obj.value && val === obj.value) {
+        if (hasValue && val === obj.value) {
           this.currentData = obj;
           break;
         }
-        if (!obj.value && obj.label === val) {
+        if (!hasValue && obj.label === val) {
           this.currentData = obj;
           break;
         }
@@ -131,16 +144,24 @@ export default {
     selectEvent(data, index) {
       // console.log('this.value',data,this.value)
       if (this.value !== data.value) {
-        this.$emit("input", data.value || data.label || "");
+        let hasValue = false;
+        if (
+          this.value === "" ||
+          this.value ||
+          this.value === "0" ||
+          this.value === 0
+        ) {
+          hasValue = true;
+        }
+        this.$emit("input", hasValue ? data.value : data.label || "");
         this.$emit("change", data, index);
       }
       // this.optionVisible = false;
-      updateState(this.key)
+      updateState(this.key);
       // return false
     },
-    openSelect() { 
-          updateState(this.key,!this.optionVisible)
-     
+    openSelect() {
+      updateState(this.key, !this.optionVisible);
     },
     // eventFn(e) {
     //   console.log('21321',e)
@@ -166,7 +187,15 @@ export default {
   font-size: torem(16px);
   color: #fff;
   text-align: left;
-  background-color: cornflowerblue;
+  // background-color: cornflowerblue;
+  background-image: linear-gradient(
+      261deg,
+      #112038 0%,
+      #1b2c46 50%,
+      #263958 100%
+    ),
+    linear-gradient(#1e2e47, #1e2e47);
+  background-blend-mode: normal, normal;
   padding: torem(2px) torem(13px);
   padding-right: 0.22rem;
   &::after {
@@ -186,7 +215,7 @@ export default {
   }
   .select-txt {
     overflow: hidden;
-    width:100% ;
+    width: 100%;
   }
   .select-clear {
     position: absolute;
@@ -278,5 +307,15 @@ export default {
     transform: rotate(180deg);
     transition: transform 0.2s;
   }
+}
+.hasValue {
+  background-image: linear-gradient(
+      261deg,
+      #11223d 0%,
+      #13375e 50%,
+      #154f87 100%
+    ),
+    linear-gradient(#1e2e47, #1e2e47);
+  background-blend-mode: normal, normal;
 }
 </style>

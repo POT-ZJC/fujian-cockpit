@@ -14,6 +14,7 @@ body {
   background-image: url('~@/assets/编组 5.jpg');
   background-repeat: no-repeat;
   background-size: 100% 100%;
+  font-family: MicrosoftYaHei;
 
   .module-title {
     font-size: torem(16px);
@@ -48,9 +49,9 @@ body {
       text-align: center;
       padding: torem(2px) torem(13px);
       background-image: linear-gradient(261deg,
-          #11223d 0%,
-          #13375e 50%,
-          #154f87 100%),
+          #112038 0%,
+          #1b2c46 50%,
+          #263958 100%),
         linear-gradient(#1e2e47,
           #1e2e47);
       background-blend-mode: normal,
@@ -102,7 +103,8 @@ body {
       box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.4);
       border-radius: 0px 4px 4px 0px;
       border: solid 1px #354865;
-      border-radius: torem(6px); 
+      border-radius: torem(6px);
+
       &::before {
         border-bottom-color: #154f87 !important;
       }
@@ -164,10 +166,25 @@ body {
     padding-top: torem(5px);
     height: 100%;
     font-family: MicrosoftYaHei;
+    background-image: linear-gradient(261deg,
+        #112038 0%,
+        #1b2c46 50%,
+        #263958 100%),
+      linear-gradient(#2329cb,
+        #2329cb);
 
     .scrollbar {
       // position: relative;
       // bottom: -16px; 
+    }
+
+    .sort-arrow {
+      cursor: pointer;
+
+      &:hover {
+        color: #69a8f6;
+
+      }
     }
 
     .th {
@@ -194,11 +211,17 @@ body {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        line-height: 28px;
+        line-height: torem(28px);
         text-align: left;
-        height: 28px;
+        height: torem(28px);
         padding: 0 5px;
-        font-size: torem(12px);
+        font-family: DINEngschriftStd;
+        font-size: torem(16px);
+      }
+
+      .td:nth-child(1) {
+        text-align: left;
+        font-size: torem(14px);
       }
     }
   }
