@@ -13,6 +13,16 @@
  	@return ($px / $base-font-size) * 1rem;
  }
 
- .tc {
+ @function topw($px, $base-ui-width: 1920px) {
+
+ 	@return ($px / $base-ui-width)+'%';
+ }
+
+ @function toph($px, $base-ui-height: 1080px) {
+
+ 	@return ($px / $base-ui-height)+'%';
+ }
+
+.tc {
  	text-align: center !important;
  }

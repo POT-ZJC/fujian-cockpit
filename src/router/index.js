@@ -1,36 +1,32 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Vue from "vue";
+import VueRouter from "vue-router"; 
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
-const routes = [ 
+const routes = [
   {
-    path: '/',
-    redirect: "/cockpit-normalScreen",
-    name: 'Home',
-    component: Home
-  }, 
+    path: "/",
+    redirect: "/cockpit-overview",
+    name: "Home",
+    // component: Home,
+  },
+  
   {
-		path: "/demo",
-		name: "demo",
-		component: () => import("@/views/demo/index.vue")
-	},
-  {
-		path: "/cockpit-normalScreen",
-		name: " normalScreen",
-		component: () => import("@/views/cockpit-version-1/normalScreen.vue")
-	},
-]
+    path: "/demo",
+    name: "demo",
+    component: () => import("@/views/demo/index.vue"),
+  },
  
-const routeFiles = require.context('./modules', true, /\.js$/)
-const modules = routeFiles
-    .keys()
-    .map(path => routeFiles(path).default)
-    .sort((a, b) => (a.sort > b.sort ? 1 : -1))
-   
-const router = new VueRouter({
-  routes:  modules.concat(routes),
-})
+];
 
-export default router
+const routeFiles = require.context("./modules", true, /\.js$/);
+const modules = routeFiles
+  .keys()
+  .map((path) => routeFiles(path).default)
+  .sort((a, b) => (a.sort > b.sort ? 1 : -1));
+
+const router = new VueRouter({
+  routes: modules.concat(routes),
+});
+
+export default router;

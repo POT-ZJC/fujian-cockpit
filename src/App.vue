@@ -6,15 +6,15 @@
 
 <style>
 html {
-  /* min-height:100%;
-  min-width: 100%; */
+  /* min-height:100%; */
+  /* min-width: 100%; */
+    height: 100%;
 }
 body {
   /* position: absolute; */
-  /* height: 100%; */
+  height: 100%;
   width: 100%;
-  margin: 0;
-  
+  margin: 0; 
   font-size: 14px;
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
